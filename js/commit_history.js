@@ -18,10 +18,11 @@ function showHistory(className){
       obj.commits.slice(0,maxCount).forEach(function(commit){
         var li = document.createElement("li");
         var date = stringToDate(commit.committed_date);
+        var message = commit.message.split("\n")[0];
         li.innerHTML =
         <dl>
           <dt>
-            <a href={commit.url}>{commit.message}</a>
+            <a href={commit.url}>{message}</a>
           </dt>
           <dd class="git-date">{date.toString()}</dd>
         </dl>.toXMLString();
