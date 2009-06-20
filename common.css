@@ -9,16 +9,21 @@ body {
   border-left:  thin solid gray;
   border-right: thin solid gray;
 }
+#contents, #footer {
+  margin: 0 0.5em;
+}
 #contents {
   width: 73%;
 	float: left;
 }
 #contents h2 {
+  margin-top: 0;
   border-bottom:thin solid #a5bce7;
   border-left:  10px solid #a5bce7;
   border-right: 10px solid #a5bce7;
 }
 h3  {
+  margin-right: 2em;
   border-bottom:thin solid #a5bce7;
 }
 .section2 {
@@ -65,6 +70,18 @@ h3  {
 	padding: 0;
 }
 
+li.repository {
+  list-style-image: url(http://github.com/images/modules/dashboard/news/push.png);
+}
+a.repository, a.page {
+  margin-left:0.5em;
+}
+a.repository:before {
+  content: url(http://github.com/images/modules/dashboard/news/push.png);
+}
+a.page:before {
+  content: url(http://github.com/images/modules/dashboard/news/wiki.png);
+}
 /*
 vim:sw=2 ts=2 et:
 */
