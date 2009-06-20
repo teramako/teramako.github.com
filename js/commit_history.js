@@ -79,8 +79,8 @@ rssEntry.prototype = {
 };
 function getHistoryFromRSS(url, cbFunc){
   var req = new XMLHttpRequest();
-  /*
   req.open("GET", url, null, null, true);
+  /*
   req.onload = function(){
     cbFunc(req.responseXML);
   }
