@@ -82,6 +82,9 @@ a.repository:before {
 a.page:before {
   content: url(http://github.com/images/modules/dashboard/news/wiki.png);
 }
+.git-history {
+  font-size: small;
+}
 /*
 vim:sw=2 ts=2 et:
 */
