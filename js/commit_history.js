@@ -19,19 +19,38 @@ function showHistory(className){
         var li = document.createElement("li");
         var date = stringToDate(commit.committed_date);
         var message = commit.message.split("\n")[0];
-        li.innerHTML =
-        <dl>
-          <dt>
-            <a href={commit.url}>{message}</a>
-          </dt>
-          <dd class="git-date">{date.toString()}</dd>
-        </dl>.toXMLString();
+        li.innerHTML = <>
+          <span class="git-date">{formatDate(date, "%Y-%m-%d %H:%M")}</span>
+          <br/>
+          <a href={commit.url}>{message}</a>
+        </>.toXMLString();
         ul.appendChild(li);
       });
       elm.removeChild(image);
     });
     elm.appendChild(ul);
   });
+}
+function formatDate(date, format){
+  function formatter(all, id){
+    var buf;
+    switch (id){
+      case "Y":
+        buf = date.getFullYear(); break;
+      case "m":
+        buf = date.getMonth() + 1; break;
+      case "d":
+        buf = date.getDate(); break;
+      case "H":
+        buf = date.getHours(); break;
+      case "M":
+        buf = date.getMinutes(); break;
+      case "S":
+        buf = date.getSeconds(); break;
+    }
+    return buf >= 10 ? buf : "0" + buf;
+  }
+  return format.replace(/%(.)/g, formatter);
 }
 function  stringToDate(str){
   var m = str.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})([-+])(\d{2}):(\d{2})/);
