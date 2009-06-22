@@ -14,7 +14,7 @@ function showHistory(className, userName){
     var image = document.createElement("img");
     image.setAttribute("src", "http://github.com/images/modules/ajax/indicator.gif");
     elm.appendChild(image);
-    getHistoryFromJSON(userNname, name, branch, function(obj){
+    getHistoryFromJSON(userName, name, branch, function(obj){
       obj.commits.slice(0,maxCount).forEach(function(commit){
         var li = document.createElement("li");
         var date = stringToDate(commit.committed_date);
