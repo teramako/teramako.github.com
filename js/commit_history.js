@@ -3,7 +3,7 @@ if (!GITHUB) {
   var GITHUB = {};
 }
 GITHUB.CommitHistory = (function(){
-function showHistory(className){
+function showHistory(className, userName){
   var elms = document.getElementsByClassName(className);
   Array.slice(elms).forEach(function(elm){
     var name = elm.getAttribute("name");
@@ -14,7 +14,7 @@ function showHistory(className){
     var image = document.createElement("img");
     image.setAttribute("src", "http://github.com/images/modules/ajax/indicator.gif");
     elm.appendChild(image);
-    getHistoryFromJSON(name, branch, function(obj){
+    getHistoryFromJSON(userNname, name, branch, function(obj){
       obj.commits.slice(0,maxCount).forEach(function(commit){
         var li = document.createElement("li");
         var date = stringToDate(commit.committed_date);
@@ -63,9 +63,12 @@ function  stringToDate(str){
   d.setUTCSeconds(m[6]);
   return new Date(d - (m[7] == "+" ? 1 : -1) * parseInt(m[8],10) * 60 * 60 * 1000);
 }
-function getHistoryFromJSON(name, branch, cbFunc){
+function getHistoryFromJSON(userName, name, branch, cbFunc){
+  if (!userName || !name || !branch){
+    throw new Error("getHistoryFromJSON: invalid arguments");
+  }
   callbacker[name] = cbFunc;
-  var url = "http://github.com/api/v1/json/teramako/" + name + "/commits/" + branch;
+  var url = "http://github.com/api/v1/json/" + userName + "/" + name + "/commits/" + branch;
   var script = document.createElement("script");
   script.setAttribute("type", "text/javascript");
   script.setAttribute("src", url + "?callback=GITHUB.CommitHistory.callback('" + name + "')");
@@ -74,8 +77,8 @@ function getHistoryFromJSON(name, branch, cbFunc){
 
 var callbacker = {};
 var self = {
-  init: function(className){
-    showHistory(className);
+  init: function(className, userName){
+    showHistory(className, userName);
   },
   callback: function(name){
     return callbacker[name];
