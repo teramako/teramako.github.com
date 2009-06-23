@@ -6,8 +6,8 @@ GITHUB.CommitHistory = (function(){
 function showHistory(className, userName){
   var elms = document.getElementsByClassName(className);
   Array.slice(elms).forEach(function(elm){
-    var name = elm.getAttribute("name");
     var branch = elm.getAttribute("branch") || "master";
+    var name = elm.getAttribute("name") + "_" + branch;
     var maxCount = elm.hasAttribute("maxcount") ? elm.getAttribute("maxcount") : 20;
     var ul = document.createElement("ul");
     ul.setAttribute("class","git-history");
