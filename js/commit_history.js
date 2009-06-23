@@ -7,7 +7,7 @@ function showHistory(className, userName){
   var elms = document.getElementsByClassName(className);
   Array.slice(elms).forEach(function(elm){
     var branch = elm.getAttribute("branch") || "master";
-    var name = elm.getAttribute("name") + "_" + branch;
+    var name = elm.getAttribute("name");
     var maxCount = elm.hasAttribute("maxcount") ? elm.getAttribute("maxcount") : 20;
     var ul = document.createElement("ul");
     ul.setAttribute("class","git-history");
@@ -67,11 +67,12 @@ function getHistoryFromJSON(userName, name, branch, cbFunc){
   if (!userName || !name || !branch){
     throw new Error("getHistoryFromJSON: invalid arguments");
   }
-  callbacker[name] = cbFunc;
+  var funcName = name + "_" + branch;
+  callbacker[funcName] = cbFunc;
   var url = "http://github.com/api/v1/json/" + userName + "/" + name + "/commits/" + branch;
   var script = document.createElement("script");
   script.setAttribute("type", "text/javascript");
-  script.setAttribute("src", url + "?callback=GITHUB.CommitHistory.callback('" + name + "_" + branch +"')");
+  script.setAttribute("src", url + "?callback=GITHUB.CommitHistory.callback('" + funcName + "')");
   document.body.appendChild(script);
 }
 
