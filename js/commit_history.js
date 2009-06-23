@@ -71,7 +71,7 @@ function getHistoryFromJSON(userName, name, branch, cbFunc){
   var url = "http://github.com/api/v1/json/" + userName + "/" + name + "/commits/" + branch;
   var script = document.createElement("script");
   script.setAttribute("type", "text/javascript");
-  script.setAttribute("src", url + "?callback=GITHUB.CommitHistory.callback('" + name + "')");
+  script.setAttribute("src", url + "?callback=GITHUB.CommitHistory.callback('" + name + "_" + branch +"')");
   document.body.appendChild(script);
 }
 
