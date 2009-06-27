@@ -9,14 +9,11 @@
         type="application/atom+xml"
         href="http://github.com/feeds/teramako/commits/teramako.github.com/master"
         title="Recent Commits to teramako.github.com:master"/>
-  <script type="text/javascript" src="js/commit_history.js"></script>
-  <script type="text/javascript">
-  function init(){
-    GITHUB.CommitHistory.init("history", "teramako");
-  }
-  </script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/github.js"></script>
+  <script type="text/javascript" src="js/util.js"></script>
 </head>
-<body onload="init();">
+<body>
 <h1><img src="img/titleimg.png" width="301" height="150" alt="hogehoge" />@github</h1>
 
 <div id="contents">
@@ -31,7 +28,7 @@
         Compatible for <a href="https://addons.mozilla.org/en-US/firefox/addon/5890">Tree Style Tab</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/1122">Tab Mix Plus</a>.
       </p>
       <h4>Commit History</h4>
-      <div class="history" name="vimperator" branch="master" maxcount="5"></div>
+      <ul class="history" project="vimperator" branch="master" maxcount="5"></ul>
     </div>
     <div class="section3" id="hatena-bookmark">
       <h3>はてなブックマーク拡張
@@ -42,7 +39,7 @@
         and adds custom favorit tags menu like a DeliciousBookmark.
       </p>
       <h4>Commit History</h4>
-      <div class="history" name="hatena-bookmark-xul" branch="master" maxcount="5"></div>
+      <ul class="history" project="hatena-bookmark-xul" branch="master" maxcount="5"></ul>
     </div>
   </div>
   <div class="section2">
@@ -57,7 +54,7 @@
         enable to make user scripts to work.
       </p>
       <h4>Commit History</h4>
-      <div class="history" name="Greasemonkey-For-Prism" branch="master" maxcount="5"></div>
+      <ul class="history" project="Greasemonkey-For-Prism" branch="master" maxcount="5"></ul>
     </div>
   </div>
   <div class="section2">
@@ -72,7 +69,7 @@
       </p>
       <p>Firefox, XULRunner上で動く、シェルライクなJavaScript Console</p>
       <h4>Commit History</h4>
-      <div class="history" name="jshell" branch="master" maxcount="5"></div>
+      <ul class="history" project="jshell" branch="master" maxcount="5"></ul>
     </div>
     <div class="section3" id="xulplorer">
       <h3>Xulplorer
@@ -87,7 +84,7 @@
         <li>テキスト編集</li>
       </ul>
       <h4>Commit History</h4>
-      <div class="history" name="xulplorer" branch="master" maxcount="5"></div>
+      <ul class="history" project="xulplorer" branch="master" maxcount="5"></ul>
     </div>
   </div>
 </div>
@@ -117,7 +114,7 @@
   </div>
   <div class="sidebar-content">
     <h2>History</h2>
-    <div class="history" name="teramako.github.com"></div>
+    <ul class="history" project="teramako.github.com" branch="master"></ul>
   </div>
 </div>
 <div id="footer">
@@ -137,6 +134,30 @@
   </div>
 </div>
 </body>
+<script type="text/javascript">
+  $(".history").each(function(index, elm){
+    var count = elm.hasAttribute("maxcount") ? parseInt(elm.getAttribute("maxcount"),10) : 0;
+    var g = GITHUB("commits", {
+      user: "teramako",
+      project: elm.getAttribute("project"),
+      branch: elm.getAttribute("branch") || "master",
+      target: elm
+    });
+    var ul = $(elm);
+    g.getCommitsListForBranch(function(commit){
+      if (count > 0) commit = commit.slice(0, count);
+      $.each(commit, function(i, commit){
+        ul.append([
+          '<li>',
+          '<span class="git-date">',
+          formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T"),
+          '</span><br/>',
+          '<a href="', commit.url, '">', commit.message, '</a></li>'
+        ].join(""));
+      });
+    });
+  });
+</script>
 </html>
 <!--
 vim:sw=2 ts=2 et:
