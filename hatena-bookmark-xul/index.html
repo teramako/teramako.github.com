@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>はてなブックマーク拡張(teramako拡張版)</title>
+  <link rel="StyleSheet" type="text/css" href="../common.css" />
+  <script type="text/javascript" src="../js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="../js/github.js"></script>
+  <script type="text/javascript" src="../js/util.js"></script>
+</head>
+<body>
+<h1><img src="../img/titleimg.png" width="301" height="150" alt="hogehoge" />@github</h1>
+
+<p><a href="http://github.com/teramako/hatena-bookmark-xul/tree/master">Repository</a></p>
+<div id="contents">
+  <div class="section2">
+    <h2>はてなブックマーク拡張</h2>
+    <div class="section3" id="hatenaBookmarkXul">
+      <h3 id="about">これは何か</h3>
+      <p><a href="http://github.com/hatena/hatena-bookmark-xul/tree/master">本家</a>からフォークして機能追加したもの</p>
+      <h3 id="feature">追加機能</h3>
+      <h4 id="favoritTagsMenu">お気に入りのタグ</h4>
+      <p>
+        <img src="img/toolbar.png" alt="screenshot 1" border="1"/><br/>
+        ツールバーに「お気に入りのタグ」が追加されます。
+      </p>
+      <p>
+        「タグリストの編集」ボタンを押下すると以下のような編集ウィンドウが開きます。<br/>
+        <img src="img/edit-tag-list.png" alt="screenshot 2"/><br/>
+        下部のテキストボックスに<samp><code>[ToDo]</code></samp>などと入力し、
+        「タグの追加」ボタンでリストに追加できます。<br/>
+        タグは<samp><code>[foo][bar]</code></samp>などと複数指定でき、全てのタグを持つブックマークに絞ることが可能です。
+      </p>
+      <h3 id="how-to-build">ビルド方法</h3>
+      <p>ビルドするには<dfn>Rake</dfn>というRubyで作られたMakeツールを使用します。</p>
+      <pre>$ git clone http://github.com/teramako/hatena-bookmark-xul.git
+$ cd hatena-bokmark-xul
+$ rake
+(in /home/teramako/var/hatena-bookmark-xul)
+mkdir -p build/hatenabookmark/chrome
+cp install.rdf build/hatenabookmark/install.rdf
+cp -r defaults build/hatenabookmark/defaults
+cp -r resources build/hatenabookmark/resources
+cp -r searchplugins build/hatenabookmark/searchplugins
+cp -r chrome build/hatenabookmark/
+cd build/hatenabookmark &amp;&amp; (find -type f -regex '.+\.sw[po]$' -exec rm {} \;) ; zip -qr -9 ../../xpi/hatenabookmark-1.1.8.xpi *
+rm -rf build</pre>
+      <p>ビルドできると、<tt class="file">./xpi</tt>ディレクトリに<dfn>XPI</dfn>ファイルが作成されます。それをドラッグ&amp;ドロップ等でFirefoxに渡してあげればインストール可能です。</p>
+    </div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="sidebar-content">
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#about">これは何か</a></li>
+      <li>
+        <a href="#feature">追加機能</a>
+        <ul>
+          <li><a href="#favoritTagsMenu">お気に入りのタグ</a></li>
+        </ul>
+      </li>
+      <li><a href="#how-to-build">ビルド方法</a></li>
+    </ul>
+  </div>
+  <div class="sidebar-content">
+    <h2>History</h2>
+    <ul class="history" project="hatena-bookmark-xul" branch="master" maxcount="10"></ul>
+  </div>
+</div>
+<div id="footer">
+  <hr/>
+  <p><a href="/">Index</a></p>
+</div>
+</body>
+<script type="text/javascript">
+  $(".history").each(function(index, elm){
+    var count = elm.hasAttribute("maxcount") ? parseInt(elm.getAttribute("maxcount"),10) : 0;
+    var g = GITHUB("commits", {
+      user: "teramako",
+      project: elm.getAttribute("project"),
+      branch: elm.getAttribute("branch") || "master",
+      target: elm
+    });
+    var ul = $(elm);
+    g.getCommitsListForBranch(function(commit){
+      if (count > 0) commit = commit.slice(0, count);
+      $.each(commit, function(i, commit){
+        ul.append([
+          '<li>',
+          '<span class="git-date">',
+          formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T"),
+          '</span><br/>',
+          '<a href="', commit.url, '">', commit.message, '</a></li>'
+        ].join(""));
+      });
+    });
+  });
+</script>
+</html>
+<!--
+vim:sw=2 ts=2 et:
+-->
