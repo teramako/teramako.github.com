@@ -1,0 +1,361 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<meta name="copyright" content="Copyright &#169; 2009 Makoto Terada"/>
+	<meta name="font-size-adjustment" content="1"/>
+	<title>SL command - LLTV</title>
+	<link rel="StyleSheet" href="slidy.css" type="text/css"/>
+	<script src="slidy.js" charset="utf-8" type="text/javascript"></script>
+<style type="text/css">
+	h1 { border-bottom: thin solid blue; text-align:center; text-shadow: 5px 5px 2px silver;}
+	h2 { text-align: left; }
+	code {
+		padding: 0 5px;
+	}
+	.command {
+		font-size: 16pt;
+		background-color: silver;
+	}
+	pre.AA {
+		border:none;
+		line-height: 1;
+		background-color: black;
+		color: white;
+	}
+	pre .p {
+		padding: 0;
+		color: green;
+	}
+	pre .p:before {
+		content: "$ ";
+	}
+</style>
+</head>
+<body>
+<div class="slide cover title">
+	<table height="80%" width="100%" style="text-align:center;">
+		<tr>
+			<td>
+				<h1 style="font-size:64pt">大改善!!<br/>劇的ビフォーアフター</h1>
+				<p style="font-size:40pt">LLTV 2009-08-29</p>
+			</td>
+		</tr>
+		<tr>
+			<td><h2 style="font-size:50pt;text-align:center;">Vimperator で SL コマンド</h2></td>
+		</tr>
+		<tr>
+		</tr>
+	</table>
+	<p style="text-align:right">by teramako <a href="mailto:teramako@gmail.com">teramako@gmail.com</a></p>
+</div>
+<div class="slide">
+	<h1>自己紹介</h1>
+	<p><img src="teramako.gif"/> ← これ</p>
+	<p style='font-family: "ＭＳ ゴシック";'>Vimp( ﾟ∀ﾟ)o彡゜Vimp( ﾟ∀ﾟ)o彡 ...</p>
+</div>
+<div class="slide">
+	<h1>自己紹介(少し真面目に)</h1>
+	<ul class="incremental">
+		<li>続きはWebで
+			<ul>
+				<li><a href="http://d.hatena.ne.jp/teramako/">d.hatena.ne.jp/teramako/</a></li>
+				<li><a href="http://vimperator.g.hatena.ne.jp/teramako/">vimperator.g.hatena.ne.jp/teramako/</a></li>
+				<li><a href="http://teramako.github.com/">teramako.github.com</a></li>
+				<li><a href="http://twitter.com/teramako/">twitter.com/teramako</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Index</h1>
+	<ol>
+		<li><a href="#(3)">Vimperatorとは</a></li>
+		<li><a href="#(5)">slコマンド</a></li>
+		<li><a href="#(6)">VimperatorプラグインでSLコマンドを</a></li>
+		<li><a href="#(7)">JavaScriptでの再現方法</a></li>
+		<li><a href="#(9)">Canvas</a></li>
+		<li><a href="#(11)">まずはHTML上に</a></li>
+		<li><a href="#(12)">より面白さを求めて</a></li>
+		<li><a href="#(15)">最後に</a></li>
+	</ol>
+</div>
+<div class="slide">
+	<h1>Vimperatorとは - 1</h1>
+	<ul>
+		<li>Mozilla FirefoxのAddon(拡張機能)</li>
+		<li>Vimperator = VIM + operate + er
+		<ul>
+			<li>テキストエディタのVIMの様な操作を実現するもの</li>
+			<li>キーボード主体でFirefoxの操作をしたい人向け</li>
+			<li>テキスト文化的</li>
+		</ul>
+		</li>
+		<li>VIMの様なキーバインド
+		<ul>
+			<li><kbd>j<kbd>,<kbd>k</kbd>で上下スクロールなど</li>
+		</ul>
+		</li>
+		<li>EX コマンド
+		<ul>
+			<li>100を超えるコマンド数</li>
+			<li><code>:open <var>url or keywords</var></code>,<code>:tabopen <var>url or keywords</var></code>でページを開く</li>
+			<li>コマンドやコマンド引数の<kbd>Tab</kbd>補完機能</li>
+		</ul>
+		</li>
+		<li>Hit-a-hint
+		<ul>
+			<li><kbd>f</kbd>,<kbd>F</kbd>からリンクを開く機能</li>
+		</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Vimperatorとは - 2</h1>
+	<ul>
+		<li>VIMのような豊富なカスタマイズ性
+		<ul>
+			<li>キーバインドの追加・変更</li>
+			<li>RCファイルによる初期設定(<code><var>$HOME</var>/.vimperatorrc</code>)</li>
+		</ul>
+		</li>
+		<li>Vimperatorプラグインによる拡張性(外部JavaScriptファイル)
+		<ul>
+			<li>userChrome.js + API の様な感じ
+			<ul>
+				<li>EX コマンドの追加</li>
+				<li>キーバインド(map)の追加</li>
+			</ul>
+			</li>
+			<li>日本のユーザにとってかなり重要
+			<ul>
+				<li>有志によって150を超えるスクリプトが<a href="http://coderepos.org/share/browser/lang/javascript/vimperator-plugins/trunk">CodeRepos</a>にアップされている</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>slコマンド</h1>
+	<ul>
+		<li>UNIX系OSのジョークソフト</li>
+		<li><code>ls</code>コマンドを間違って<code>sl</code>とtypoしてしまう</li>
+		<li>コンソール上を<dfn>D51型蒸気機関車</dfn>がアニメーションで動く</li>
+		<li>説明では、「キータイプ矯正ソフト」である</li>
+		<li>ソース: <a href="http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/">豊田正史とslコマンド (Masashi Toyoda and SL command)</a></li>
+	</ul>
+	<pre class="AA" style="font-size:medium;">                    (@@) (  ) (@)  ( )  @@    ()    @     O     @     O      @
+               (   )
+           (@@@@)
+        (    )
+
+      (@@@)
+      ====        ________                ___________
+  _D _|  |_______/        \__I_I_____===__|_________|
+   |(_)---  |   H\________/ |   |        =|___ ___|      _________________ 
+   /     |  |   H  |  |     |   |         ||_| |_||     _|                \_____A
+  |      |  |   H  |__--------------------| [___] |   =|                        |
+  | ________|___H__/__|_____/[][]~\_______|       |   -|                        |
+  |/ |   |-----------I_____I [][] []  D   |=======|____|________________________|_
+__/ =| o |=-~~\  /~~\  /~~\  /~~\ ____Y___________|__|__________________________|_
+ |/-=|___||    ||    ||    ||    |_____/~\___/          |_D__D__D_|  |_D__D__D_|
+  \_/      \__/  \__/  \__/  \__/      \_/               \_/   \_/    \_/   \_/</pre>
+
+</div>
+<div class="slide">
+	<h1>VimperatorプラグインでSLコマンドを</h1>
+	<ul>
+		<li>Vimperatorのコマンドで<code>ls</code>コマンドがある
+		<ul>
+			<li>Firefoxのタブをリスト表示するもの(vimでは開いているバッファをリスト表示</li>
+		</ul>
+		</li>
+		<li><code>ls</code>コマンドがあるなら<code>sl</code>コマンドもないとね!!!(ぉ
+			<ul>
+				<li>JavaScriptでSLを動かすVimperatorプラグインを作成しよう</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>JavaScriptでの再現方法</h1>
+	<ul>
+		<li>HTML
+			<ul>
+				<li>通常のDOM操作</li>
+				<li>既に実装がある</li>
+				<ul>
+					<li><a href="http://creazy.net/2008/02/sl_js.html">JavaScriptでSLを走らせる「SL.JS」を作りました [C!]</a></li>
+				</ul>
+			</ul>
+		</li>
+		<li>SVG
+			<ul>
+				<li>実装方法がHTMLの場合と大差なさそうで面白くない</li>
+			</ul>
+		</li>
+		<li>Canvas
+			<ul>
+				<li>Text APIは新しい感じで受けが良いかも。採用</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>JavaScriptでの再現方法(番外編)</h1>
+	<ul>
+		<li>ターミナルのエスケープシーケンスを使用して、コンソール上で
+			<ul>
+				<li>Spidermonkey</li>
+				<li>Rihno</li>
+				<li>xpcshell(Mozilla Xulrunner)</li>
+			</ul>
+		</li>
+		<li>コンソール上では既にbashスクリプトだが拙者がやってしまった
+			<ul>
+				<li><a href="http://github.com/teramako/scripts/blob/master/shell/sl.sh">shell/sl.sh at master from teramako's scripts - GitHub</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Canvas Text API</h1>
+	<ul>
+		<li>Firefox 3.1 以降からは<a href="http://www.whatwg.org/specs/web-apps/current-work/#text">HTML5のドラフト版のText API</a>が実装されている
+		<ul>
+			<li><code><var>context</var>.fillText</code></li>
+			<li><code><var>context</var>.strokeText</code></li>
+			<li><code><var>context</var>.measureText</code></li>
+			<li>など</li>
+			<li>詳細は<a href="http://builder.japan.zdnet.com/sp/firefox-3-for-developer-2008/story/0,3800087566,20378808,00.htm?ref=rss">Firefox 3.1で強化されるHTML 5対応--Canvas Text APIを検証 - builder by ZDNet Japan</a>を参照</li>
+		</ul>
+		</li>
+		<li>また、実験的なAPIの名残である以下のメソッドも使用可能
+		<ul>
+			<li><code><var>context</var>.mozDrawText</code></li>
+			<li><code><var>context</var>.mozMeasureText</code></li>
+			<li><code><var>context</var>.mozPathText</code></li>
+			<li><code><var>context</var>.mozTextAlongPath</code></li>
+			<li>詳細は<a href="https://developer.mozilla.org/ja/Drawing_text_using_a_canvas#.e6.b3.a8.e6.84.8f.e7.82.b9_2">Drawing text using a canvas - MDC</a>を参照</li>
+		</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Canvasによるアニメーションの基本</h1>
+	<ul>
+		<li>定期的な描画はDOMのwindow.setTimeoutやwindow.setIntervalを使用</li>
+		<li>一度描画したものは描画されっぱなし → 事前にクリアする必要あり
+		<ul>
+			<li><code><var>context</var>.clearRect</code>の使用</li>
+		</ul>
+		</li>
+	</ul>
+	<pre>var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+var interval = window.setInterval(draw, 1000);
+function draw(){
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	// 以下に描画のコード
+	// ...
+} </pre>
+	<p>clearRectをした例</p>
+	<canvas width="800" height="50" id="canvas_1" style="border: thin solid black;"></canvas>
+	<p>clearRectをしない例</p>
+	<canvas width="800" height="50" id="canvas_2" style="border: thin solid black;"></canvas>
+	<script type="text/javascript">
+	var canvas1 = document.getElementById("canvas_1");
+	var canvas2 = document.getElementById("canvas_2");
+	if (canvas1.getContext && canvas2.getContext){
+		var ctx1 = canvas1.getContext("2d");
+		var ctx2 = canvas2.getContext("2d");
+		var interval = window.setInterval(draw, 10);
+	}
+	var counter = 0;
+	function random(num){
+		return Math.floor(Math.random() * num);
+	}
+	function draw(){
+		counter++;
+		ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+		if (counter > canvas1.width) {
+			counter = - 100;
+			ctx1.fillStyle = "rgb(" + random(256) + "," + random(256) + "," + random(256) + ")";
+			ctx2.fillStyle = "rgb(" + random(256) + "," + random(256) + "," + random(256) + ")";
+		}
+		ctx1.fillRect(counter, 0, 50, 50);
+		ctx2.fillRect(counter, 0, 50, 50);
+	}
+	</script>
+</div>
+<div class="slide">
+	<h1>まずはHTMLで</h1>
+	<p>普通にHTML上に実装してみた</p>
+	<p><button onclick="SL_start()">Start</button> <button onclick="SL_stop()">Stop</button></p>
+	<ul>
+		<li><label><input type="checkbox" id="SL_doFly"/>: fly</label>
+		<li><label><input type="checkbox" id="SL_doLogo"/>: logo</label>
+	</ul>
+	<canvas id="sl" width="800" height="400" style="border:thin solid black;background-color:black;"></canvas>
+	<script type="text/javascript;version=1.8" src="sl.js"></script>
+</div>
+<div class="slide">
+	<h1>より面白さを求めて</h1>
+	<p>単にブラウザ上で動作するだけでは面白くないよね!?<br/>もっとうざったくしよう</p>
+	<ul>
+		<li>フルスクリーンで動かそう</li>
+		<li>せっかくcanvasなんだから+αなアニメーションを入れよう</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>フルスクリーン</h1>
+	<ul>
+		<li>XULのpanel要素を使用
+		<ul>
+			<li>ウィンドウ装飾を持たないポップアップが可能
+			<ul>
+				<li><code><var>panel</var>.openPopupAtScreen()</li>
+				<li>詳細: <a href="https://developer.mozilla.org/ja/XUL/panel">panel - MDC</a></li>
+			</ul>
+			</li>
+			<li>CSSの<code>background-color: rgba(...)</code>を用いて半透明に
+			<ul>
+				<li>UNIX系のX Windowでは動作しない</li>
+				<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=408284">Bug 408284 ? Support for translucent windows on Linux</a></li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>canvas要素のwidth,heightを最大値まで広げる</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>+αなアニメーション</h1>
+	<h2>ネタ</h2>
+	<p><code>-s</code>オプションを用意してみた</p>
+	<p style="font-size:40pt">お題は「lucky☆st○r」</p>
+	<p style="font-size:60pt;line-height:1" class="incremental">全然ダメで<br/>ごめんなさい<br/>orz</p>
+</div>
+<div class="slide">
+	<h1>最後に</h1>
+	<ul class="incremental">
+		<li>そもそもVimperatorでlsコマンドを打とうと思うやつはいない</li>
+		<li>今回の作成のためにslコマンドを何度も打っていたら癖になった</li>
+		<li>アニメーションは難しい
+		<ul>
+			<li>拙者の力不足</li>
+			<li>タイムラン制御が簡単になるライブラリやフレームワークが欲しい</li>
+		</ul>
+		</li>
+		<li>重たい
+		<ul>
+			<li>オブジェクト数が多いと処理落ちする</li>
+			<li>テキストの描画が重い気がする</li>
+		</ul>
+		</li>
+		<li>まとめると、まったくもって役に立たない</li>
+		<li>だが、そ れ が い い</li>
+	</ul>
+</div>
+</body>
+</html>
