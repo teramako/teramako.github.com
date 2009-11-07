@@ -1,0 +1,208 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<meta name="copyright" content="Copyright &#169; 2009 Makoto Terada"/>
+	<meta name="font-size-adjustment" content="3"/>
+	<title>SQLiteAnalyzer - Firefox Developers Conference 2009</title>
+	<link rel="StyleSheet" href="slidy.css" type="text/css"/>
+	<script src="slidy.js" charset="utf-8" type="text/javascript"></script>
+<style type="text/css">
+	h1, h2 { font-family: "IPA P明朝",sans-serif; }
+	h1 { border-bottom: thin solid blue; text-align:center; text-shadow: 5px 5px 2px silver;}
+	h2 { text-align: left; }
+	code {
+		padding: 0 5px;
+	}
+	.command {
+		font-size: 16pt;
+		background-color: silver;
+	}
+	p,li {
+		font-family: "メイリオ","IPA Pゴシック",serif;
+	}
+</style>
+</head>
+<body>
+<div class="slide cover title">
+	<table height="80%" width="100%" align="center">
+		<tr>
+			<td>
+				<h1 style="font-size:64pt">SQLiteAnalyzer(仮)</h1>
+				<p style="font-size:30pt">Firefox Developers Conference 2009-11-08</p>
+			</td>
+		</tr>
+		<tr>
+			<td><h2 style="font-size:50pt;text-align:center;">開発者募集中</h2></td>
+		</tr>
+	</table>
+	<p style="text-align:right">by teramako <a href="mailto:teramako@gmail.com">teramako@gmail.com</a></p>
+</div>
+<div class="slide">
+	<h1>これは何？</h1>
+	<ul>
+		<li>SQLite DBファイルの使用状況を可視化するXulrunnerアプリケーション</li>
+		<li>各テーブルやインデックスの使用サイズや空きサイズを解析</li>
+		<li>sqlite3_analyzerというコマンドラインツールの出力の保管と表示(GUI化)</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>きっかけ</h1>
+	<p>ちょっと前、Firefoxのパフォーマンス改善のために内部で使用されるSQLiteデータベースの再編成が注目を浴びた</p>
+	<ul>
+		<li><a href="https://addons.mozilla.org/ja/firefox/addon/13824">Vacuum Places</a></li>
+		<li><a href="https://addons.mozilla.org/ja/firefox/addon/13878">Vacuum Places Improved</a></li>
+		<li><a href="https://addons.mozilla.org/ja/firefox/addon/13860">PlacesCleaner</a></li>
+		<li><a href="https://addons.mozilla.org/ja/firefox/addon/11198">SQLite Optimizer</a></li>
+		<p>via <a href="http://level.s69.xrea.com/mozilla/index.cgi?id=20090824_VACUUM">Places を VACUUM する拡張機能3個 - えむもじら</a></p>
+	</ul>
+	<p>また、Firefox3.6から<tt class="file">places.sqlite</tt>がアイドル時間中にVACUUMされるようになった</p>
+	<p>それはそれでいいけど、DBの中身を可視化したい。データを以って再編成時期を見極めたい</p>
+	<p>Firefox以外のアプリケーションが使用するDBにも応用できるのでは！？</p>
+</div>
+<div class="slide">
+	<h1>Screenshot</h1>
+	<img src="version1.1.png" alt="SQLiteAnalyzer(仮) v1.1" width="100%"/>
+</div>
+<div class="slide">
+	<h1>ソースコード</h1>
+	<ul>
+		<li><a href="http://github.com/teramako/sqlite_analyzer">teramako's sqlite_analyzer at master - GitHub</a></li>
+	</ul>
+	<h2>必要なもの</h2>
+	<ul>
+		<li><a href="http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/">Xulrunner 1.9以上</a> or<br/>
+		Firefox 3.5以上(firefox -app path.to.application.ini で起動)
+		</li>
+		<li><a href="http://sqlite.org/download.html">sqlite3_analyzer</a></li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>sqlite3_analyzer</h1>
+	<p><a href="http://sqlite.org/">sqlite.org</a>提供のsqliteデータベースの使用状況を解析するコマンドラインツール</p>
+	<ul>
+		<li>
+			<a href="http://sqlite.org/download.html">SQLite Download Page</a>
+			<ul>
+				<li>Linux: sqlite3_analyzer-3.6.1.bin.gz</li>
+				<li>Max OS X: sqlite3_analyzer-3.6.1-osx-x86.bin.gz</li>
+				<li>Windows: sqlite3_analyzer-3.6.1.zip</li>
+			</ul>
+		</li>
+		<li>SQL文を標準出力</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>sqlite3_analyzer出力</h1>
+	<object data="sqlite3_analyzer.output.txt" type="text/plain" border="1" width="95%" height="75%"></object>
+	<p>SQL分を抜き出して加工して、DBに保管</p>
+</div>
+<div class="slide">
+	<h1>外部ファイル実行方法 - 1</h1>
+	<h2><a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIProcess">nsIProcess</a></h2>
+	<ul>
+		<li>標準で提供される外部ファイル実行のためのXPCOM</li>
+	</ul>
+	<pre>var filePath = "C:\\foo\\bar\\hoge.exe";
+var file = Cc["@mozilla.org/file/local;1"]
+          .createInstance(Ci.nsILocalFile);
+file.initWithPath(filePath);
+var args = ["foo", "bar"];
+var p = Cc["@mozilla.org/process/util;1"]
+        .createInstance(Ci.nsIProcess);
+p.init(file);
+p.run(true, args, args.length);</pre>
+	<ul>
+		<li>簡単だけど、標準出力/エラーを受け取れない</li>
+		<ul>
+			<li>一度リダイレクトでファイルに出力して、読む必要がある</li>
+			<li>格好良くない</li>
+		</ul>
+	</ul>
+</div>
+<div class="slide">
+	<h1>外部ファイル実行方法 - 2</h1>
+	<h2>IPC Service</h2>
+	<ul>
+		<li>Thunderbirdで有名な<a href="https://addons.mozilla.org/ja/thunderbird/addon/71">Enigmail</a></li>
+		<li>Firefox &amp; GmailでGPGをサポートする<a href="https://addons.mozilla.org/en-US/firefox/addon/4645">FireGPG</a></li>
+		<ul>
+			<li>gpg外部コマンドを使って暗号化および認証を行う</li>
+		</ul>
+	</ul>
+</div>
+<div class="slide">
+    <h1>外部ファイル実行方法 - 3</h1>
+    <h2>IPC Service具体例</h2>
+	<pre style="font-size:10pt;">
+function RequestObserver(func, args){
+  this._func = func; this._args = args;
+}
+RequestObserver.prototype = {
+  QueryInterface: function (iid) {
+    if (!iid.equals(Ci.nsIRequestObserver) &amp;&amp; !iid.equals(Ci.nsISupports))
+      throw Components.results.NS_ERROR_NO_INTERFACE;
+    return this;
+  },
+  onStartRequest: function (channel, ctxt) { },
+  onStopRequest: function (channel, ctxt, status) {
+	  // ...
+  }
+};
+
+const ipcService = Cc["@mozilla.org/process/ipc-service;1"].getService(Ci.nsIIPCService);
+function runAsync(file, args, cbFunc, cbArgs) {
+    var stdoutPipeConsole = Cc["@mozilla.org/process/pipe-console;1"].createInstance(Ci.nsIPipeConsole);
+    stdoutPipeConsole.open(1024, 0, true); // 1024行分
+    var stderrPipeConsole = Cc["@mozilla.org/process/pipe-console;1"].createInstance(Ci.nsIPipeConsole);
+    stderrPipeConsole.open(100, 0, true); // 100行分
+    var env = [];
+    var observer = new RequestObserver(cbFunc, cbArgs); // nsIRequestObserver
+    var ipcRequest = ipcService.runAsync(file, args, args.length,
+                                         "", // preInput
+                                         "", // stdInData
+                                         0, // stdInData.length
+                                         env, env.length,
+                                         stdoutPipeConsole,
+                                         stderrPipeConsole,
+                                         observer);
+}</pre>
+	<ul>
+		<li>標準出力/エラーを受け取れる(ただし、指定行数分のみ?)</li>
+		<li>非同期実行が可能(runAsyncメソッド)</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>開発状況</h1>
+	<ul>
+		<li>UI
+		<ul>
+			<li>コンテキストメニュー: 無し</li>
+			<li>データツリーのグループ化: 無し</li>
+		</ul>
+		</li>
+		<li>グラフ
+		<ul>
+			<li>DB全体の使用率グラフ: 未完成</li>
+			<li>複数期間選択時の使用率推移グラフ: 無し</li>
+		</ul>
+		</li>
+		<li>ツール
+		<ul>
+			<li>VACUUM機能: 無し</li>
+			<li>REINDEX機能: 無し</li>
+			<li>レポート出力: 無し</li>
+		</ul>
+	</ul>
+	<p>要するに何も出来て無い</p>
+</div>
+<div class="slide">
+	<h1>開発者募集中</h1>
+	<p>やることいっぱい。<br/>ぜひ、</p>
+	<ul>
+		<li><a href="mailto:teramako@gmail.com">teramako@gmail.com</a> or</li>
+		<li>Twitter:<a href="http://twitter.com/teramako/">@teramako</a></li>
+	</ul>
+	<p>まで！！</p>
+</div>
+</body>
+</html>
