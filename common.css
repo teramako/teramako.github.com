@@ -75,6 +75,7 @@ li.repository {
 }
 a.repository, a.page {
   margin-left:0.5em;
+  font-size:small;
 }
 a.repository:before {
   content: url(http://github.com/images/modules/dashboard/news/push.png);
