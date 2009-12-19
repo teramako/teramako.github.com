@@ -1,0 +1,233 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<meta name="copyright" content="Copyright &#169; 2009 Makoto Terada"/>
+	<meta name="font-size-adjustment" content="3"/>
+	<title>Meta Jetpacking</title>
+	<link rel="StyleSheet" href="slidy.css" type="text/css"/>
+	<script src="slidy.js" charset="utf-8" type="text/javascript"></script>
+<style type="text/css">
+	* {
+		font-family: "メイリオ", serif;
+	}
+	div.titlepage.h2{
+		padding-top: 20% !important;
+	}
+	div.titlepage h1 {
+		font-family: "Imprint MT Shadow",fantasy;
+	}
+	h1 {
+		border-bottom: thin solid blue; text-align:center; text-shadow: 5px 5px 2px silver;
+	}
+	code {
+		font-style: normal;
+		padding: 0 5px;
+		background: rgba(128,128,128,0.2);
+	}
+	kbd {
+		font-style: normal;
+		background: #ffd;
+		-moz-box-shadow: 3px 3px 2px silver;
+		padding: 0 5px;
+	}
+	img {
+		-moz-box-shadow: 10px 10px 15px gray;
+	}
+	li pre {
+		margin-top: 0;
+	}
+	#bg,#logo {
+		-moz-box-shadow: none;
+		opacity: .8;
+		position: fixed;
+	}
+	#bg {
+		top: 10%;
+		left: -150px;
+	}
+	#logo {
+		top: 10%;
+		left: 230px;
+		opacity: .3;
+	}
+</style>
+</head>
+<body>
+<div class="background">
+	<img id="bg" src="back.jpg"/>
+	<img id="logo" src="logo.png"/>
+</div>
+<div class="slide titlepage">
+	<table height="75%" width="100%" style="text-align:center;">
+		<tr>
+			<td>
+				<h1 style="font-size:64pt">Meta Jetpacking</h1>
+				<p style="font-size:30pt">Mozilla 勉強会@東京 2009-12-19</p>
+			</td>
+		</tr>
+	</table>
+	<address>by teramako <a href="mailto:teramako@gmail.com">teramako@gmail.com</a></address>
+</div>
+<div class="slide titlepage h1">
+	<h1>Jetpackインストーラ</h1>
+	<p>開発効率の向上を</p>
+</div>
+<div class="slide">
+	<h1>Jetpackのエディタ</h1>
+	<p>付属のエディタ(about:jetpack)では書きにくい</p>
+	<ul>
+		<li>コード補完がない</li>
+		<li>
+			エディタ部分がTextAreaでなく、Canvas
+			<ul>
+				<li>XUL/Migemoが入っていると<kbd>/</kbd>,<kbd>\</kbd>を打てない！</li>
+				<li>Vimperatorを使っていると(ry</li>
+			</ul>
+		</li>
+		<li>他のドキュメントを見ながらの場合、いちいちタブ切り替えが発生する</li>
+		<li>日本語打てない(必要ないけど)</li>
+	</ul>
+	<p class="bigger">ヽ(｀Д´#)ﾉ ムキー 書きにくいー</p>
+</div>
+<div class="slide">
+	<h1>Jetpackのインストールシステム</h1>
+	<p>Webからのインストールに特化している</p>
+	<ul>
+		<li><code>&lt;link rel="jetpack" href="..."/&gt;</code></li>
+		<li>
+			ローカルファイルのインストールが面倒<br/>
+			いちいちHTMLファイルを用意しないといけない
+		</li>
+	</ul>
+	<br/><br/><br/>
+	<p class="bigger">ヽ(｀Д´#)ﾉ ムキー 面倒過ぎるー</p>
+</div>
+<div class="slide">
+	<h1 class="hidden">No More Jetpack Editor</h1>
+	<table height="75%" width="100%" style="text-align:center;"><tr><td>
+	<img src="NoMoreJetpackEditor.png"/>
+	</td></tr></table>
+</div>
+<div class="slide">
+	<h1 class="hidden">No More HTML</h1>
+	<table height="75%" width="100%" style="text-align:center;"><tr><td>
+	<img src="NoMoreHTML.png"/>
+	</td></tr></table>
+</div>
+<div class="slide">
+	<h1>現状を打開しよう</h1>
+	<ul>
+		<li>開発効率を上げたい</li>
+		<li>好きなエディタで編集したい</li>
+		<li>ローカルファイルのインストールをもっと簡単にしたい</li>
+	</ul>
+	<p>
+		出来ないならば出来るように作れば良い。<br/>
+		<span class="bigger">Firefoxならそれが出来る</span><br/><br/>
+		↓ ↓ ↓<br/><br/>
+		<a href="http://teramako.github.com/JetpackScripts/jetpack-feature-installer.html">jetpack feature installer</a>
+	</p>
+</div>
+<div class="slide">
+	<h1>Jetpack Feature Installer - 1</h1>
+	<h2>
+		Get <a href="http://teramako.github.com/JetpackScripts/jetpack-feature-installer.html">jetpack feature installer</a> !!<br/>
+		<a style="font-size:16pt" href="http://teramako.github.com/JetpackScripts/jetpack-feature-installer.html">http://teramako.github.com/JetpackScripts/jetpack-feature-installer.html</a>
+	</h2>
+	<p>ローカルファイルのインストールを支援するJetpack Feature</p>
+	<ul>
+		<li>
+			ツール -&gt; Install JetpackFeature メニュー
+			<img src="jetpackFeatureInstaller_Menu.png" align="right"/>
+		</li>
+		<li>
+			ファイル選択ダイアログからインストール<br/>
+			<img src="jetpackFeatureInstaller_FilePicker.png" width="50%"/>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Jetpack Feature Installer - 2</h1>
+	<h2>インストールしたら・・・</h2>
+	<p><img src="jetpackFeatureInstaller_refresh.png" align="right"/></p>
+	<ol>
+		<li>動作確認</li>
+		<li>ファイル編集(好きなエディタでどうぞ)</li>
+		<li>about:jetpack -&gt; Installed Features</li>
+		<li>refresh !!!
+		</li>
+		<li>1へ</li>
+	</ol>
+</div>
+<div class="slide">
+	<h1>Jetpack Feature Installer - 3</h1>
+	<h2>注意点</h2>
+	<ul>
+		<li>Components 使っている</li>
+		<li>
+			将来的に使えなくなる可能性がある
+		</li>
+	</ul>
+</div>
+<div class="slide titlepage h1">
+	<h1>Jetpack Hack</h1>
+	<p>Jetpackの内部をハックしよう</p>
+</div>
+<div class="slide">
+	<h1>内部コンテキストへ！ - 1</h1>
+	<h2>
+		Get <a href="http://teramako.github.com/JetpackScripts/jetpack_hack.html">jetpack hack</a> !!<br/>
+		<a style="font-size:16pt" href="http://teramako.github.com/JetpackScripts/jetpack_hack.html">http://teramako.github.com/JetpackScripts/jetpack_hack.html</a>
+	</h2>
+	<p>要：<a href="https://addons.mozilla.org/ja/firefox/addon/6622">DOM Inspector</a></p>
+	<p><img src="jetpack_hack_statusbar.png" align="right"/></p>
+	<p>
+		ステータスバーのJetpackアイコンをクリックするとDOM Inspectorが起動
+		<img src="jetpack_hack_domInspector.png"/>
+	</p>
+</div>
+<div class="slide">
+	<h1>内部コンテキストへ！ - 2</h1>
+	<p>JetpackRuntime -&gt; contexts に各featureがある</p>
+	<p>
+		JetpackRuntime -&gt; contexts -&gt; <var>index</var> -&gt; unsafeSandbox に実行コンテキスト<br/>
+		コンテキストのグローバルオブジェクトにアクセス可能！<br/>
+		デバッグに役立つかも！？<br/>
+		<img src="jetpack_hack_domInspector_2.png"/>
+	</p>
+</div>
+<div class="slide titlepage h1">
+	<h1>VimperatorからHack</h1>
+	<p>キーボード派のあなたへ</p>
+</div>
+<div class="slide">
+	<h1>Vimperatorを使う</h1>
+	<h2><a href="http://gist.github.com/239525">http://gist.github.com/239525</a></h2>
+	<p>vimperatorの<code>js</code>,<code>echo</code>コマンド + 補完機能は最強</p>
+	<ul>
+		<li>各featureのタイトル列挙
+			<pre>:echo jetpack.contexts.map(function(c) c.feed.title)</pre>
+		</li>
+		<li>import可能なfutureの列挙
+			<pre>:echo jetpack.contexts[0].unsafeSandbox.jetpack.future.list()</pre>
+			<pre>:echo jetpack.jWin.JetpackEnv.futures</pre>
+		</li>
+		<li>Install
+			<pre>:js jetpack.install("~/var/JetpackScripts/jetpack_hack.js")</pre>
+		</li>
+		<li>Uninstall
+			<pre>:js jetpack.uninstall("jetpack_hack")</pre>
+		</li>
+		<li>Reinstall
+			<pre>:js jetpack.reinstall("jetpack_hack")</pre>
+		</li>
+		<li>Refresh
+			<pre>:js jetpack.refresh("jetpack_hack")</pre>
+		</li>
+		<li>Purge
+			<pre>:js jetpack.purge("jetpack_hack")</pre>
+		</li>
+	</ul>
+</div>
+</body>
+</html>
