@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>wat - hogehoge@github</title>
+  <link rel="StyleSheet" type="text/css" href="../common.css" />
+  <script type="text/javascript" src="../js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="../js/github.js"></script>
+  <script type="text/javascript" src="../js/util.js"></script>
+</head>
+<body>
+<h1><img src="../img/titleimg.png" width="301" height="150" alt="hogehoge" />@github</h1>
+
+<p><a href="http://github.com/teramako/wat/tree/master">Repository</a></p>
+<div id="contents">
+  <div class="section2">
+    <h2>WAT (WebApplicationTab)</h2>
+    <p><a href="https://addons.mozilla.org/ja/thunderbird/addon/55713">Get Extension</a></p>
+    <div class="section3">
+      <h3 id="about">これは何か</h3>
+      <p>Thunderbird 3 のタブにWebページを開くアドオン</p>
+      <p>
+        <img src="img/WAT_toolbarmenu.png" width="500" height="auto" alt="WAT_toolbarmenu capture"/>
+      </p>
+    </div>
+    <div class="section3">
+      <h3 id="feature">機能</h3>
+      <ul>
+        <li>
+          ブックマーク的にURLメニューに登録できます。<br/>
+          <img src="img/WAT_Option.png" width="400" height="auto" alt="WAT_Option capture"/>
+        </li>
+        <li>
+          "WAT" -&gt; "URLをタブに開く" から任意のURLを開けます<br/>
+          <img src="img/WAT_OpenURL_dialog.png" alt="WAT_OpenURL_dialog capture"/>
+        </li>
+        <li>
+          コンテキストメニュー(右クリック)からタブに開けます<br/>
+          <img src="img/WAT_ContextMenu.png" alt="WAT_ContextMenu capture"/>
+        </li>
+        <li>
+          Thunderbird 3では開くことが出来るタブの数が10個に制限されていますが、必要であればさらに開くことが出来ます。<br/>
+          <img src="img/WAT_maxTabs_WARNING_en.png" alt="WARNING:WAT_maxTabs capture"/>
+        </li>
+      </ul>
+    </div>
+    <div class="section3">
+      <h3 id="how_to_build">ビルド方法</h3>
+      <pre>
+        $ git clone git://github.com/teramako/wat.git 
+        $ cd wat
+        $ sh build.sh
+      </pre>
+    </div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="sidebar-content">
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#about">これは何か</a></li>
+      <li><a href="#feature">機能</a></li>
+      <li><a href="#how-to-build">ビルド方法</a></li>
+    </ul>
+  </div>
+  <div class="sidebar-content">
+    <h2>History</h2>
+    <ul class="history" project="wat" branch="master" maxcount="10"></ul>
+  </div>
+</div>
+<div id="footer">
+  <hr/>
+  <p><a href="/">Index</a></p>
+</div>
+</body>
+<script type="text/javascript">
+  $(".history").each(function(index, elm){
+    var count = elm.hasAttribute("maxcount") ? parseInt(elm.getAttribute("maxcount"),10) : 0;
+    var g = GITHUB("commits", {
+      user: "teramako",
+      project: elm.getAttribute("project"),
+      branch: elm.getAttribute("branch") || "master",
+      target: elm
+    });
+    var ul = $(elm);
+    g.getCommitsListForBranch(function(commit){
+      if (count > 0) commit = commit.slice(0, count);
+      $.each(commit, function(i, commit){
+        ul.append([
+          '<li>',
+          '<span class="git-date">',
+          formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T"),
+          '</span><br/>',
+          '<a href="', commit.url, '">', commit.message, '</a></li>'
+        ].join(""));
+      });
+    });
+  });
+</script>
+</html>
+<!--
+vim:sw=2 ts=2 et:
+-->
