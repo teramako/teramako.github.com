@@ -1,0 +1,602 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<meta name="copyright" content="Copyright &#169; 2010 Makoto Terada"/>
+	<meta name="font-size-adjustment" content="-1"/>
+	<title>Thunderbird タブ拡張(WAT)</title>
+	<link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+	<link rel="StyleSheet" href="./custom.css" type="text/css"/>
+	<script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+	<img id="bg" src="img/feature-background.jpg" width="100%"/>
+</div>
+<div class="slide titlepage">
+	<table height="75%" width="100%" style="text-align:center;">
+		<tr>
+			<td>
+				<h1 style="font-size:64pt">Thunderbird<br/>タブ拡張(WAT)</h1>
+				<p style="font-size:30pt">Mozilla 勉強会@東京 2010-04-03</p>
+			</td>
+		</tr>
+	</table>
+	<address>by teramako <a href="mailto:teramako@gmail.com">teramako@gmail.com</a></address>
+</div>
+<div class="slide">
+	<h1>自己紹介</h1>
+	<p><img src="img/teramako.gif"/>teramako</p>
+	<h2>Webサイト</h2>
+	<dl>
+		<dt>はてな id:teramako</dt>
+			<dd><a href="http://d.hatena.ne.jp/teramako/">http://d.hatena.ne.jp/teramako/</a></dd>
+			<dd><a href="http://vimperator.g.hatena.ne.jp/teramako/">http://vimperator.g.hatena.ne.jp/teramako/</a></dd>
+		<dt>Twitter</dt>
+			<dd><a href="http://twitter.com/teramako/">http://twitter.com/teramako/</a></dd>
+		<dt>GitHub</dt>
+			<dd><a href="http://github.com/teramako/">http://github.com/teramako/</a></dd>
+	</dl>
+	<h2>歴</h2>
+	<ul>
+		<li>拡張機能を作りたくてJavaScript,XULを勉強し始める (2006年頃)</li>
+		<li>初めて作った拡張はThunderbird用の<a href="https://addons.mozilla.org/ja/thunderbird/addon/4984">TagDialog</a> (2007年)</li>
+		<li><a href="http://code.google.com/p/vimperator-labs/">Vimperator</a>に出会い、傾倒 (2008年秋)</li>
+		<li>Vimperatorのプラグインを作成して過ごす (2009年)</li>
+		<li>Jetpackもちょこちょこと触ってた</li>
+		<li>Thunderbird 3が出てタブ機能が付いたことを知り、<a href="https://addons.mozilla.org/ja/thunderbird/addon/55713">WAT</a>なる拡張を作る (2009年冬)</li>
+		<li><a href="https://addons.mozilla.org/ja/firefox/addon/123891" title="Vimperator日本語ヘルプ :: Add-ons for Firefox">Vimperatorの日本語ヘルプ拡張</a>をAMOにアップ(昨日)</li>
+	</ul>
+</div>
+<div class="slide titlepage h1">
+	<h1><img src="img/watIcon32.png"/>WAT</h1>
+	<p>WebApplicationTab</p>
+</div>
+<div class="slide">
+	<h1>What is WAT</h1>
+	<p>Thunderbird 3 でWebページをタブに開くことを可能にする拡張機能</p>
+	<ul>
+		<li>AMO: <a href="https://addons.mozilla.org/ja/thunderbird/addon/55713">https://addons.mozilla.org/ja/thunderbird/addon/55713</a></li>
+		<li>リポジトリ: <a href="http://github.com/teramako/wat">http://github.com/teramako/wat</a></li>
+	</ul>
+	<h2>Screenshots</h2>
+	<p>
+		<img src="img/WAT_menu.png" alt="capture_1" align="left"/>
+		<img src="img/WAT_1.png" alt="capture_2" width="750"/>
+	</p>
+</div>
+<div class="slide">
+	<h1>きっかけ</h1>
+	<blockquote cite="http://www.lifehacker.jp/2009/12/thunderbird_3google_wave.html" title="Thunderbird 3の新しいタブ機能でGoogle Waveの受信箱が開ける : ライフハッカー［日本版］">
+	<p>Thunderbirdを立ち上げたら、ツールメニューからエラーコンソールを開き、以下のコードを追加します。</p>
+	<pre>Components.classes['@mozilla.org/appshell/window-mediator;1']
+	.getService(Components.interfaces.nsIWindowMediator)
+	.getMostRecentWindow("mail:3pane")
+	.document.getElementById("tabmail")
+	.openTab("contentTab", {
+		contentPage: "https://wave.google.com/wave/?nouacheck"
+	});</pre>
+	</blockquote>
+	<p><a href="http://www.lifehacker.jp/2009/12/thunderbird_3google_wave.html">Thunderbird 3の新しいタブ機能でGoogle Waveの受信箱が開ける</a>みたいな初心者に優しくないやり方が紹介されているのを見て、腹立たしく思い作った。</p>
+</div>
+<div class="slide">
+	<h1>機能</h1>
+	<ul>
+		<li>リンクの右クリック(コンテキストメニュー)からとか</li>
+		<li>中ボタンクリックとか</li>
+		<li>URLの登録も可能</li>
+		<li>RSSフィードの購読(Thunderbirdの「ブログとニュース」アカウントでの購読)</li>
+	</ul>
+	<p>タブ機能において、<em>Thunderbrid3が持つべき機能を追加</em>しているだけ</p>
+	<p class="smaller">WATはFirefoxの車輪の再発明で出来ています</p>
+</div>
+<div class="slide">
+	<h1>拡張なしのThunderbird 3</h1>
+	<p>出来ないことだらけ (version 3.0.3時点)</p>
+	<ul>
+		<li>タブに開く機能はあってもインターフェースがない</li>
+		<li>Webページの「戻る」「進む」ができない</li>
+		<li>開けるタブ数は10個まで (ハードコーディング)</li>
+		<li>ページのアイコンが表示されない</li>
+		<li>RSSフィードの検出なんてもってのほか</li>
+		<li>metaタグのリダイレクト(<code>&lt;meta http-equiv="refresh" content="..."&gt;</code>)が動作しない</li>
+	</ul>
+	<p class="bigger">WATがあれば全部できる！</p>
+</div>
+<div class="slide">
+	<h1>WATの制限事項</h1>
+	<ul>
+		<li>ロケーションバーはない
+			<ul>
+				<li>ThunderbirdのUIを汚したくない</li>
+			</ul>
+		</li>
+		<li>JavaScript URI
+			<ul>
+				<li>現状、<code>&lt;a href="javascript:..."&gt;</code>だったらloadURIしている<br/>
+				(セキュリティ的に怖いので廃止したい)</li>
+				<li>Thunderbird側で制限を設けていると思われる<br/>
+				(解消方法が分からない)</li>
+				<li>同様に<code>&lt;iframe src="javascript:..."&gt;</code>も動作しない場合がある<br/>
+				(GoogleCalendarのToDo)</li>
+				<li>人気のThunderBrowseでも動作しない</li>
+			</ul>
+		</li>
+		<li>タブを11個以上開くときは警告を出す<br/>(既存機能を尊重した結果)</li>
+		<li>他ドメインへのリンクは左クリックでは外部ブラウザへ開く
+			<ul>
+				<li>Thunderbirdでブラウジングはあくまで補助機能であるという考え</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide titlepage h1">
+	<h1>Thunderbirdタブ実装</h1>
+	<p>Firefoxとの比較を交えて</p>
+</div>
+<div class="slide">
+	<h1>tabmail要素</h1>
+	<p>Thunderbird3のタブ実装形態はFirefoxとは異なり、<dfn>tabbrowser</dfn>要素はない</p>
+	<p><img src="img/di_tabmail.png" align="right"/></p>
+	<p><dfn>tabmail</dfn>という要素が<dfn>tabbrowser</dfn>の代わり</p>
+	<ul>
+		<li>
+			<tt class="file">chrome://messenger/content/tabmail.xml#tabmail</tt>にバインド<br/>
+			参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/tabmail.xml" title="comm-central comm-central/mail/base/content/tabmail.xml">tabmail.xml - MXR</a>
+		</li>
+		<li>タブに幾つかの種類がある</li>
+		<li>タブが開かれた時、<dfn>browser</dfn>要素が新たに生成されるとは限らない</li>
+		<li>タブに開くには、<code>tabmail.openTab</code>メソッドを使用する</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>タブの種類</h1>
+	<p>Firefoxは1種類だが、Thunderbirdには(デフォルトでは)6つの種類がある</p>
+	<p><code>tabmail.openTab</code>メソッドの第一引数で指定</p>
+	<dl class="section">
+		<h2>種類</h2>
+		<dt>"contentTab"</dt>
+			<dd>通常のWebコンテンツ</dd>
+			<dd><img src="img/contentTab.png"/></dd>
+		<dt>"chromeTab"</dt>
+			<dd><dfn>chrome URI</dfn>, <dfn>about URI</dfn>等のThunderbird内部コンテンツ</dd>
+			<dd><code>contentTab</code>との違いは、<dfn>browser</dfn>要素に<code>disablesecurity="true"</code>の属性</dd>
+		<dt>"folder"</dt>
+			<dd>メッセージフォルダ</dd>
+			<dd><img src="img/folder.png"/></dd>
+		<dt>"message"</dt>
+			<dd>メッセージ</dd>
+			<dd><img src="img/message.png"/></dd>
+		<dt>"glodaFacet"</dt>
+			<dd>検索結果</dd>
+			<dd><img src="img/glodaFacet.png"/></dd>
+		<dt>"glodaList"</dt>
+			<dd>検索結果から開いたメッセージリストとメッセージ内容</dd>
+			<dd><img src="img/glodaList.png"/></dd>
+	</dl>
+</div>
+<div class="slide">
+	<h1>タブに開く</h1>
+	<p>tabmail.openTabメソッドを使用する</h1>
+	<pre>var tabmail = document.getElementById("tabmail");
+tabmail.openTab(<var>aTabModeName</var>, <var>aArgs</var>);</pre>
+	<p>参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/tabmail.xml#420">comm-central comm-central/mail/base/content/tabmail.xml</a></p>
+	<div class="section">
+		<h2>主な処理</h2>
+		<ol>
+			<li>tabmail.tabModes[<var>aTabModeName</var>]の取得</li>
+			<li>
+				新たなタブを作らず、タブの選択のみにするか判断
+				<ul>
+					<li><var>aTabModeName</var>が<samp>contentTab</samp>の場合、既に同じURLを開いているか等</li>
+				</ul>
+			</li>
+			<li><dfn>tab</dfn>要素の生成</li>
+			<li>tabmail.tabModes[<var>aTabModeName</var>].openTab または tabmail.tabModes[<var>aTabModeName</var>].tabType.openTab に <var>aArgs</var> を渡して実行</li>
+		</ol>
+		<h2>引数</h2>
+		<ol>
+			<li><var>aTabModeName</var> (String)</li>
+			<li><var>aArgs</var> (Object)</li>
+		</ol>
+		<div class="section">
+			<h2><var>aTabModeName</var></h2>
+			<p>参照：前項<p>
+			<h2><var>aArgs</var></h2>
+			<p><var>aTabModeName</var>によって異なるプロパティをもつオブジェクト</p>
+			<div class="section">
+				<h3>全てに共通するプロパティ</h3>
+				<dl>
+					<dt>background</dt>
+						<dd>バックグラウンドに開くか (Boolean)</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="slide">
+	<h1>タブに開く - contentTab</h1>
+	<p>Webページを開くモード</p>
+	<dl>
+		<dt>contentPage</dt>
+			<dd>URL (String)</dd>
+			<dd>必須</dd>
+		<dt>clickHandler</dt>
+			<dd><dfn>onclick</dfn>属性の値 (String)</dd>
+			<dd>省略時、<code>specialTabs.defaultClickHandler(event)</code>が使用される</dd>
+	</dl>
+	<p>参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/specialTabs.js#221">comm-central comm-central/mail/base/content/specialTabs.js#221</a></p>
+	<div class="section">
+		<h2>Example</h2>
+		<pre>var tabmail = document.getElementById("tabmail");
+tabmail.openTab("contentTab", {
+  contentPage: "http://example.com",
+  background: true, 
+  clickHandler: "specialTabs.siteClickHandler(event, /^https?:\\/\\/example\\.com\\//)"
+});</pre>
+		<h2>Note</h2>
+		<ul>
+			<li><dfn>browser</dfn>要素に<code>disablehistory="true"</code>があり、ページ履歴が記録されない</li>
+			<li><code>clickHandler</code>を定めないと、<code>specialTabs.defaultClickHandler(event)</code>が使用され、リンククリック時は全て外部ブラウザに開かれる</li>
+			<li><code>specialTabs.siteClickHandler</code>は第二引数に正規表現オブジェクトを取り、リンクURLとマッチする場合はそのタブに開くようになる</li>
+		</ul>
+	</div>
+</div>
+<div class="slide">
+	<h1>タブに開く - chromeTab</h1>
+	<p><dfn>chrome URI</dfn>, <dfn>about URI</dfn>を開くモード</p>
+	<dl>
+		<dt>chromePage</dt>
+			<dd>URL (String)</dd>
+			<dd>必須</dd>
+		<dt>clickHandler</dt>
+			<dd><dfn>onclick</dfn>属性の値 (String)</dd>
+			<dd>省略時、<code>specialTabs.defaultClickHandler(event)</code>が使用される</dd>
+	</dl>
+	<p>参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/specialTabs.js#652">comm-central comm-central/mail/base/content/specialTabs.js#652</a></p>
+	<div class="section">
+		<h2>Example</h2>
+		<pre>var tabmail = document.getElementById("tabmail");
+tabmail.openTab("chromeTab", {
+  chromePage: "chrome://global/content/console.xul"
+});</pre>
+		<h2>Note</h2>
+		<ul>
+			<li>chromeTabで作られる<dfn>browser</dfn>要素は<code>disablesecurity="true"</code>となっている。</li>
+			<li><dfn>browser</dfn>要素の<dfn>type</dfn>属性に<code>content-primary</code>が定められない(コード中コメントアウト)ため<code>window.content</code>からの参照が不可</li>
+		</ul>
+	</div>
+</div>
+<div class="slide">
+	<h1>タブに開く - folder</h1>
+	<p>メッセージフォルダを開くモード</p>
+	<dl>
+		<dt>folder</dt>
+			<dd>folderオブジェクト (nsIMsgFolder)</dd>
+			<dd>必須</dd>
+		<dt>folderPaneVisible</dt>
+			<dd>フォルダツリーを表示するか否か (Boolean)</dd>
+			<dd>省略時は最初のタブ設定を流用</dd>
+		<dt>messagePaneVisible</dt>
+			<dd>メッセージを表示するか否か (Boolean)</dd>
+			<dd>省略時は最初のタブ設定を流用</dd>
+		<dt>msgHdr</dt>
+			<dd>messageオブジェクト (nsIMsgDBHdr)</dd>
+			<dd>選択するメッセージ</dd>
+		<dt>forceSelectMessage</dt>
+			<dd><var>msgHdr</var>と組み合わせて使う (Boolean)</dd>
+		<dt>searchMode</dt>
+			<dd>検索モード</dd>
+			<dd><ul>
+				<li>"global" (すべてのメッセージを検索)</li>
+				<li>0 (件名または差出人、受信者)</li>
+				<li>1 (件名または差出人)</li>
+				<li>2 (件名または宛先、Cc)</li>
+				<li>3 (件名)</li>
+				<li>4 (差出人)</li>
+				<li>5 (宛先または Cc)</li>
+				<li>6 (メッセージ本文)</li>
+			</ul></dd>
+	</dl>
+	<p>参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/mailTabs.js#150">comm-central comm-central/mail/base/content/mailTabs.js</a></p>
+	<div class="section">
+		<h2>Example</h2>
+		<pre>var tabmail = document.getElemenetById("tabmail");
+tabmail.openTab("folder", {
+  folder: gFolderTreeView.getSelectedFolders()[0],
+  msgHdr: gFolderDisplay.selectedMessage,
+  folderPaneVisible: false
+});</pre>
+	</div>
+</div>
+<div class="slide">
+	<h1>タブに開く - message</h1>
+	<p>メッセージを開くモード</p>
+	<dl>
+		<dt>msgHdr</dt>
+			<dd>メッセージオブジェクト (nsIMsgDBHdr)</dd>
+			<dd>必須</dd>
+		<dt>viewWrapperToClone<dt>
+			<dd>メッセージビューオブジェクト (Object)</dd>
+	</dl>
+	<p>参照: <a href="http://mxr.mozilla.org/comm-central/source/mail/base/content/mailTabs.js#350">comm-central comm-central/mail/base/content/mailTabs.js</a></p>
+	<div class="section">
+		<h2>Example</h2>
+		<pre>var tabmail = document.getElmenetById("tabmail");
+tabmail.openTab("message", {
+  msgHdr: gFolderDisplay.selectedMessage,
+  viewWrapperToClone: gFolderDisplay.view,
+  background: true
+});</pre>
+		<h2>Note</h2>
+		<ul>
+			<li><code>viewWrapperToClone</code>を指定しないと、そのビューの次/前のメッセージへの移動ができない</li>
+		</ul>
+	</div>
+</div>
+<div class="slide titlepage h1">
+	<h1>WATでのタブとブラウザ実装</h1>
+	<p>Firefoxからいろいろ拝借</p>
+</div>
+<div class="slide">
+	<h1>タブに開くメソッド実装</h1>
+	<p>WAT.openTab(<var>aURL</var>)</p>
+	<p>参照: <a href="http://github.com/teramako/wat/blob/version-0.5/chrome/content/wat.js#L441">chrome/content/wat.js at version-0.5 from teramako's wat - GitHub</a></p>
+	<ol>
+		<li><var>aURL</var>を<dfn>nsIURI</dfn>に変換</li>
+		<li>
+			URIスキームで<var>contentTab</var>か<var>chromeTab</var>かを判定
+			<ul>
+				<li><dfn>chrome</dfn>,<dfn>about</dfn>スキームなら<var>chromeTab</var></li>
+				<li>それ以外は<var>contentTab</var></li>
+			</ul>
+		</li>
+		<li>
+			tabmail.openTabに渡す引数設定
+			<ul>
+				<li><var>contentTab</var>ならば、<code>{ conentPage, clickHandler }</code>の生成</li>
+				<li><var>chromeTab</var>ならば、<code>{ chromePage, clickHandler }</code>の生成</li>
+			</ul>
+		</li>
+		<li>tabmail.openTabの実行</li>
+		<li><var>contentTab</var>の場合、履歴を有効にする</li>
+	</ol>
+</div>
+<div class="slide">
+	<h1>履歴(戻る、進む)の有効化</h1>
+	<p>デフォルトでは履歴が無効化(<code>disablehistory=true</code>)されている</p>
+	<p>有効にするには<dfn>nsISHistory</dfn>インスタンスを生成して<code>browser.webNavigation.sessionHistory</code>に代入する</p>
+	<pre>function enableSessionHistory(browser){
+  if (!browser.hasAttribute("disablehistory"))
+    return;
+  browser.removeAttribute("disablehistory");
+  try {
+    os.addObserver(browser, "browser:purge-session-history", false);
+    <em>browser.webNavigation.sessionHistory =
+      Cc["@mozilla.org/browser/shistory;1"].createInstance(Ci.nsISHistory);</em>
+  } catch(e){
+    Components.utils.reportError(e);
+  }  
+}</pre>
+	<p><code>browser.goBack()</code>,<code>browser.goForward()</code>で「戻る」、「進む」が可能</p>
+	<div class="section">
+		<h2>Note</h2>
+		<p>
+			通常(<code>disablehistory=true</code>が無ければ)、履歴は有効なので特に何もする必要はない<br/>
+			参照: <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/content/widgets/browser.xml#631">mozilla-central mozilla/toolkit/content/widgets/browser.xml</a>
+		</p>
+	</div>
+</div>
+<div class="slide">
+	<h1>タブに表示するアイコン</h1>
+	<p>5種類のアイコン</p>
+	<ul>
+		<li><var>ドメイン</var>/favicon.ico</li>
+		<li>
+			link[rel~=icon]のhref属性値
+			<pre>&lt;link rel="shortcut icon" href="..."/&gt;</pre>
+		</li>
+		<li>デフォルトのアイコン</li>
+		<li>読み込み中を示すインジケータ</li>
+		<li>ドキュメントが画像の場合は、縮小した画像 (未実装)</li>
+	</ul>
+	<div class="section">
+		<h2>当初</h2>
+		<ol>
+			<li>ドキュメントの<dfn>DOMContentLoaded</dfn>イベントを待つ</li>
+			<li>link[rel~=icon]があれば採用</li>
+			<li><dfn>XMLHttpRequest</dfn>のHEADメソッドを<var>ドメイン</var>/favicon.icoへ投げてレスポンスヘッダが<code>Content-Type: <var>image/x-icon</var></code>であれば、採用</li>
+		</ol>
+		<p>参照: <a href="http://github.com/teramako/wat/commit/cac931e0a728664051bd3324ed192daa248151bb">http://github.com/teramako/wat/commit/cac931e0a728664051bd3324ed192daa248151bb</a></p>
+		<h2>Firefoxでは</h2>
+		<p><dfn>DOMLinkAdded</dfn>イベントと<dfn>nsIWebProgressListener</dfn>の組み合わせ</p>
+		<dl>
+			<dt><dfn>DOMLinkAdded</dfn>イベント処理部分</dt>
+				<dd><a href="http://mxr.mozilla.org/mozilla1.9.2/source/browser/base/content/browser.js#2918">mozilla1.9.2 mozilla/browser/base/content/browser.js</a></dd>
+			<dt><dfn>nsIWebProgressListener</dfn>実装部分</dt>
+			<dd><a href="http://mxr.mozilla.org/mozilla1.9.2/source/browser/base/content/tabbrowser.xml#311">mozilla1.9.2 mozilla/browser/base/content/tabbrowser.xml</a></dd>
+		</dl>
+		<div class="section">
+			<h3>DOMLinkAdded イベント</h3>
+			<p><dfn>link</dfn>要素が追加されたときにイベント発生</p>
+			<ol>
+				<li>rel属性値に"icon"があれば処理</li>
+				<li>href属性値のセキュリティチェック</li>
+				<li><dfn>browser</dfn>要素の<var>mIconURL</var>プロパティにURLを代入</li>
+			</ol>
+			<h3>nsIWebProgressListener インターフェース</h3>
+			<p>コンテンツの読み込み状況に応じて処理</p>
+			<p>参照: <a href="https://developer.mozilla.org/en/nsIWebProgressListener">https://developer.mozilla.org/en/nsIWebProgressListener</a></p>
+			<ul>
+				<li>読み込み中ならば、インジケータの設定</li>
+				<li>読み込みが終了していれば、アイコン設定
+					<ul>
+						<li><dfn>browser</dfn>要素の<var>mIconURL</var>に値があれば、それを使用</li>
+						<li>なければ、<var>ドメイン</var>/favicon.icoを設定</li>
+						<li>画像読み込みに失敗した場合はデフォルトのアイコン</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="slide">
+	<h1>metaタグのリダイレクト</h1>
+	<pre>&lt;meta http-equiv="refresh" content="10; URL=http://example.com" /&gt;</pre>
+	<p>
+		<dfn>browser</dfn>要素の<code>browser.docShell.allowMetaRedirect</code>は<var>true</var>になっているのに、リダイレクトされない！<br/>
+		何故？
+	</p>
+	<div class="section">
+		<h2>当初</h2>
+		<ol>
+			<li>ドキュメントの<dfn>DOMContentLoaded</dfn>イベントを待つ</li>
+			<li>meta[http-equiv=refresh]があればパースしてloadURI</li>
+		</ol>
+		<p>参照: <a href="http://github.com/teramako/wat/commit/844b0c7962b251f02577226337184cface7e8ede#L0L339">http://github.com/teramako/wat/commit/844b0c7962b251f02577226337184cface7e8ede#L0L339</a></p>
+		<h2>Firefoxでは</h2>
+		<p>参照: <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/NsIWebProgressListener2#onRefreshAttempted()">https://developer.mozilla.org/en/XPCOM_Interface_Reference/NsIWebProgressListener2#onRefreshAttempted()</a></p>
+		<p><dfn>nsIWebProgressListener2</dfn>の<dfn>onRefreshAttempted</dfn>で<var>true</var>を返してリダイレクトを許可している</p>
+	</div>
+	<p>Thunderbirdの<dfn>onRefreshAttempted</dfn>は定義のみで中身がないため、リダイレクトされない</p>
+</div>
+<div class="slide">
+	<h1>RSSフィードの検出</h1>
+	<pre>&lt;link rel="alternate" type="application/rss+xml" title="RSS" href="..."/&gt;</pre>
+	<p>Firefoxではアイコンと同じく<dfn>DOMLinkAdded</dfn>で検出</p>
+</div>
+<div class="slide titlepage h1">
+	<h1>開発手法</h1>
+	<p>FirefoxもThunderbirdも大して変わらない</p>
+</div>
+<div class="slide">
+	<h1>開発に使っているAddon等</h1>
+	<ul>
+		<li>Vimperator (for Firefox)
+			<ul>
+				<li><a href="http://code.google.com/p/vimperator-labs/">http://code.google.com/p/vimperator-labs/</a></li>
+			</ul>
+		</li>
+		<li>Muttator (for Thunderbird)
+			<ul>
+				<li><a href="http://code.google.com/p/vimperator-labs/">http://code.google.com/p/vimperator-labs/</a></li>
+				<li>常用はお勧めしない(バグが多い)</li>
+				<li>コードの大部分をVimperatorと共有</li>
+			</ul>
+		</li>
+		<li>DOM Inspector
+			<ul>
+				<li><a href="https://addons.mozilla.org/ja/firefox/addon/6622">https://addons.mozilla.org/ja/firefox/addon/6622</a> (for Firefox)</li>
+				<li><a href="https://addons.mozilla.org/ja/thunderbird/addon/1806">https://addons.mozilla.org/ja/thunderbird/addon/1806</a> (for Thunderbird)</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Vimperator, Muttator</h1>
+	<p>真の価値はvimキーバインドではなく、<em>コマンドライン機能</em>と<em>拡張性</em></p>
+	<ul>
+		<li><code>echo</code>コマンド
+			<ul>
+				<li>JavaScriptを実行(eval)して戻り値を出力するコマンド</li>
+				<li>e.g.)<code>:echo content.document.title</code></li>
+				<li>e.g.)<code>:echo Application.exntensions.all.map(function(e) [e.id, e.name])</code></li>
+			</ul>
+		</li>
+		<li>Tab補完
+			<ul>
+				<li><kbd>Tab</kbd>で補完リストが出る</li>
+				<li>JavaScriptオブジェクトの補完が超強力</li>
+			</ul>
+		</li>
+		<li>jsファイルのロード機能 (plugin)
+			<ul>
+				<li>userChrome.jsの様なchrome特権を持ったコードを読み込める</li>
+				<li>コマンドやキーバインドの追加などのAPIがあるため、書きたいコードに集中できる</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>DOM Inspector</h1>
+	<p>お馴染みのツール</p>
+	<ul>
+		<li>File -&gt; Inspect Chrome Document -&gt; ...</li>
+		<li>DOM構造の確認</li>
+		<li>CSSの確認</li>
+		<li>JavaScriptプロパティの確認</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>Vimperartor + DOM Inspector</h1>
+	<p>JavaScript実行結果をDOM Inspectorに表示するVimperatorプラグイン</p>
+	<ul>
+		<li><a href="http://coderepos.org/share/browser/lang/javascript/vimperator-plugins/trunk/inspector.js">/lang/javascript/vimperator-plugins/trunk/inspector.js – CodeRepos::Share – Trac</a></li>
+		<li>
+			<code>:inspect</code>コマンド
+			<ul>
+				<li><pre>:inspect getBrowser()</pre></li>
+				<li><pre>:inspect Application.extensions.all</pre></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="slide">
+	<h1>個人的なJavaScriptの書き方</h1>
+	<ul>
+		<li>名前空間を最小に</li>
+		<li>外部からアクセス出来るものと出来ないものを区別</li>
+    <li>匿名関数はできるだけ避ける(例外が発生した時、どの関数からかわかりやすくするため)</li>
+	</ul>
+	<pre>let WAT = (function(){
+  // --------------------------
+  // private
+  // --------------------------
+  const Cc = Components.classes;
+  const Ci = Components.interfaces;
+  function init(){
+    window.removeEventListener("load", init, false);
+    self.tabMail = document.getElementById("tabmail");
+  }
+  function fooFunc(){
+    Application.console.log(arguments.callee.name + "\n"+ Error("DEBUG").stack);
+  }
+  // --------------------------
+  // public
+  // --------------------------
+  let self = {
+    tabMail: null,
+    openTab: function WAT_openTab(aURL){
+      // ...;
+      fooFunc();
+    },
+  };
+  window.addEventListener("load", init, false);
+  return self;
+})();</pre>
+</div>
+<div class="slide">
+	<h1>Firefox, ThunderbirdのXUL,JavaScriptコード</h1>
+	<p>Firefox, THunderbirdのソースコードの参照方法</p>
+	<div class="section">
+		<h2>Mozilla Cross-Reference</h2>
+		<ul>
+			<li><a href="http://mxr.mozilla.org/">http://mxr.mozilla.org/</a></li>
+			<li>C++含め全てのソースコードがここにある</li>
+		</ul>
+		<h2><var>インストールディレクトリ</var>/chrome/*.jar</h2>
+		<dl>
+			<dt>Windows</dt>
+				<dd><tt class="file">C:\Program Files\Mozilla Firefox\chrome\*.jar</tt></dd>
+			<dt>Linux</dt>
+				<dd><tt class="file">/usr/lib/firefox-3.6/chrome/*.jar</tt>(Ubuntuの場合)</dd>
+			<dt>Mac OS X</dt>
+				<dd><tt class="file">/Applications/Firefox.app/Contents/MacOS/chrome/*.jar</tt></dd>
+		</dl>
+		<p><tt class="file">*.jar</tt>ファイルはzip形式で圧縮されている。展開しておくと、ローカルから手早く参照可能</p>
+	</div>
+</div>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2:
+-->

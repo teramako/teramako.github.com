@@ -1,0 +1,118 @@
+* {
+  font-family: "ヒラギノ丸ゴ Pro","メイリオ", serif;
+}
+div.titlepage.h2{
+  /* padding-top: 20% !important; */
+}
+/*
+div.titlepage h1 {
+  font-family: "ヒラギノ明朝 Pro", "Imprint MT Shadow",fantasy;
+}
+*/
+h1, h2, h3 {
+  font-family: "ヒラギノ明朝 Pro", "Imprint MT Shadow",fantasy;
+}
+h1 {
+  border-bottom: thin solid blue;
+  text-align:center;
+  text-shadow: 5px 5px 2px silver;
+}
+h2 {
+  border-bottom: thin solid gray;
+  margin-left: 0 !important;
+}
+h3 {
+  border-bottom: thin solid silver;
+  margin-left: 0 !important;
+}
+.section {
+  margin: auto 1em;
+}
+.section .section {
+  margin: auto 1em;
+}
+pre {
+  font-family: "Osaka−等幅",monospace;
+  background-color: rgba(228, 229, 231, 0.8);
+  margin-right: 2em;
+}
+code {
+  font-family: inherit;
+  font-style: inherit;
+  padding: 0 5px;
+  background: rgba(128,128,128,0.2);
+}
+var {
+  font-family: inherit;
+  font-style: inherit;
+  text-decoration: underline;
+}
+dfn {
+  color: green;
+  text-decoration: underline;
+  font-style: inherit;
+}
+kbd {
+  font-style: normal;
+  background: #ffd;
+  -moz-box-shadow: 3px 3px 2px silver;
+  padding: 0 5px;
+}
+em {
+  text-decoration: inherit;
+  font-style: inherit;
+  color: red;
+}
+blockquote {
+  border: thin solid #AAA;
+  background-color: rgba(228,228,228,0.5);
+  -moz-border-radius: 10px;
+  margin-left: 3em;
+  width: 85%;
+}
+blockquote:before {
+  content: "“";
+  font-size: 5em;
+  line-height: 0.8;
+  text-indent: -0.5em;
+  color:silver;
+  float:left;
+}
+img.cap {
+  -moz-box-shadow: 10px 10px 15px gray;
+}
+li pre {
+  margin-top: 0;
+}
+tt.file {
+  font-family: monospace;
+  color: green;
+}
+.misc{
+  font-size: 16pt;
+  margin: auto 3em;
+}
+#bg {
+  -moz-box-shadow: none;
+  opacity: 0.3;
+  position: fixed;
+}
+dt {
+	float:left;
+	vertical-align: top;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+dt:before {
+	clear:both;
+}
+dt:after {
+	content: ":";
+	margin: auto 0.5em;
+}
+dd {
+	margin-left: 13em !important;
+}
+/*
+vim: sw=2 ts=2 et:
+*/
