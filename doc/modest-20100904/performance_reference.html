@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>ノード参照 - E4X Performance</title>
+  <link rel="stylesheet" href="base.css"/>
+  <script type="application/javascript; version=1.8" src="performance_common.js"></script>
+  <script type="application/javascript; version=1.8">
+  //<![CDATA[
+
+  var funcs = [
+    function E4X_ノードのリファレンス_1() {
+      var x = <div><a>hoge</a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a;
+      }
+    },
+    function E4X_ノードのリファレンス_2() {
+      var x = <div><a><b>hoge</b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b;
+      }
+    },
+    function E4X_ノードのリファレンス_3() {
+      var x = <div><a><b><c>hoge</c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c;
+      }
+    },
+    function E4X_ノードのリファレンス_4() {
+      var x = <div><a><b><c><d>hoge</d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d;
+      }
+    },
+    function E4X_ノードのリファレンス_5() {
+      var x = <div><a><b><c><d><e>hoge</e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e;
+      }
+    },
+    function E4X_ノードのリファレンス_6() {
+      var x = <div><a><b><c><d><e><f>hoge</f></e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e.f;
+      }
+    },
+    function E4X_ノードのリファレンス_7() {
+      var  x = <div><a><b><c><d><e><f><g><h>hoge</h></g></f></e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e.f.g.h;
+      }
+    },
+    function E4X_ノードのリファレンス_8() {
+      var  x = <div><a><b><c><d><e><f><g><h><i>hoge</i></h></g></f></e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e.f.g.h.i;
+      }
+    },
+    function E4X_ノードのリファレンス_9() {
+      var  x = <div><a><b><c><d><e><f><g><h><i><j>hoge</j></i></h></g></f></e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e.f.g.h.i.j;
+      }
+    },
+    function E4X_ノードのリファレンス_10() {
+      var  x = <div><a><b><c><d><e><f><g><h><i><j><k>hoge</k></j></i></h></g></f></e></d></c></b></a></div>;
+      for (let i=0; i<times; i++){
+        var buf = x.a.b.c.d.e.f.g.h.i.j.k;
+      }
+    },
+    function DOM_ノードのリファレンス_10(){
+      var div = doc.createElement("div"),
+      a   = doc.createElement("a"),
+      b   = doc.createElement("b"),
+      c   = doc.createElement("c"),
+      d   = doc.createElement("d"),
+      e   = doc.createElement("e"),
+      f   = doc.createElement("f"),
+      g   = doc.createElement("g"),
+      h   = doc.createElement("h"),
+      i   = doc.createElement("i"),
+      j   = doc.createElement("j"),
+      k   = doc.createElement("k");
+      k.appendChild(doc.createTextNode("hoge"));
+      j.appendChild(k);
+      i.appendChild(j);
+      h.appendChild(i);
+      g.appendChild(h);
+      f.appendChild(g);
+      e.appendChild(f);
+      d.appendChild(e);
+      c.appendChild(d);
+      b.appendChild(c);
+      a.appendChild(b);
+      div.appendChild(a);
+      for (let i=0; i<times; i++){
+        var buf = div.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+      }
+    },
+  ];
+  function init() {
+    res = doc.getElementById("result");
+    work = doc.getElementById("work");
+
+    res.appendChild(xmlToDOM(
+      <dl>
+        <dt>ループ回数</dt>
+        <dd>{times}</dd>
+      </dl>
+    ));
+
+    var i=0;
+    var r = [];
+    (function measure(){
+      var f = funcs[i++];
+      if (!f) {
+        finish(r);
+        return;
+      }
+      var start = Date.now();
+      var result = f.call(this);
+      var end = Date.now();
+      log(f.name, end - start, result);
+      r.push([f.name, end-start]);
+      clear();
+      setTimeout(arguments.callee, 800);
+    })();
+  }
+  function finish(r){
+    var datas = <></>;
+    for (let i=0; i < r.length; i++){
+      datas[i] = <tr><td>{r[i][0]}</td><td>{r[i][1]}</td></tr>;
+    }
+    res.insertBefore(xmlToDOM(
+      <table border="1">
+        <tr><th>Name</th><th>MilliSeccond</th></tr>
+        {datas}
+      </table>
+    ), res.firstChild);
+  }
+  //]]>
+  </script>
+</head>
+<body onload="init()">
+<h1>E4X Performance</h1>
+<section>
+  <hgroup>
+    <h2>ノード参照</h2>
+  </hbroup>
+  <div id="result"></div>
+</section>
+<div id="code"></div>
+<div id="work"></div>
+</body>
+</html>
+

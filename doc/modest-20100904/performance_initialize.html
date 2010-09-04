@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>初期化 - E4X Performance</title>
+  <link rel="stylesheet" href="base.css"/>
+  <script type="application/javascript; version=1.8" src="performance_common.js"></script>
+  <script type="application/javascript; version=1.8">
+  //<![CDATA[
+
+  var funcs = [
+    function E4X_シンプルなリテラル() {
+      for (let i=0; i<times; i++) {
+        var x = <p>hoge</p>;
+      }
+    },
+    function E4X_コンストラクタ() {
+      for (let i=0; i<times; i++) {
+        var x = new XML("<p>hoge</p>");
+      }
+    },
+    function E4X_式埋め込み() {
+      for (let i=0; i<times; i++){
+        var x = <p>{i}</p>;
+      }
+    },
+    function E4X_複数要素(){
+      for (let i=0; i<times; i++){
+        var x = <div><p>hoge</p><p>piyo</p></div>;
+      }
+    },
+    function E4X_複数要素と式埋め込み (){
+      var x;
+      for (let i=0; i<times; i++){
+        x = <div><p>{i}</p><p>{i+1}</p></div>;
+      }
+    },
+    function E4X_名前空間(){
+      var x;
+      for (let i=0; i<times; i++){
+        x = <div xmlns="http://www.w3.org/1999/xhtml">
+          <p>hoge</p><p>piyo</p>
+        </div>;
+      }
+    },
+    function Object_リテラル初期化(){
+      for (let i=0; i<times; i++){
+        var x = { div: { p: ["hoge", "piyo"] } };
+      }
+    },
+    function DOM_複数要素() {
+      for (let i=0; i<times; i++){
+        var e = doc.createElement("div"),
+            span1 = doc.createElement("span"),
+            span2 = doc.createElement("span");
+        span1.appendChild(doc.createTextNode("hoge"));
+        span2.appendChild(doc.createTextNode("piyo"));
+        e.appendChild(span1);
+        e.appendChild(span2);
+      }
+    },
+    function E4X_深いノード() {
+      for (let i=0; i<times; i++){
+        var x = <div><a><b><c><d><e><f><g><h/></g></f></e></d></c></b></a></div>;
+      }
+    },
+    function DOM_深いノード(){
+      var div,a,b,d,e,f,g,h;
+      for (let i=0; i<times; i++){
+        div = doc.createElement("div"),
+        a   = doc.createElement("a"),
+        b   = doc.createElement("b"),
+        c   = doc.createElement("c"),
+        d   = doc.createElement("d"),
+        e   = doc.createElement("e"),
+        f   = doc.createElement("f"),
+        g   = doc.createElement("g"),
+        h   = doc.createElement("h"),
+        g.appendChild(h);
+        f.appendChild(g);
+        e.appendChild(f);
+        d.appendChild(e);
+        c.appendChild(d);
+        b.appendChild(c);
+        a.appendChild(b);
+        div.appendChild(a);
+      }
+    },
+  ];
+  function init() {
+    res = doc.getElementById("result");
+    work = doc.getElementById("work");
+
+    res.appendChild(xmlToDOM(
+      <dl>
+        <dt>ループ回数</dt>
+        <dd>{times}</dd>
+      </dl>
+    ));
+
+    var i=0;
+    var r = [];
+    (function measure(){
+      var f = funcs[i++];
+      if (!f) {
+        finish(r);
+        return;
+      }
+      var start = Date.now();
+      var result = f.call(this);
+      var end = Date.now();
+      log(f.name, end - start, result);
+      r.push([f.name, end-start]);
+      clear();
+      setTimeout(arguments.callee, 800);
+    })();
+  }
+  function finish(r){
+    var datas = <></>;
+    for (let i=0; i < r.length; i++){
+      datas[i] = <tr><td>{r[i][0]}</td><td>{r[i][1]}</td></tr>;
+    }
+    res.insertBefore(xmlToDOM(
+      <table border="1">
+        <tr><th>Name</th><th>MilliSeccond</th></tr>
+        {datas}
+      </table>
+    ), res.firstChild);
+  }
+  //]]>
+  </script>
+</head>
+<body onload="init()">
+<h1>E4X Performance</h1>
+<section>
+  <hgroup>
+    <h2>初期化</h2>
+  </hbroup>
+  <div id="result"></div>
+</section>
+<div id="code"></div>
+<div id="work"></div>
+</body>
+</html>
+

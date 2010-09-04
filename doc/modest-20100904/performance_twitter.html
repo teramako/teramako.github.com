@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Twitter - E4X Performance</title>
+  <link rel="stylesheet" href="base.css"/>
+  <script type="application/javascript; version=1.8" src="performance_common.js"></script>
+  <script type="application/javascript; version=1.8">
+  //<![CDATA[
+
+  // Twitter message
+  var msg = {
+      id: "22171755798",
+      user: {
+        name: "NAME",
+        screen_name: "SCREEN_NAME",
+        profile_image_url: "profile_image.png",
+      },
+      text: "TEXT",
+      created_at: "Thu Aug 26 00:00:00 +0000 2010",
+      source: 'web',
+  };
+
+
+  var funcs = [
+    function E4X_Twitter一括Append(){
+      var xmls = <></>;
+      var t = times / 100;
+      for (let i=0; i < t; i++){
+      xmls[i] =
+        <li class="hentry u-umi_waaz status" id={"status_" + msg.id}>
+          <span class="thumb vcard author">
+            <a href={"http://twitter.com/" + msg.user.screen_name} class="tweet-url profile-pic url">
+              <img alt={msg.user.name} class="photo fn" height="48" src={msg.user.profile_image_url} width="48"/>
+            </a>
+          </span>
+          <span class="status-body">
+            <span class="status-content">
+              <strong>
+                <a href={"http://twitter.com/" + msg.user.screen_name} class="tweet-url screen-name">{msg.user.screen_name}</a>
+              </strong>
+              <span class="actions">
+                <div>
+                  <a id={"status_star_" + msg.id} class="fav-action non-fav" title="ツイートをお気に入りに登録">  </a>
+                </div>
+              </span>
+              <span class="entry-content">{msg.text}</span>
+            </span>
+            <span class="meta entry-meta" data="{}">
+              <a class="entry-date" rel="bookmark" href={"http://twitter.com/" + msg.user.screen_name + "/status/" + msg.id}>
+                <span class="published timestamp" data={"{time:'" + msg.created_at + "'}"}>few minites ago</span>
+              </a>
+              <span>{msg.source}から</span>
+            </span>
+            <ul class="actions-hover">
+              <li>
+                <span class="reply">
+                  <span class="reply-icon icon"></span>
+                  <a href={"/?status=@" + msg.user.screen_name + "&amp;in_reply_to_status_id=" + msg.id + "&amp;in_reply_to=" + msg.user.screen_name} title={msg.user.screen_name + "に返事"}>返信</a>
+                </span>
+              </li>
+              <li>
+                <span class="retweet-link">
+                  <span class="retweet-icon icon"></span>
+                  <a title="リツイート" href="#">リツイート</a>
+                </span>
+              </li>
+            </ul>
+            <ul class="meta-data clearfix"></ul>
+          </span>
+        </li>;
+      }
+
+      var res = { LoopTimes: t };
+      var start = Date.now();
+      work.appendChild(xmlToDOM(xmls));
+      res["一括xmlToDOM and append"]= (Date.now() - start);
+
+      return res;
+    },
+    function E4X_Twitter毎回Append(){
+      var xmls = <></>;
+      var t = times / 100;
+      for (let i=0; i < t; i++){
+      xmls[i] =
+        <li class="hentry u-umi_waaz status" id={"status_" + msg.id}>
+          <span class="thumb vcard author">
+            <a href={"http://twitter.com/" + msg.user.screen_name} class="tweet-url profile-pic url">
+              <img alt={msg.user.name} class="photo fn" height="48" src={msg.user.profile_image_url} width="48"/>
+            </a>
+          </span>
+          <span class="status-body">
+            <span class="status-content">
+              <strong>
+                <a href={"http://twitter.com/" + msg.user.screen_name} class="tweet-url screen-name">{msg.user.screen_name}</a>
+              </strong>
+              <span class="actions">
+                <div>
+                  <a id={"status_star_" + msg.id} class="fav-action non-fav" title="ツイートをお気に入りに登録">  </a>
+                </div>
+              </span>
+              <span class="entry-content">{msg.text}</span>
+            </span>
+            <span class="meta entry-meta" data="{}">
+              <a class="entry-date" rel="bookmark" href={"http://twitter.com/" + msg.user.screen_name + "/status/" + msg.id}>
+                <span class="published timestamp" data={"{time:'" + msg.created_at + "'}"}>few minites ago</span>
+              </a>
+              <span>{msg.source}から</span>
+            </span>
+            <ul class="actions-hover">
+              <li>
+                <span class="reply">
+                  <span class="reply-icon icon"></span>
+                  <a href={"/?status=@" + msg.user.screen_name + "&amp;in_reply_to_status_id=" + msg.id + "&amp;in_reply_to=" + msg.user.screen_name} title={msg.user.screen_name + "に返事"}>返信</a>
+                </span>
+              </li>
+              <li>
+                <span class="retweet-link">
+                  <span class="retweet-icon icon"></span>
+                  <a title="リツイート" href="#">リツイート</a>
+                </span>
+              </li>
+            </ul>
+            <ul class="meta-data clearfix"></ul>
+          </span>
+        </li>;
+      }
+      var res = { LoopTimes: t };
+      var start = Date.now();
+      for (let i=0; i < t; i++){
+        work.appendChild(xmlToDOM(xmls[i]));
+      }
+      res["毎回xmlToDOM and append"] = (Date.now() - start);
+      return res;
+    },
+    function innerHTML_Twitter一括代入(){
+      var msgs = [];
+      var t = times / 100;
+      for (let i=0; i < t; i++){
+      msgs[i] = [
+        '<li class="hentry u-umi_waaz status" id="status_' + msg.id + '">',
+          '<span class="thumb vcard author">',
+            '<a href="http://twitter.com/' + msg.user.screen_name + '" class="tweet-url profile-pic url">',
+              '<img alt="'+msg.user.name+'" class="photo fn" height="48" src="'+msg.user.profile_image_url+'" width="48"/>',
+            '</a>',
+          '</span>',
+          '<span class="status-body">',
+            '<span class="status-content">',
+              '<strong>',
+                '<a href="http://twitter.com/' + msg.user.screen_name+'" class="tweet-url screen-name">' +msg.user.screen_name+'</a>',
+              '</strong>',
+              '<span class="actions">',
+                '<div>',
+                  '<a id="status_star_' + msg.id+'" class="fav-action non-fav" title="ツイートをお気に入りに登録">  </a>',
+                '</div>',
+              '</span>',
+              '<span class="entry-content">'+msg.text+'</span>',
+            '</span>',
+            '<span class="meta entry-meta" data="{}">',
+              '<a class="entry-date" rel="bookmark" href="http://twitter.com/' + msg.user.screen_name + '/status/' + msg.id +'">',
+                '<span class="published timestamp" data="{time:\'"' + msg.created_at + '\'}"}>few minites ago</span>',
+              '</a>',
+              '<span>'+msg.source+'から</span>',
+            '</span>',
+            '<ul class="actions-hover">',
+              '<li>',
+                '<span class="reply">',
+                  '<span class="reply-icon icon"></span>',
+                  '<a href="/?status=@' + msg.user.screen_name + '&amp;in_reply_to_status_id=' + msg.id + '&amp;in_reply_to=' + msg.user.screen_name+'" title="'+msg.user.screen_name + 'に返事">返信</a>',
+                '</span>',
+              '</li>',
+              '<li>',
+                '<span class="retweet-link">',
+                  '<span class="retweet-icon icon"></span>',
+                  '<a title="リツイート" href="#">リツイート</a>',
+                '</span>',
+              '</li>',
+            '</ul>',
+            '<ul class="meta-data clearfix"></ul>',
+          '</span>',
+        '</li>'
+      ].join("");
+      }
+      var res = { LoopTimes: t };
+      var start = Date.now();
+      work.innerHTML = msgs.join("");
+      res["一括代入"] = (Date.now() - start);
+      return res;
+    },
+    function innerHTML_Twitter毎回代入(){
+      var msgs = [];
+      var t = times / 100;
+      for (let i=0; i < t; i++){
+      msgs[i] = [
+        '<li class="hentry u-umi_waaz status" id="status_' + msg.id + '">',
+          '<span class="thumb vcard author">',
+            '<a href="http://twitter.com/' + msg.user.screen_name + '" class="tweet-url profile-pic url">',
+              '<img alt="'+msg.user.name+'" class="photo fn" height="48" src="'+msg.user.profile_image_url+'" width="48"/>',
+            '</a>',
+          '</span>',
+          '<span class="status-body">',
+            '<span class="status-content">',
+              '<strong>',
+                '<a href="http://twitter.com/' + msg.user.screen_name+'" class="tweet-url screen-name">' +msg.user.screen_name+'</a>',
+              '</strong>',
+              '<span class="actions">',
+                '<div>',
+                  '<a id="status_star_' + msg.id+'" class="fav-action non-fav" title="ツイートをお気に入りに登録">  </a>',
+                '</div>',
+              '</span>',
+              '<span class="entry-content">'+msg.text+'</span>',
+            '</span>',
+            '<span class="meta entry-meta" data="{}">',
+              '<a class="entry-date" rel="bookmark" href="http://twitter.com/' + msg.user.screen_name + '/status/' + msg.id +'">',
+                '<span class="published timestamp" data="{time:\'"' + msg.created_at + '\'}"}>few minites ago</span>',
+              '</a>',
+              '<span>'+msg.source+'から</span>',
+            '</span>',
+            '<ul class="actions-hover">',
+              '<li>',
+                '<span class="reply">',
+                  '<span class="reply-icon icon"></span>',
+                  '<a href="/?status=@' + msg.user.screen_name + '&amp;in_reply_to_status_id=' + msg.id + '&amp;in_reply_to=' + msg.user.screen_name+'" title="'+msg.user.screen_name + 'に返事">返信</a>',
+                '</span>',
+              '</li>',
+              '<li>',
+                '<span class="retweet-link">',
+                  '<span class="retweet-icon icon"></span>',
+                  '<a title="リツイート" href="#">リツイート</a>',
+                '</span>',
+              '</li>',
+            '</ul>',
+            '<ul class="meta-data clearfix"></ul>',
+          '</span>',
+        '</li>'
+      ].join("");
+      }
+      var res = { LoopTimes: t };
+      var start = Date.now();
+      for (let i=0; i < t; i++){
+        work.innerHTML += msgs[i];
+      }
+      res["毎回insert+="] = (Date.now() - start);
+      return res;
+    }
+  ];
+  function init() {
+    res = doc.getElementById("result");
+    work = doc.getElementById("work");
+
+    res.appendChild(xmlToDOM(
+      <dl>
+        <dt>ループ回数</dt>
+        <dd>{times}</dd>
+      </dl>
+    ));
+
+    var i=0;
+    var r = [];
+    (function measure(){
+      var f = funcs[i++];
+      if (!f) {
+        finish(r);
+        return;
+      }
+      var start = Date.now();
+      var result = f.call(this);
+      var end = Date.now();
+      log(f.name, end - start, result);
+      r.push([f.name, end-start]);
+      clear();
+      setTimeout(arguments.callee, 800);
+    })();
+  }
+  function finish(r){
+    var datas = <></>;
+    for (let i=0; i < r.length; i++){
+      datas[i] = <tr><td>{r[i][0]}</td><td>{r[i][1]}</td></tr>;
+    }
+    res.insertBefore(xmlToDOM(
+      <table border="1">
+        <tr><th>Name</th><th>MilliSeccond</th></tr>
+        {datas}
+      </table>
+    ), res.firstChild);
+  }
+  //]]>
+  </script>
+</head>
+<body onload="init()">
+<h1>E4X Performance</h1>
+<section>
+  <hgroup>
+    <h2>Twitter</h2>
+  </hbroup>
+  <div id="result"></div>
+</section>
+<div id="code"></div>
+<div id="work"></div>
+</body>
+</html>
+

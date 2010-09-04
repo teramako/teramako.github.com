@@ -1,0 +1,150 @@
+@charset "UTF-8";
+
+* {
+  font-family: "HiraMaruPro-W4", "ヒラギノ丸ゴ Pro","メイリオ", serif;
+}
+body {
+  color: white;
+  background-color: black;
+}
+.slide a:visited { color: darkorange; }
+.slide a:link { color: darkorange; }
+.slide a:hover { color: orange; text-decoration: underline }
+.slide a:active { color: orange; text-decoration: underline }
+
+h1, h2, h3 {
+  font-family: "HiraMinPro-W3", "ヒラギノ明朝 Pro", "Imprint MT Shadow",fantasy;
+}
+h1 {
+  border-bottom: thin solid blue;
+  text-align:center;
+  text-shadow: 3px 3px 4px orange;
+}
+h2 {
+  border-bottom: thin solid gray;
+  margin-left: 0 !important;
+}
+h3 {
+  border-bottom: thin solid silver;
+  margin-left: 0 !important;
+}
+.section {
+  margin: auto 1em;
+}
+.section .section {
+  margin: auto 1em;
+}
+pre {
+  font-family: "Osaka−等幅",monospace;
+  background-color: rgba(228, 229, 231, 0.8);
+  margin-right: 2em;
+}
+code {
+  font-family: inherit;
+  font-style: inherit;
+  padding: 0 5px;
+  background: rgba(128,128,128,0.2);
+}
+var {
+  font-family: inherit;
+  font-style: inherit;
+  text-decoration: underline;
+}
+dfn {
+  color: green;
+  text-decoration: underline;
+  font-style: inherit;
+}
+kbd {
+  font-style: normal;
+  background: #ffd;
+  -moz-box-shadow: 3px 3px 2px silver;
+  padding: 0 5px;
+}
+em {
+  text-decoration: inherit;
+  font-style: inherit;
+  color: red;
+}
+blockquote {
+  border: thin solid #AAA;
+  background-color: rgba(228,228,228,0.5);
+  -moz-border-radius: 10px;
+  margin-left: 3em;
+  width: 85%;
+}
+blockquote:before {
+  content: "“";
+  font-size: 5em;
+  line-height: 0.8;
+  text-indent: -0.5em;
+  color:silver;
+  float:left;
+}
+img.cap {
+  -moz-box-shadow: 10px 10px 15px rgba(64,64,64,0.9);
+  border-color: silver;
+  margin-bottom: 10px;
+}
+li pre {
+  margin-top: 0;
+}
+tt.file {
+  font-family: monospace;
+  color: green;
+}
+.misc{
+  font-size: 16pt;
+  margin: auto 3em;
+}
+#bg {
+  -moz-box-shadow: none;
+  opacity: 0.3;
+  position: fixed;
+  right: 0; bottom: 0;
+}
+#bg-p {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  font-family: "ヒラギノ明朝 Pro", "Imprint MT Shadow",fantasy;
+  color: black;
+  text-shadow: 3px 3px 4px orange;
+  font-size: 58;
+  text-align: center;
+  -moz-transform: rotate(-30deg);
+}
+dt {
+	float:left;
+	vertical-align: top;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+dt:before {
+	clear:both;
+}
+dt:after {
+	content: ":";
+	margin: auto 0.5em;
+}
+dd {
+	margin-left: 13em !important;
+}
+
+/* SyntaxHightligher */
+.slide .syntaxhighlighter,
+.slide .syntaxhighlighter .line.alt1, 
+.slide .syntaxhighlighter .line.alt2 {
+  background-color: rgba(15,25,42, 0.5) !important;
+}
+.slide .syntaxhighlighter {
+  border: thin solid rgba(128,128,128, 0.5) !important;
+  padding: 2px;
+}
+.slide .syntaxhighlighter .color2 {
+  color: magenta !important;
+}
+
+/*
+vim: sw=2 ts=2 et:
+*/

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>要素追加 - +=演算子 - E4X Performance</title>
+  <link rel="stylesheet" href="base.css"/>
+  <script type="application/javascript; version=1.8" src="performance_common.js"></script>
+  <script type="application/javascript; version=1.8">
+  //<![CDATA[
+
+  var funcs = [
+    function E4X_appendChild(time){
+      var div = <div/>;
+      for (let i=0, t = time; i<t; i += 2){
+        //div.appendChild(<><span>hoge</span><span>piyo</span></>);
+        div.* += <span>hoge</span>;
+      }
+      var start = Date.now();
+      work.appendChild(xmlToDOM(div));
+      return { LoopTimes: time, toDomAndAppend: (Date.now() - start) };
+    },
+  ];
+  function init() {
+    res = doc.getElementById("result");
+    work = doc.getElementById("work");
+
+    var i=0, time=500;
+    var f = funcs[0];
+    var r = [];
+    (function measure(){
+      i++;
+      if (i == 11){
+        finish(r);
+        return;
+      }
+      time = 500 * i;
+      var start = Date.now();
+      var res = f.call(this, time);
+      var end = Date.now();
+      log(f.name, end - start, res);
+      r.push([end-start, time]);
+      clear();
+      setTimeout(arguments.callee, 800);
+    })();
+  }
+  function finish(r){
+    var datas = <></>;
+    for (let i=0; i < r.length; i++){
+      datas[i] = <tr><td>{r[i][1]}</td><td>{r[i][0]}</td></tr>;
+    }
+    res.insertBefore(xmlToDOM(
+      <table border="1">
+        <tr><th>回数</th><th>ミリ秒</th></tr>
+        {datas}
+      </table>
+    ), res.firstChild);
+  }
+  //]]>
+  </script>
+</head>
+<body onload="init()">
+<h1>E4X Performance</h1>
+<section>
+  <hgroup>
+    <h2>要素追加 - <code>+=</code>演算子</h2>
+  </hbroup>
+  <div id="result"></div>
+</section>
+<div id="code"></div>
+<div id="work"></div>
+</body>
+</html>
+

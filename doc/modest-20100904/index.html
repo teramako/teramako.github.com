@@ -1,0 +1,376 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2010 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="1"/>
+  <title>E4X - Mozilla勉強会@東京 4th</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXML.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <p id="bg-p">ECMAScript<br/>for<br/>XML</p>
+  <img src="Mozilla-Firefox.jpg" id="bg" width="500"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="100%" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">E4X</h1>
+        <p style="font-size:30pt;">Mozilla 勉強会@東京 4th<br/>2010-09-04</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>E4X 概要</h1>
+  <p><img src="Standard-ECMA-357.png" class="cap" height="300px" align="right"/></p>
+  <ul>
+    <li>ECMAScript for XML の略</li>
+    <li>ECMAScript を拡張してネイティブで XML をサポートする仕様</li>
+    <li>仕様: <a href="http://www.ecma-international.org/publications/standards/Ecma-357.htm">Standard ECMA-357</a></li>
+    <li>和訳版: <a href="http://www.ne.jp/asahi/nanto/moon/specs/ecma-357.html">ECMAScript for XML (E4X) 仕様</a></li>
+  </ul>
+  <br clear="right"/>
+  <pre class="brush: mozjs;">
+    var x = <root>
+      <item>hoge</item>
+      <item>piyo</item>
+    </root>;
+    alert(x.item[0]); // hoge
+  </pre>
+  <p>みたいなことができる</p>
+</div>
+<div class="slide">
+  <h1>E4X 概要 - 2</h1>
+  <ul>
+    <li>Mozilla は JavaScript 1.6 からサポート</li>
+    <li>Mozilla独自拡張あり</li>
+    <li>ブラウザで実装されているのはFirefoxのみ</li>
+  </ul>
+  <p>詳しいことは、前項の仕様か、<a title="E4X in Firefox 発表資料" href="http://nanto.asablo.jp/blog/2007/04/22/1459018">E4X in Firefox 発表資料</a>を読もう<br/><img src="e4x_nanto.png" height="350"/></p>
+</div>
+<div class="slide titlepage h1">
+  <h1>E4X の変なところ</h1>
+  <p>はまりポイントなど</p>
+</div>
+<div class="slide">
+  <h1>XML_toString</h1>
+  <p>名前空間がからむと、文字列化時に変なことになる</p>
+  <pre class="brush: mozjs;">
+    default xml namespace = "";
+    var x = &lt;div xmlns="http://www.w3.org/1999/xhtml"/&gt;
+    x.appendChild(<p xmlns="">non-namespace</p>);
+    x.appendChild(<p xmlns="http://www.w3.org/1999/xhtml">xhtml namespace</p>);
+  </pre>
+  <h2>toString() すると...</h2>
+  <pre class="brush: xml;">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <p>non-namespace</p>
+      <p>xhtml namespace</p>
+    </div>
+  </pre>
+  <p>空の名前空間を指定した部分が無くなってる。本来は下記のようになっているべき。</p>
+  <pre class="brush: xml;">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <p xmlns="">non-namespace</p>
+      <p>xhtml namespace</p>
+    </div>
+  </pre>
+  <h2>文字列化にバグがあるだけ</h2>
+  <p>名前空間が上書きされているように見えるだけ</p>
+  <pre class="brush: mozjs;">
+    x.*[0].name() // p == QName("", "p")
+    x.*[1].name() // http://www.w3.org/1999/xhtml::p == QName("http://www.w3.org/1999/xhtml", "p")
+  </pre>
+</div>
+<div class="slide">
+  <h1>XML_toString - 2</h1>
+  <p>変な名前空間名が付く</p>
+  <pre class="brush: mozjs;">
+    var ns = "http://www.w3.org/1999/xhtml";
+    var x = &lt;div xmlns={ns}&gt;
+      <p>hoge</p>
+    &lt;/div&gt;;
+    x.ns::p.@class = "hogeClass";
+  </pre>
+  <p>ごく普通の操作ですね？</p>
+  <h2>toString() すると...</h2>
+  <pre class="brush: xml;">
+    <div xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+      <p class="hogeClass" xmlns:xhtml-1="http://www.w3.org/1999/xhtml">hoge</p>
+    </div>
+  </pre>
+</div>
+<div class="slide">
+  <h1>XML_toString - 3</h1>
+  <p>もう一つ</p>
+  <pre class="brush: mozjs;">
+    var ns = "@mozilla";
+    var x = &lt;div xmlns={ns}&gt;
+      <p>hoge</p>
+    &lt;/div&gt;;
+    x.ns::p.@class = "hogeClass";
+  </pre>
+  <p>ちょっと変な名前空間にしてみますよ...</p>
+  <h2>toString() すると...</h2>
+  <pre class="brush: mozjs;">
+    <div xmlns:aaaaaaaaaa="@mozilla" xmlns="@mozilla">
+      <p class="hogeClass" xmlns:aaaaaaaa-1="@mozilla">hoge</p>
+    </div>
+  </pre>
+  <p>何ですか、この接頭辞は？</p>
+</div>
+<div class="slide">
+  <h1>x.a === x.a ではない</h1>
+  <pre class="brush: mozjs;">
+    var x = <root>
+      <a>hoge</a>
+      <a>piyo</a>
+    </root>;
+  </pre>
+  <pre class="brush: mozjs;">
+    x.a === x.a // false
+    x.a[0] === x.a[0] // true
+  </pre>
+  <h2>特殊な内部メソッド<code>[[Get]]</code></h2>
+  <ul>
+    <li>E4X では Object にある内部メソッドの<code>[[Get]]</code>を上書き</li>
+    <li>新規 XMLList を作成して適合する XML オブジェクトを追加して返す。</li>
+    <li>つまり、毎回別インスタンスを返す。</li>
+    <li>添字等を付けた個々の XML オブジェクトの参照先は同じ</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>function 名前空間</h1>
+  <p>Mozilla の独自拡張</p>
+  <ul>
+    <li>内部メソッド<code>[[Get]]</code>/<code>[[Put]]</code>の動きを変更させる</li>
+    <li>プロトタイプチェーンをさかのぼったプロパティ名取得を行う</li>
+  </ul>
+  <pre class="brush: mozjs;">
+    var x = <root>
+      <list>hoge</list>
+      <list>foo</list>
+      <length>xml element</length>
+    </root>;
+  </pre>
+  <pre class="brush: mozjs;">
+    x.length // xml element
+    x.function::length // function length() { [native code] }
+  </pre>
+</div>
+<div class="slide">
+  <h1>function 名前空間 - フィルタ編</h1>
+  <p><code><var>id</var></code>が<code>b</code>の要素を取りたいな</p>
+  <pre class="brush: mozjs;">
+    var x = <root>
+      <list id="a">hoge</list>
+      <list id="b">piyo</list>
+      <list>fuga</list>
+    </root>;
+  </pre>
+  <div class="incremental">
+  <p>フィルタを使って..</p>
+  <pre class="brush: mozjs;">
+    x.list.(@id == "b");
+    // ReferenceError: reference to undefined XML name @id
+  </pre>
+  <p>あー、もしかして、id属性を持っていないものがあるとエラーになる？<br/>んじゃ、<code>hasOwnProperty</code>メソッドを使って存在する場合...にすれば良いよね</p>
+  <pre class="brush: mozjs;">
+    x.list.(hasOwnProperty("@id") && @id == "b");
+    // &lt;&gt;&lt;/&gt;
+  </pre>
+  <p>Ｗ Ｈ Ｙ ？</p>
+  <ul>
+    <li>実はこの<code>hasOwnProperty</code>メソッドはグローバルオブジェクトの<code>hasOwnProperty</code>(ブラウザ上ならwindow)で、XML オブジェクトのものではない。</li>
+    <li>XML オブジェクトの内部メソッド<code>[[Get]]</code>はメソッド取得を行わない</li>
+  </ul>
+  <p>そこで、<code>function</code>名前空間</p>
+  <pre class="brush: mozjs;">
+    x.list.(function::hasOwnProperty("@id") && @id == "b");
+    // <list id="b">piyo</list>
+  </pre>
+  </div>
+</div>
+<div class="slide">
+  <h1>function 名前空間 - prototype拡張編</h1>
+  <p>XML オブジェクトを prototype 拡張して使いやすく</p>
+  <pre class="brush: mozjs;">
+    XML.prototype.function::toDOMNode = function toDOMNode(){
+      // ...
+    }
+  </pre>
+  <ul class="incremental">
+    <li>代入できるのは function オブジェクトのみ
+      <pre class="brush: mozjs;">
+        XML.prototype.function::foo = "abc";
+        alert(XML.prototype.function::foo); // "undefined"
+        var x = &lt;root/&gt;;
+        alert(x.function::foo); // "undefined"
+      </pre>
+      ブラックホールに飲み込まれた？
+    </li>
+    <li><code>__defineGetter__</code>とか罠チック
+      <pre class="brush: mozjs;">
+        XML.prototype.__defineGetter__("hoge", function(){
+          alert(this);
+          return "HOGE";
+        });
+        var x = <p>hoge</p>;
+        x.function::hoge; // alert が２回出る しかも、return値なし
+      </pre>
+    </li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>パフォーマンス</h1>
+  <p>そんなの知りません。E4Xは扱いやさが全てです！</p>
+</div>
+<div class="slide">
+  <h1>初期化</h1>
+  <p>
+    <img src="e4x_initialize.png" class="cap"/>
+  </p>
+  <ul>
+    <li>まぁ基本的に遅い</li>
+    <li><code>new XML(...)</code>より、リテラルで書いた方が多少速い
+      <ul>
+        <li>Firefox4β4だと逆に遅くなる</li>
+      </ul>
+    </li>
+    <li>Firefox4β4は式評価やDOM APIが速くなっている</li>
+    <li>Firefox 3.6.8 では E4X と DOM とで速度差はほとんどない</li>
+  </ul>
+  <p><a href="performance_initialize.html">実験ページ</a></p>
+</div>
+<div class="slide">
+  <h1>ノードの参照</h1>
+  <p>
+    <img src="e4x_reference_node.png" class="cap" align="right"/>
+  </p>
+  <ul>
+    <li>因に DOM でノードを10個作って参照したところ、5ミリ秒であった</li>
+    <li>遅いですね〜</li>
+  </ul>
+  <p><a href="performance_reference.html">実験ページ</a></p>
+</div>
+<div class="slide">
+  <h1>要素追加</h1>
+  <p><img src="e4x_addChild.png" class="cap" align="right"/></p>
+  <ul>
+    <li><code>appendChild</code>遅い</li>
+    <li><code>+=</code>演算子による追加は<em>超スーパー遅い</em></li>
+    <li>XMLList に添字付きでの追加は遅くない</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>要素追加 - appendChild</h1>
+  <p><img src="e4x_add_appendChild.png" class="cap" align="right"/></p>
+  <ul>
+    <li>2次曲線的に増加</li>
+    <li>ブレがあるのはガーベージコレクションのせい？</li>
+  </ul>
+  <p><a href="performance_add_appendChild.html">実験ページ</a></p>
+  <br clear="right"/>
+  <pre class="brush: mozjs;">
+    var x = <div></div>;
+    for (var i = 0; i < times; i++){
+      x.appendChild(<span>hoge</span>);
+    }
+  </pre>
+</div>
+<div class="slide">
+  <h1>要素追加 - <code>+=</code>演算子</h1>
+  <p><img src="e4x_add_plus_equal.png" class="cap" align="right"/></p>
+  <ul>
+    <li>2次曲線的に増加</li>
+    <li>超遅い</li>
+  </ul>
+  <p><a href="performance_add_plus_equal.html">実験ページ</a></p>
+  <br clear="right"/>
+  <pre class="brush: mozjs;">
+    var x = &lt;div/&gt;;
+    for (var i = 0; i < times; i++){
+      x.* += <span>hoge</span>;
+    }
+  </pre>
+</div>
+<div class="slide">
+  <h1>要素追加 - <code>xlist[<var>i</var>]</code>に代入</h1>
+  <p><img src="e4x_add_xlist.png" class="cap" align="right"/></p>
+  <ul>
+    <li>1次曲線的な増加傾向</li>
+    <li>結構速い</li>
+  </ul>
+  <p><a href="performance_add_xlist.html">実験ページ</a></p>
+  <br clear="right"/>
+  <pre class="brush: mozjs;">
+    var xlist = new XMLList();
+    for (var i = 0; i < times; i++){
+      xlist[i] = <span>hoge</span>;
+    }
+    var x = <div>{xlist}</div>;
+  </pre>
+</div>
+<div class="slide">
+  <h1>Twitterのツイートで実験</h1>
+  <p>
+    実用面を考慮して、Twitterのツイートを50個作成し追加
+  </p>
+  <p><img src="e4x_twitter.png" class="cap" align="right" width="700"/></p>
+  <ul>
+    <li><code>innerHTML</code>に一括代入速い</li>
+    <li>ただし、<code>+=</code>で代入は超遅い</li>
+    <li>E4X 実用的じゃね？</li>
+  </ul>
+  <p><a href="performance_twitter.html">実験ページ</a></p>
+  <p>DOM APIを使用した要素作成は気持ちが萎えて、やってません。すみません。</p>
+  <br clear="right"/>
+</div>
+<div class="slide">
+  <h1>まとめ</h1>
+  <ul class="incremental">
+    <li>名前空間は弄るなｗ
+      <ul>
+        <li><code>toString()</code>するなら要注意</li>
+      </ul>
+    </li>
+    <li>パフォーマンス
+      <ul>
+        <li>基本的には遅い</li>
+        <li>初期化後にあまり弄らなければ使えるレベル
+          <ul>
+            <li>参照もあまりするな</li>
+            <li>要素の追加厳禁</li>
+          </ul>
+        </li>
+        <li>複雑なノードを作成するなら E4X はそんなに遅くない</li>
+      </ul>
+    </li>
+    <li>そんなことより、<em>見易さ</em>、<em>書き易さ</em>ですよ！！！</li>
+  </ul>
+</div>
+<div class="slide">
+  <p style="position:fixed; left: 30%; top: 40%;">ご清聴ありがとうございました</p>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = false;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
