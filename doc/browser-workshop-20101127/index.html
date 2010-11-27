@@ -1,0 +1,226 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2010 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="1"/>
+  <title>キーボードブラウジング - 第2回ブラウザー勉強会</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <p id="bg-p">Vim<br/>+<br/>Firefox<br/>⇓<br/>Vimperator</p>
+  <img src="Mozilla-Firefox.jpg" id="bg" width="500"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="100%" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">“キーボード”<br/>ブラウジングへの誘い</h1>
+        <p style="font-size:30pt;">第2回ブラウザー勉強会<br/>2010-11-27</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>自己紹介</h1>
+  <dl>
+    <dt>はてなID</dt>
+    <dd>
+      <img src="teramako.gif" width="64"/>
+      <a href="http://www.hatena.ne.jp/teramako/">teramako</a>
+    </dd>
+    <dt>Twitter</dt>
+    <dd>
+      <img src="teramako.jpg" width="64"/>
+      <a href="http://twitter.com/teramako/">@teramako</a>
+    </dd>
+  </dl>
+  <ul>
+    <li>Vimperator とか</li>
+    <li>Mozilla とか Firefox とか</li>
+    <li>Thunderbird 拡張機能とか</li>
+    <li>(Mozilla)JavaScript とか</li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>始めに</h1>
+</div>
+<div class="slide">
+  <h1>キーボードから手を離したくない</h1>
+  <p style="line-height: 1.5">
+    今プログラミングしている。文章を書いている。コンソールを弄っている。<br/>
+    んで、ちょっとネットで検索したい。<br/>
+    とたんにマウスに手を伸ばしたり、キーボードに戻ったりと忙しくなる。
+    <br/>
+    マウスは便利。でも今、手を離したくない。
+  </p>
+  <p>そんな風に誰もが思いますよね？</p>
+</div>
+<div class="slide big">
+  <h1>コンソールユーザだったら...</h1>
+  <p>
+    <del>telnet</del>, Lynx, w3m を使うけど...
+  </p>
+</div>
+<div class="slide big">
+  <h1 class="none">いやいや</h1>
+  <p>さすがにそれは厳しい</p>
+</div>
+<div class="slide big">
+  <h1 class="none">普通のブラウザで</h1>
+  <p>普通のブラウザ &amp; キーボードでブラウジングしたい！</p>
+</div>
+<div class="slide">
+  <h1 class="none">マウスいらない</h1>
+  <p>
+    <img src="mouse-x.png" height="90%"/>
+  </p>
+</div>
+<div class="slide titlepage h1">
+  <h1>拡張機能</h1>
+  <p>それ拡張機能で出来るよ！</p>
+</div>
+<div class="slide">
+  <h1>いろいろある</h1>
+  <ul style="float:left">
+    <li>Firefox
+      <ul>
+        <li>KeyConfig</li>
+        <li>LoL (旧 Hit-a-Hint)</li>
+        <li>Vimperator</li>
+        <li>KeySnail</li>
+        <li>etc...</li>
+      </ul>
+    </li>
+    <li>Google Chrome
+      <ul>
+        <li>KeyConfig</li>
+        <li>Vimlike-smooziee</li>
+        <li>Vimium</li>
+        <li>Vrome</li>
+        <li>etc...</li>
+      </ul>
+    </li>
+  </ul>
+  <ul style="float:left;">
+    <li>Opera
+      <ul><li>設定で可能(?)</li></ul>
+    </li>
+    <li>Safari
+      <ul><li>あるの？</li></ul>
+    </li>
+    <li>IE
+      <ul><li>ないよね？</li></ul>
+    </li>
+  </ul>
+</div>
+<div class="slide big">
+  <p>
+    Firefox 拡張の<br/>
+    Vimperator<br/>がオススメだよ
+  </p>
+</div>
+<div class="slide titlepage h1">
+  <h1>Vimperator</h1>
+  <p style="font-size: 48pt; text-align: center">
+    <img src="firefox-logo.png" width="200"/> + <img src="vim-editor_logo.png" width="200"/>
+    ⇛
+    <img src="vimperator-logo.png" width="200" style="background-color:white;"/>
+  </p>
+</div>
+<div class="slide">
+  <h1>Vimperator とは</h1>
+  <ul>
+    <li>
+      キーボードによるブラウジングを提供する
+      <ul>
+        <li>
+          エディタの Vim のような操作
+          <ul>
+            <li><kbd>j</kbd>,<kbd>k</kbd> で上下スクロール、<kbd>gg</kbd>で先頭へ、<kbd>G</kbd>で末尾へ etc...</li>
+          </ul>
+        </li>
+        <li>Hit-a-Hint の様なリンク選択</li>
+      </ul>
+    </li>
+    <li>
+      UI にまで手を加えている
+      <ul>
+        <li>ロケーションバーが消えたり</li>
+        <li>ステータスバーが Vim っぽくなったり</li>
+      </ul>
+    </li>
+    <li>コマンドライン機能 &amp; 補完機能</li>
+    <li>
+      優れたカスタマイズ性
+      <ul>
+        <li>(UNIXライクな) RC ファイルによる設定</li>
+        <li>プラグイン機能</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1 class="none">Vimperator周りの系統図</h1>
+  <p><img src="vimperator_diagram.png" width="100%"/></p>
+  <p>多くの拡張やソフトが Vimperator の影響を受けている</p>
+  <ul style="font-size: 16pt">
+    <li>UNIX系ツールからFirefox拡張機能へ
+      <ul>
+        <li>まず<a href="http://mozless.mozdev.org/index.ja.html">mozless</a></li>
+        <li>Emacsライクな操作を可能にする<a href="https://addons.mozilla.org/ja/firefox/addon/4141">Firemacs</a></li>
+        <li>キーボードからリンク選択を可能にする<a href="https://addons.mozilla.org/ja/firefox/addon/1341">Hit-a-Hint</a> (Firefox 2.0まで) → 現在 <a href="https://addons.mozilla.org/en-US/firefox/addon/8781/">LoL</a> へフォーク</li>
+        <li>Vim的カスタマイズ性を備えた <a href="https://addons.mozilla.org/ja/firefox/addon/4891/">Vimperator</a> (超オススメ)</li>
+        <li>よりEmacs的に拡張可能な <a href="https://addons.mozilla.org/ja/firefox/addon/13118">KeySnail</a> (オススメ)</li>
+      </ul>
+    </li>
+    <li>Firefox拡張機能からGoogleChrome拡張機能へ
+      <ul>
+        <li><a href="https://chrome.google.com/extensions/detail/donnjgnmaheadpiphiedimcjpiefdnnj">Vimlike-Smooziee</a></li>
+        <li><a href="https://chrome.google.com/extensions/detail/dbepggeogbaibhgnhhndojpepiihcmeb">Vimium</a></li>
+        <li><a href="https://chrome.google.com/extensions/detail/godjoomfiimiddapohpmfklhgmbfffjj">Vrome</a></li>
+      </ul>
+    </li>
+    <li>Operaでは<a href="http://my.opera.com/Blazeix/blog/vimperator-for-opera">Vimperator for Opera</a> なんてのが</li>
+    <li>最近では、<a href="http://luakit.org/projects/luakit/">luakit</a>(WebKit + Lua) なんてのも</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>入門者たちへ</h1>
+  <ol>
+    <li>導入直後、十分に驚きを味わってください。</li>
+    <li>導入して再起動後に表示される<em>ヘルプを良く読みましょう</em>
+      <ul>
+        <li>メニューバーの表示方法、Vimperatorの無効化方法が書かれています</li>
+        <li>チュートリアルもあります</li>
+      </ul>
+    </li>
+    <li><a href="https://addons.mozilla.org/ja/firefox/addon/123891/">Vimperator日本語ヘルプ拡張</a>があるで、英語が苦手なら導入すると良いかも</li>
+  </ol>
+</div>
+<div class="slide">
+  <h1>中毒者たちの症状</h1>
+  <ol>
+    <li>ブログに設定した RC ファイルやプラグインを晒す</li>
+    <li>Vim を使い始める</li>
+    <li>「Vimperatorのせいで他のブラウザに乗り換えられない」などとTwitterに呟く</li>
+    <li>「自分がFirefoxを使っているのはVimperatorがあるから」などとTwitterに書き込む</li>
+    <li>「Vimperatorはブラウザです！」などと突然Twitterに書き込む</li>
+    <li>最新プラグイン入手のために、Subversion, Git を使い始める</li>
+    <li>プラグインを作ってみようとする</li>
+    <li>最新版入手のためにMercurialを導入し、ビルドし始める</li>
+    <li>メーリングリストを購読し始める</li>
+  </ol>
+</div>
+<div class="slide">
+  <h1 class="none">End</h1>
+  <p style="position:fixed; left: 30%; top: 40%;">ご清聴ありがとうございました</p>
+</div>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
