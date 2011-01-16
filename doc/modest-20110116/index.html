@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2010 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="1"/>
+  <title>Panorama カスタマイズ - Mozilla勉強会@東京 5th</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushCss.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <img src="FF35_fs_1024x768.jpg" id="bg" width="1024"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="95%" align="center" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">Panorama で遊ぼう</h1>
+        <p style="font-size:30pt;line-height:1.5">Mozilla 勉強会@東京 4th<br/>2011-01-16</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>自己紹介</h1>
+  <ul>
+    <li><img src="../teramako.gif" width="48"/> teramako
+      <ul>
+        <li>Hatena: <a href="http://www.hatena.ne.jp/teramako/">id:teramako</a></li>
+        <li>Twitter: <a href="http://twitter.com/teramako/">@teramako</a><img src="../teramako.jpg" width="48"/></li>
+      </ul>
+    </li>
+    <li>Mozilla JavaScript 大好き</li>
+    <li>2007年くらいから <a href="http://vimperator.org/">Vimperator</a> にはまる
+      <ul>
+        <li>パッチを送ったりしてたらいつの間にかメンテナーに</li>
+      </ul>
+    </li>
+    <li>Thunderbird 拡張も少し (<a href="https://addons.mozilla.org/ja/thunderbird/addon/wat-webapplicationtab/">WAT</a>)</li>
+  </ul>
+</div>
+<div class="slide titlepage">
+  <h1>Panorama</h1>
+  <p><img src="panorama.png" align="right"/></p>
+  <ul style="text-align:left;">
+    <li>Firefox 4 の目玉(?)</li>
+    <li>タブのグループ化</li>
+    <li>可視化</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>パノラマって</h1>
+  <p>面白いけど...</p>
+  <ul>
+    <li>コンテキストメニューないの？</li>
+    <li>他のグループに移動するにはパノラマ経由でないとできない</li>
+    <li>ちょい味気ないよね</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>カスタマイズしたいな</h1>
+  <p>デスクトップっぽくしてみたい</p>
+  <ul>
+    <li>壁紙とか表示させたいな</li>
+    <li>ガジェットとか作ったら面白いかも</li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>壁紙貼ろうぜ</h1>
+  <p>userChrome.css 編</p>
+</div>
+<div class="slide">
+  <h1>DOM Inspector で調査</h1>
+  <p>まずは DOM Inspector でパノラマの構造を調査</p>
+  <p><img src="panorama-bg-inspector.png" align="right" width="600"/></p>
+  <ul>
+    <li>URL: chrome://browser/content/tabview.html</li>
+    <li>中身はHTML</li>
+    <li><code>#bg</code> に背景</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>userChrome.css</h1>
+  <p>Firefox内部コンテンツへスタイルを適用する古典的方法</p>
+  <ul>
+    <li><tt class="file"><var>プロファイルディレクトリ</var>/chrome/userChrome.css</tt>
+      <ul>
+        <li>Minefieldだと<tt class="file">chrome</tt>ディレクトリがない!?</li>
+      </ul>
+    </li>
+    <li>デフォルトの名前空間が XUL
+      <ul>
+        <li>HTML 要素へ適用するにはXHTMLの名前空間を使用</li>
+        <li><code>@namespace html url("http://www.w3.org/1999/xhtml");</code></li>
+        <li>セレクタには<code>html|*...</code> (参考: <a href="http://www.w3.org/TR/css3-namespace/">http://www.w3.org/TR/css3-namespace/</a>)</li>
+      </ul>
+    </li>
+    <li>特定のURLに限定して適用するには、<code>@-moz-document url(....) { ... }</code>を使用</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>userChrome.css のコード</h1>
+  <div style="font-size: 16pt">
+  <pre class="brush: css">
+  @charset "utf-8";
+  @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+  @namespace html url("http://www.w3.org/1999/xhtml");
+  @-moz-document url("chrome://browser/content/tabview.html") {
+    html|*#bg {
+      background-image: url(....) !important;
+      background-repeat: no-repeat !important;
+      background-size: cover !important;
+      background-position: top left !important;
+    }
+  }
+  </pre>
+  </div>
+  <p>Stylish でも同じようなことはできるはず。（画像をbase64エンコードしてインラインに書く必要がある？ &gt; <a href="http://beau.g-com.ne.jp/mon-extension-memo10_12-2.html#panoramasbackground">Panorama のバックグラウンド</a>）</p>
+</div>
+<div class="slide">
+  <h1>一方Vimperatorユーザは</h1>
+  <p><code>style</code>コマンドを使った</p>
+  <pre>:style -name panorama-bg chrome://browser/content/tabview.html &lt;&lt;EOM
+#bg {
+  background-image: url(....) !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  background-position: top left !important;
+}
+EOM</pre>
+  <p>消す場合は</p>
+  <pre>:delstyle -name panorama-bg</pre>
+<p>Vimperator 便利！！</p>
+</div>
+<div class="slide titlepage h1">
+  <h1>Panorama Gadget</h1>
+  <p>パノラマにガジェットを!!</p>
+</div>
+<div class="slide">
+  <h1>拡張を作ってみたよ(未完成)</h1>
+  <p><img src="pgadget_1.png" align="right" width="450"/></p>
+  <ul>
+    <li>JavaScriptファイルを読み込むフレームワーク的拡張機能
+      <ul>
+        <li>特殊な userChrome.js みたいな感じ</li>
+      </ul>
+    </li>
+    <li><a href="https://github.com/teramako/pgadget">https://github.com/teramako/pgadget</a></li>
+  </ul>
+  <p><img src="pgadget_2.png" width="450"/></p>
+</div>
+<div class="slide">
+  <h1>デモ</h1>
+</div>
+<div class="slide">
+  <h1>ちょっと苦労したところ</h1>
+  <ul>
+    <li>HTMLへのoverlayができない(XULでやっていた拡張方法が使えない)
+      <ul>
+        <li><code>&lt;script src="..."&gt;</code>の埋め込みできない</li>
+        <li><code>&lt;link rel="stylesheet" href="..."&gt;</code>の埋込みができない</li>
+      </ul>
+    </li>
+  </ul>
+  <p>⇓</p>
+  <ul>
+    <li>スクリプトは、<dfn>mozIJSSubScriptLoader</dfn>を使えばいいじゃない</li>
+    <li>スタイルは、<dfn>nsIStyleSheetService</dfn>を使えばいいじゃない</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>やっていること</h1>
+  <p>パノラマが起動されるまで</p>
+  <ul>
+    <li><dfn>tabviewframeinitialized</dfn>イベントを待つ
+      <ul>
+        <li><dfn>mozIJSSubScriptLoader</dfn>でコンテキストにパノラマのウィンドウを指定して拡張内のJavaScriptを読み込ませる
+          <ol>
+            <li>ガジェット用のCSSを<dfn>nsIStyleSheetService</dfn>を使用して読み込む</li>
+            <li>ガジェットの表示/非表示を操作するUIの設定</li>
+            <li><tt class="file"><var>プロファイルディレクトリ</var>/pgadget/*.pg.js</tt>を読み込む
+              <ul>
+                <li>1ガジェット、1ファイル</li>
+                <li>それぞれのコンテキスト上に読み込まれる</li>
+                <li>各イベントの設定</li>
+              </ul>
+            </li>
+          </ol>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>ガジェット・ファイル</h1>
+  <ul>
+    <li>Chrome特権ありのJavaScriptファイル</li>
+    <li>コンテキストの<code>__proto__</code>にパノラマのwindowオブジェクト</li>
+    <li>規定の変数、関数を定義することで動作</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>ガジェット・ファイル既定の変数/関数</h1>
+  <table border="1" cellspacing="0" style="font-size: 14pt">
+    <caption>特殊変数/関数</caption>
+    <tr>
+      <th>変数名/関数名</th><th>説明</th>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>必須。ガジェットのID. 要素のid属性にも使われる</td>
+    </tr>
+    <tr>
+      <td>title</td>
+      <td>ガジェットのタイトル</td>
+    </tr>
+    <tr>
+      <td>xml</td>
+      <td>コンテンツ。E4Xで記述</td>
+    </tr>
+    <tr>
+      <td>css</td>
+      <td>CSS文字列</td>
+    </tr>
+    <tr>
+      <td>rect</td>
+      <td>初期表示位置. <code>{top, bottom, left, right, width, height}</code>(px値)を含むオブジェクト</td>
+    </tr>
+    <tr>
+      <td>draggable</td>
+      <td>Bool値(Default: true) ドラッグの可否</td>
+    </tr>
+    <tr>
+      <td>closeable</td>
+      <td>Bool値(Default: true) クローズの可否</td>
+    </tr>
+    <tr>
+      <td>risizable</td>
+      <td>Bool値(Default: true) リサイズの可否</td>
+    </tr>
+    <tr>
+      <td>function onLoad</td>
+      <td>初期化時に呼び出される</td>
+    </tr>
+    <tr>
+      <td>function onUnLoad</td>
+      <td>クローズ時に呼び出される</td>
+    </tr>
+    <tr>
+      <td>function onShown</td>
+      <td>パノラマが表示されたときに呼び出される</td>
+    </tr>
+    <tr>
+      <td>function onHidden</td>
+      <td>パノラマが閉じるときに呼び出される</td>
+    </tr>
+  </table>
+</div>
+<div class="slide">
+  <h1>サンプル</h1>
+  <pre class="brush: mozjs">
+    var id = "sample";
+    var title = "Sample Gadget";
+    var rect = { top: 20, left: 10, width: 250 };
+    var xml = <div>
+      <p>This is a sample</p>
+      <p class="date"></p>
+    </div>;
+    var css = <css>&lt;![CDATA[
+      #sample .date { font-size: 16pt; }
+    ]]></css>.toString();
+    function onShown () {
+      gadget.contentElm.querySelector(".date").innerHTML =
+        (new Date).toLocaleString();
+    }
+  </pre>
+</div>
+<div class="slide">
+  <table width="95%" height="80%" align="center" style="text-align:center;">
+    <tr>
+      <td>
+        <p>ご清聴ありがとうございました</p>
+      </td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = true;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
