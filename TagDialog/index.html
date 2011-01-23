@@ -103,7 +103,7 @@
           '<span class="git-date">',
           formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T"),
           '</span><br/>',
-          '<a href="', commit.url, '">', commit.message, '</a></li>'
+          '<a href="https://github.com', commit.url, '">', commit.message, '</a></li>'
         ].join(""));
       });
     });
