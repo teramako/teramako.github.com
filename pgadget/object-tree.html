@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html"/>
+  <title>Object tree - pgadget - hogehoge@github</title>
+  <link rel="start" href="../index.html"/>
+  <link rel="stylesheet" href="../common.css"/>
+  <style type="text/css">
+  #maproot { font-size: 12px; margin: 1em 0;}
+  ul, ol {
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 20px;
+    width: 90%;
+  }
+  ul {
+    list-style: none;
+  }
+  .region {
+    border: thin dashed gray;
+    margin-bottom: 0.5em;
+  }
+  ul > li:before {
+    content: "\25a0";
+    color: black;
+  }
+  .node:before, .node li:before {
+    color: blue;
+  }
+  .userContext li {
+    background-color: silver;
+  }
+  svg {
+    background-color: #f9f9f9;
+    border: thin solid gray;
+  }
+  #arrow path, #desc path {
+    fill: none;
+    stroke-width: 1;
+    stroke: black;
+    stroke-dasharray: 3 3;
+    marker-end: url(#triangle);
+  }
+  #desc {
+    font-size: 12px;
+  }
+  #desc ul li {
+    list-style: none;
+  }
+  .tabViewContextRegion {
+    background-color: LightCyan;
+  }
+  .pgadgetRegion {
+    background-color: OldLace;
+  }
+  .private:before {
+    color: gray;
+  }
+  </style>
+</head>
+<body>
+<h1><img src="../img/titleimg.png" width="301" height="150" alt="hogehoge" />@github</h1>
+
+<navi>
+  <ol>
+    <li><a href="../index.html">Top</a></li>
+    <li><a href="index.html">pgadget</a></li>
+    <li>object-tree</li>
+  </ol>
+</navi>
+<article>
+<h2>Object tree of Panorama gadget</h2>
+<svg width="100%" height="900" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="triangle" viewbox="0 0 10 10" refX="0" refY="5"
+          markerUnits="strokeWidth" markerWidth="10" markerHeight="8" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+  </marker>
+</defs>
+<foreignObject x="0" y="0" width="100%" height="100%">
+<div id="maproot" xmlns="http://www.w3.org/1999/xhtml">
+  <ul>
+    <li class="region">window
+      <ul class="tabViewContextRegion">
+        <li>gWindow [object ChromeWindow] (reference to Firefox's window object)</li>
+        <li>gBrowser [object XULElement] (reference to tabbrowser)</li>
+        <li>Services<ul><li>...</li></ul></li>
+        <li>Utils<ul><li>...</li></ul></li>
+        <li>GroupItems<ul><li>...</li></ul></li>
+        <li>...</li>
+      </ul>
+      <ul class="pgadgetRegion">
+        <li class="private">NS (String: "pgadget@teramako.github.com")</li>
+        <li class="private">StyleService
+          <ul>
+            <li>add ()</li>
+            <li>remove ()</li>
+          </ul>
+        </li>
+        <li class="region"><span id="gadgetmanager">pgadget@teramako.github.com::GadgetManager</span>
+          <ul>
+            <li>start ()</li>
+            <li>add (nsIFile || Object || String)</li>
+            <li>remove (id)</li>
+            <li>get (id)</li>
+            <li>...</li>
+          </ul>
+        </li>
+        <li class="private"><span ref="gadgetmanager">GadgetManager</span></li>
+        <li class="region"><span id="gadgets">pgadget@teramako.github.com::gadgets [object Array]</span>
+          <ol>
+            <li>...</li>
+            <li class="region"><span id="pgadget">[instance PanoramaGadget]</span>
+              <ul>
+                <li><span ref="gadget-id">id</span></li>
+                <li class="region">item
+                  <ul class="userContext">
+                    <li><span ref="pgadget">gadget</span></li>
+                    <li>__FILE__ [object nsIFile]</li>
+                    <li><span id="gadget-id">id</span></li>
+                    <li>title</li>
+                  </ul>
+                </li>
+                <li><span ref="contentElm">contentElm</span></li>
+                <li><span ref="titleElm">titleElm</span></li>
+                <li><span ref="rootElm">rootElm</span></li>
+                <li>onShown ()</li>
+                <li>onHidden ()</li>
+                <li>close ()</li>
+                <li>...</li>
+              </ul>
+            </li>
+            <li>...</li>
+          </ol>
+        </li>
+        <li class="private"><span ref="gadgets">gadgets</span></li>
+        <li class="private">...</li>
+      </ul>
+      <ul>
+        <li class="node">document
+          <ul>
+            <li>&lt;body&gt;
+              <ul>
+                <li>...</li>
+                <li><span id="rootElm">&lt;div id="<span ref="gadget-id">id</span>" class="gadget"&gt;</span>
+                  <ul>
+                    <li><span id="titleElm">&lt;div class="title"&gt;</span></li>
+                    <li><span id="contentElm">&lt;div class="content"&gt;</span></li>
+                  </ul>
+                </li>
+                <li>...</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+</foreignObject>
+<g id="desc" transform="translate(600, 80)">
+  <rect x="0" y="0" width="210" height="160" fill="white" fill-opacity="0.8" stroke="black" stroke-width="1"/>
+  <rect x="20" y="15" width="10" height="10" fill="black"/>
+    <text x="40" y="24">JS Object</text>
+  <rect x="20" y="35" width="10" height="10" fill="gray"/>
+    <text x="40" y="44">JS Private Object</text>
+  <rect x="20" y="55" width="10" height="10" fill="blue"/>
+    <text x="40" y="64">DOM Node</text>
+  <path d="M 20 80 h 5"/>
+    <text x="40" y="84">reference</text>
+  <rect x="20" y="91" width="170" height="18" fill="LightCyan"/>
+    <text x="40" y="104">defined by Firefox</text>
+  <rect x="20" y="111" width="170" height="18" fill="OldLace"/>
+    <text x="40" y="124">defined by the exntension</text>
+  <rect x="20" y="131" width="170" height="18" fill="silver"/>
+    <text x="40" y="144">Gadget File's context</text>
+</g>
+<g id="arrow"></g>
+</svg>
+</article>
+<div id="footer">
+  <hr/>
+  <p><a href="../index.html">Index</a></p>
+</div>
+</body>
+<script type="text/javascript">
+var aGroup = document.getElementById("arrow");
+var refs = document.querySelectorAll("[ref]");
+Array.prototype.forEach.call(refs, function(ref) {
+  var id = ref.getAttribute("ref");
+  var refElm = document.getElementById(id);
+  var rect = ref.getBoundingClientRect();
+  var refRect = refElm.getBoundingClientRect();
+  // console.log("RectTop: ", rect.top, "SVGRectTop: " ,svgRect.top, rect.height);
+  var x1 = rect.right + 5,
+      y1 = rect.top + (rect.height / 2),
+      x2 = refRect.right + 8,
+      y2 = refRect.top + (refRect.height / 2) + (rect.top > refRect.top ? 2 : -4);
+  var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", [
+    "M", x1, y1,
+    "Q",
+    (x1 + (x1 + x2)/2),
+    ((y1 + y2)/2),
+    x2, y2
+  ].join(" "));
+  aGroup.appendChild(path);
+});
+</script>
+</html>
+<!--
+vim:sw=2 ts=2 et:
+-->
