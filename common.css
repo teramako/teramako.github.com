@@ -4,34 +4,63 @@ html {
   background-color: silver;
 }
 body {
-  margin: 0 10%;
+  margin: 0 5%;
+  padding: 0 0.5em;
   background-color: white;
   border-left:  thin solid gray;
   border-right: thin solid gray;
+  min-height: 600px;
+  font-family: "HiraMaruPro-W4", "ヒラギノ丸ゴ Pro","メイリオ", serif;
 }
-#contents, #footer {
-  margin: 0 0.5em;
+h1, h2, h3, h4 {
+  margin: 0;
+  /* font-family: "HiraMinPro-W3", "ヒラギノ明朝 Pro", "Imprint MT Shadow",sans-serif; */
+  font-family: serif;
+}
+h2 { font-size: 24pt; }
+h3 { font-size: 20pt; }
+h4 { font-size: 18pt; }
+article {
+  counter-reset: table_counter code_counter img_caption;
+}
+article > hgroup {
+  width: 72%;
+  float: left;
 }
 #contents {
   width: 72%;
 	float: left;
 }
-#contents h2 {
+#contents h2, article > hgroup  {
   margin-top: 0;
+  padding-left: 5px;
   border-bottom:thin solid #a5bce7;
   border-left:  10px solid #a5bce7;
   border-right: 10px solid #a5bce7;
 }
+hgroup { margin: 1em 0; }
+hgroup > h2, hgroup > h3, hgroup > h4, hgroup > p { margin: 0; }
+hgroup > p { font-size: 10pt; }
 h3  {
   margin-right: 2em;
   border-bottom:thin solid #a5bce7;
 }
-.section2 {
+section > h4, section > hgroup {
+  padding-left: 5px;
+  border-left: 5px solid #a5bce7;
 }
-.section3 {
+section + section {
+  margin-top: 1em;
+}
+.section3, section {
   margin-left: 1em;
 }
-.section3:after {
+section:before {
+  clear: both;
+  content: "";
+  display: block;
+}
+.section3:after, {
   clear: both;
   content: "";
   display: block;
@@ -40,6 +69,24 @@ h3  {
   float: right;
 	width: 25%;
 }
+#sidebar h3 {
+  font-size: 12pt;
+}
+navi.sidebar {
+  position: absolute;
+  left: 73%;
+  width: 21%;
+  font-size: small;
+  z-index: 10;
+  border: solid thin #a5bce7;
+  background-color: white;
+}
+navi.sidebar:after {
+  clear:both;
+  content: "";
+  display: block;
+}
+
 .sidebar-content {
 	font-size: small;
 }
@@ -58,8 +105,7 @@ h3  {
   content: "";
   display: block;
 }
-.sidebar-content h2, .footer-content h2 {
-	font-size: 16pt;
+navi h2, navi h4, .sidebar-content h2, .footer-content h2 {
 	margin: 0;
 	padding: 0 10px;
   border-left:  10px solid #a5bce7;
@@ -85,6 +131,82 @@ a.page:before {
 }
 .git-history {
   font-size: small;
+}
+navi ol {
+  list-style: none;
+  margin: 1em 0;
+  padding: 0;
+}
+navi ol li {
+  float: left;
+}
+navi ol li:last-child {
+  float: none;
+}
+navi ol li + li:before {
+  margin: 0 0.5em;
+  content: ">";
+}
+dl { margin-left: 1em; font-size: 11pt; }
+dt { font-weight: bold; }
+dd { margin-left: 1em; }
+dd > p { margin: 0; }
+.file { color: darkgreen; }
+var[title] { text-decoration: underline; }
+p.img {
+  text-indent: 0;
+  font-size: 10pt;
+  text-decoration:none;
+  counter-increment: img_caption;
+}
+p.img:not([align]) {
+  text-align: center;
+}
+p.img:before {
+  clear: both;
+  display: block;
+  content: "図" counter(img_caption) ": " attr(title);
+  text-align: center;
+}
+
+table[id] {
+  border-collapse: collapse;
+  margin: auto 1em 0.5em 1em;
+  font-size: 10pt;
+  background-color: white;
+  box-shadow: 0px 0px 20px gray;
+  counter-increment: table_counter;
+}
+table[id] th, table td {
+  padding: 2px 5px;
+  border: thin solid gray;
+  vertical-align: top;
+}
+table[id] th {
+  background-color: silver;
+  white-space: nowrap;
+}
+table[id] > caption:before {
+  content: "表" counter(table_counter) ": ";
+}
+code {
+  padding: 0 2px;
+  background-color: #ddd;
+}
+dfn {
+  font-style: normal;
+  color: darkgreen;
+  padding: 0 2px;
+}
+dfn[title] { cursor: help; }
+.syntaxhighlighter {
+  margin: 0 !important;
+  width: 95% !important;
+  padding-bottom: 3px;
+  counter-increment: code_counter;
+}
+.syntaxhighlighter table caption:before {
+  content: "Code " counter(code_counter) ": " !important;
 }
 /*
 vim:sw=2 ts=2 et:
