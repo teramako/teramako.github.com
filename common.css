@@ -69,8 +69,11 @@ section:before {
   float: right;
 	width: 25%;
 }
-#sidebar h3 {
+#sidebar h3, {
   font-size: 12pt;
+}
+navi.sidebar h2, navi.sidebar h4 {
+  font-size: 16pt;
 }
 navi.sidebar {
   position: absolute;
