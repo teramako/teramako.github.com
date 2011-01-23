@@ -47,6 +47,8 @@
       <li><a href="#terms">用語</a></li>
       <li><a href="#whowto">ガジェットの作り方</a></li>
     </ul>
+    <h2>Commits History</h2>
+    <ul class="history" project="pgadget" branch="master" maxcount="5"></ul>
   </navi>
 
   <p id="diagram_1" title="パノラマ 1" class="img" style="width:72%;">
@@ -319,6 +321,30 @@ SyntaxHighlighter.defaults["auto-links"] = false;
 SyntaxHighlighter.defaults["toolbar"] = false;
 SyntaxHighlighter.defaults["tab-size"] = 2;
 SyntaxHighlighter.all()
+</script>
+<script type="text/javascript">
+  $(".history").each(function(index, elm){
+    var count = elm.hasAttribute("maxcount") ? parseInt(elm.getAttribute("maxcount"),10) : 0;
+    var g = GITHUB("commits", {
+      user: "teramako",
+      project: elm.getAttribute("project"),
+      branch: elm.getAttribute("branch") || "master",
+      target: elm
+    });
+    var ul = $(elm);
+    g.getCommitsListForBranch(function(commit){
+      if (count > 0) commit = commit.slice(0, count);
+      $.each(commit, function(i, commit){
+        ul.append([
+          '<li>',
+          '<span class="git-date">',
+          formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T"),
+          '</span><br/>',
+          '<a href="', commit.url, '">', commit.message, '</a></li>'
+        ].join(""));
+      });
+    });
+  });
 </script>
 </html>
 <!--
