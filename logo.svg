@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<svg width="300" height="150" viewBox="0 0 390 180" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css"><![CDATA[
+  text {
+    font-family: "Times New Roman";
+  }
+  .github {
+    font-size: 40px;
+    fill: gray;
+  }
+  .logo {
+    font-size: 100px;
+    stroke-width: 2;
+    stroke-opacity: 0.5;
+    fill: url(#grad);
+  }
+  .t .logo {
+    stroke: #4169e1;
+  }
+  .ts text {
+    fill-opacity: 0.4;
+  }
+  ]]></style>
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
+      <stop offset="0%" stop-color="white"/>
+      <stop offset="50%" stop-color="#b0c4de"/>
+      <stop offset="70%" stop-color="#4169e1"/>
+      <stop offset="100%" stop-color="#0000cd"/>
+    </linearGradient>
+  </defs>
+  <g class="ts" transform="translate(0, 100) scale(1,-1)">
+    <text x="10" y="0" class="logo">hogezilla</text>
+  </g>
+  <g class="t">
+    <text x="75" y="45" class="github">@<tspan dx="50">ithub</tspan></text>
+    <text x="10" y="100" class="logo">
+      <tspan>ho</tspan><tspan dy="-42">g</tspan><tspan dy="42">ezilla</tspan>
+    </text>
+  </g>
+</svg>
