@@ -129,7 +129,7 @@ $CORE.prototype = {
 GITHUB.types.push("user");
 function $USER(opt) { this.option = opt || {}; }
 $USER.prototype = new $CORE();
-extends($USER, {
+extend($USER, {
   /**
    * @see http://develop.github.com/p/users.html#searching_for_users
    */
@@ -151,7 +151,7 @@ extends($USER, {
 GITHUB.types.push("commits");
 function $COMMITS(opt) { this.option = opt || {}; }
 $COMMITS.prototype = new $CORE();
-extends($COMMITS, {
+extend($COMMITS, {
   /**
    * @see http://develop.github.com/p/commits.html#listing_commits_on_a_branch
    */
@@ -172,7 +172,7 @@ extends($COMMITS, {
 GITHUB.types.push("blob");
 function $BLOB(opt) { this.option = opt || {}; } 
 $BLOB.prototype = new $CORE();
-extends($BLOB, {
+extend($BLOB, {
   /**
    * @see http://develop.github.com/p/object.html#trees
    */
@@ -193,7 +193,7 @@ extends($BLOB, {
 GITHUB.types.push("repositories");
 function $REPOSITORIES(opt) { this.option = opt || {}; }
 $REPOSITORIES.prototype = new $CORE();
-extends($REPOSITORIES, {
+extend($REPOSITORIES, {
   /**
    * @see http://develop.github.com/p/repo.html#searching_repositories
    */
@@ -229,25 +229,25 @@ function createFunc(pathArray, returnKey){
     });
   }
 } // }}}
-// extends {{{
+// extend {{{
 /**
  * @param {Function|Object} class
  * @param {Object} obj
  */
-function extends(class, obj){
+function extend(_class, obj){
   var flag;
   for (var key in obj){
     flag = true;
     if (obj.__lookupGetter__(key)){
-      class.prototype.__defineGetter__(key, obj[key]);
+      _class.prototype.__defineGetter__(key, obj[key]);
       flag = false;
     }
     if (obj.__lookupSetter__(key)){
-      class.prototype.__defineSetter__(key, obj[key]);
+      _class.prototype.__defineSetter__(key, obj[key]);
       flag = false;
     }
     if (flag){
-      class.prototype[key] = obj[key];
+      _class.prototype[key] = obj[key];
     }
   }
 } // }}}
