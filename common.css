@@ -12,7 +12,7 @@ body {
   min-height: 600px;
   font-family: "HiraMaruPro-W4", "ヒラギノ丸ゴ Pro","メイリオ", serif;
 }
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
   margin: 0;
   /* font-family: "HiraMinPro-W3", "ヒラギノ明朝 Pro", "Imprint MT Shadow",sans-serif; */
   font-family: serif;
@@ -20,6 +20,7 @@ h1, h2, h3, h4 {
 h2 { font-size: 24pt; }
 h3 { font-size: 20pt; }
 h4 { font-size: 18pt; }
+h5 { font-size: 14pt; border-bottom: thin solid #a5bce7; }
 article {
   counter-reset: table_counter code_counter img_caption;
 }
@@ -99,7 +100,7 @@ navi.sidebar:after {
   display: block;
 }
 
-#footer {
+#footer, footer {
 	clear: both;
   padding-bottom: 0.5em;
 }
@@ -120,21 +121,22 @@ navi h2, navi h4, .sidebar-content h2, .footer-content h2 {
 }
 
 li.repository {
-  list-style-image: url(http://github.com/images/modules/dashboard/news/push.png);
+  list-style-image: url(https://github.com/images/modules/dashboard/news/push.png);
 }
 a.repository, a.page {
   margin-left:0.5em;
   font-size:small;
 }
 a.repository:before {
-  content: url(http://github.com/images/modules/dashboard/news/push.png);
+  content: url(https://github.com/images/modules/dashboard/news/push.png);
 }
 a.page:before {
-  content: url(http://github.com/images/modules/dashboard/news/wiki.png);
+  content: url(https://github.com/images/modules/dashboard/news/wiki.png);
 }
 .git-history {
   font-size: small;
 }
+
 navi ol {
   list-style: none;
   margin: 1em 0;
@@ -161,6 +163,9 @@ p.img {
   font-size: 10pt;
   text-decoration:none;
   counter-increment: img_caption;
+  margin: 0.5em auto;
+  padding: 0.5em;
+  background-image: url("./img/img-bg.svg");
 }
 p.img:not([align]) {
   text-align: center;
@@ -168,8 +173,11 @@ p.img:not([align]) {
 p.img:before {
   clear: both;
   display: block;
-  content: "図" counter(img_caption) ": " attr(title);
+  content: "IMG-" counter(img_caption) ": " attr(title);
   text-align: center;
+}
+p.img img {
+  box-shadow: 5px 5px 3px gray;
 }
 
 table[id] {
@@ -202,6 +210,23 @@ dfn {
   padding: 0 2px;
 }
 dfn[title] { cursor: help; }
+kbd {
+  quotes: "["  "]";
+  font-family: monospace;
+  margin: auto 2px;
+  color: Magenta;
+}
+kbd.input {
+  quotes: "“" "”";
+}
+kbd:before {
+  content: open-quote;
+  color: black;
+}
+kbd:after {
+  content: close-quote;
+  color: black;
+}
 .syntaxhighlighter {
   margin: 0 !important;
   width: 95% !important;
