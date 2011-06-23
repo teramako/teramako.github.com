@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Pano - hogezilla@github</title>
+  <link rel="stylesheet" type="text/css" href="../common.css"/>
+</head>
+<body>
+<h1><a href="../index.html"><img src="../logo.svg" width="300" height="150" alt="hogehoge" /></a></h1>
+
+<p><a href="https://github.com/teramako/Pano">Repository</a></p>
+
+<navi class="sidebar">
+  <h2>Index</h2>
+  <ul>
+    <li><a href="#feature">Feature</a>
+      <ul>
+        <li><a href="#pano-sidebar">The sidebar</a></li>
+        <li><a href="#pano-button">Pano button</a></li>
+        <li><a href="#pano-all-tabs-button">All tabs button</a></li>
+      </ul>
+    </li>
+    <li><a href="#reports">Report bugs or request</a></li>
+    <li><a href="#license">License</a></li>
+  </ul>
+</navi>
+<article>
+  <hgroup style="float: none;">
+    <img src="pano.svg" width="52" height="52" align="left"/>
+    <h2>Pano</h2>
+    <p><a href="https://addons.mozilla.org/ja/firefox/addon/pano/">Get Extension</a></p>
+  </hgroup>
+
+  <p>Show the tabgroups list. No more needs open Panorama view :-P</p>
+
+  <section>
+    <h3 id="feature">Feature</h3>
+    <ul>
+      <li>list tabgroups on <a href="#pano-sidebar">the sidebar</a></li>
+      <li><a href="#pano-button">Pano button</a> toggles open/close the sidebar and groups menu list for switching</li>
+      <li>add the other groups and it's tabs in <a href="#pano-all-tabs-button">all-tabs-button</a>'s menu</li>
+    </ul>
+
+    <section>
+      <h4 id="pano-sidebar">The sidebar</h4>
+      <p class="img" title="Pano-sidebar" style="float: right;">
+        <img src="sidebar-0.4.png" width="350" height="550"/>
+      </p>
+      <p>
+        Shows all tabs list by grouping.
+        The first group is AppTabs (Pinned tabs) list,
+        the next... are normal tabgroups, and the last is orphaned tabs group.
+      </p>
+      <h5>Opening the sidebar</h5>
+      <ul>
+        <li>"Menubar" -&gt; "View" -&gt; "Sidebar" -&gt; "Tab Group"</li>
+        <li>KeyNavigation: <kbd>Ctrl + Alt + p</kbd> or <kbd>Command + Option + p</kbd>(on Mac OS X)</li>
+        <li><dfn>Pano button</dfn>(<a href="#pano-button">see below</a>)</li>
+      </ul>
+
+      <h5>Double click:</h5>
+      <ul>
+        <li>a tab item: switch to the tab (also do by <kbd>ENTER</kbd>)</li>
+        <li>a group item: be into editing the group name (also do by <kbd>F2</kbd>)</li>
+      </ul>
+
+      <h5>Drag &amp; Drop</h5>
+      <p>Can Drag &amp; Drop multi tab items.</p>
+
+      <h5>Filtering</h5>
+      <p>List up only matches the title or the URL.</p>
+      <dl>
+        <dt><code>*</code></dt><dd>wild card</dd>
+        <dt><code>|</code></dt><dd>OR condition</dd>
+      </dl>
+      <p>Caution:
+        On filtering, Drag &amp; Drop is not available :(
+      </p>
+
+      <h5>Context menu</h5>
+      <ul>
+        <li>Create a new tabgroup</li>
+        <li>Close the tabgroup (only on a group item)</li>
+        <li>Close the tab (only on a tab item)</li>
+        <li>Close the sidebar</li>
+      </ul>
+    </section>
+    <section>
+      <h4 id="pano-button">Pano button</h4>
+      <p class="img" title="Pano-button" style="float: right;">
+        <img src="pano-button-menu.png" width="177" height="166"/>
+      </p>
+      <p>
+        Pano button is in <dfn>Cusutomize Toolbar</dfn> by default.
+        Needs drag and drop the button to a toolbar if you want use.
+      </p>
+      <p>Pano button has 2 features.</p>
+      <ol>
+        <li>it's button toggle open/close the sidebar.</li>
+        <li>it's menu has tabgroups menu for switching to the tabgroup.
+          <ul>
+            <li>the selected tab will be the last selected tab in the tabgroup.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+    <section>
+      <h4 id="pano-all-tabs-button">All tabs list</h4>
+      <p class="img" title="All tabs list" style="float: right;">
+        <img src="all-tabs-list.png" width="408" height="230"/>
+      </p>
+      <p>
+        Add "The other groups" menu (sorry the capture [IMG-3] is on Japanese locale "他グループ")
+        to <dfn>all-tabs-list button</dfn>.
+        The menu has tabgroups (without the current group) menu,
+        and has tabs menu in the tabgroup menu for switching.
+      </p>
+      <p>Caution:
+        when set <code>browser.allTabs.previews</code> to <code>true</code> in Preferences(about:config),
+        this feature will not be available.
+      </p>
+    </section>
+  </section>
+  <section>
+    <h3 id="reports">Report bugs or request</h3>
+    <p>
+      Please report to <a href="https://github.com/teramako/Pano/issues">GitHub Issues</a> if you find bugs or have ideas. 
+    </p>
+  </section>
+  <section>
+    <h3 id="license">License</h3>
+    <p>
+      Thease code are licensed under a disjunctive tri-license
+      giving you the choice of one of the three following sets of free software/open source licensing terms.
+    </p>
+    <ul>
+      <li><a href="http://www.mozilla.org/MPL/MPL-1.1.html" title="Mozilla Public License version 1.1">MPL 1.1</a></li>
+      <li><a href="http://www.gnu.org/licenses/gpl-2.0.html" title="GNU General Public License version 2.0">GPL 2.0</a></li>
+      <li><a href="http://www.gnu.org/licenses/lgpl-2.1.html" title="GNU Lesser General Public License version 2.1">LGPL 2.1</a></li>
+    </ul>
+    <p>Full version, see <a href="https://github.com/teramako/Pano/blob/master/license.txt">license.txt</a>.</p>
+  </section>
+</article>
+<footer>
+  <hr/>
+  <p><a href="/">Index</a></p>
+</footer>
+</body>
+</html>
