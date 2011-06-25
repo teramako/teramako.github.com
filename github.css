@@ -1,0 +1,12 @@
+
+.git-date {
+  text-decoration: underline;
+}
+
+.git-log {
+  white-space: pre;
+  margin-top: 0;
+  border-left: 2px solid silver;
+  padding-left: 5px;
+}
+
