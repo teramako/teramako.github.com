@@ -51,7 +51,7 @@
     <section>
       <h4 id="pano-sidebar">The sidebar</h4>
       <p class="img" title="Pano-sidebar" style="float: right;">
-        <img src="sidebar-0.4.png" width="350" height="550"/>
+        <img src="sidebar.png" width="350" height="550"/>
       </p>
       <p>
         Shows all tabs list by grouping.
@@ -185,10 +185,9 @@
     g.getCommitsListForBranch(function(commit){
       if (count > 0) commit = commit.slice(0, count);
       $.each(commit, function(i, commit){
-        ul.append(
-          '<li><span class="git-date">' +
+        ul.append('<li><span class="git-date">' +
           formatDate(toDateFromw3cDateString(commit.committed_date), "%F %T") +
-          '</span> <a href="https://github.com/' + commit.url + '">diff</a><br/>' +
+          '</span> <a href="https://github.com' + commit.url + '">diff</a><br/>' +
           '<pre class="git-log">' + commit.message + '</pre></li>');
       });
     });
