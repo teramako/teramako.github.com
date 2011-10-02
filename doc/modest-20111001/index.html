@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2011 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="2"/>
+  <title>Pano - Mozilla勉強会@東京 6th</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushCss.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <img src="pano.svg" id="bg" height="600"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="95%" align="center" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:56pt">Pano って拡張機能</h1>
+        <p style="font-size:30pt;line-height:1.5">Mozilla 勉強会@東京 6th<br/>2011-10-01</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>自己紹介</h1>
+  <p>teramako と申します</p>
+  <ul>
+    <li>Hatena: <a href="http://www.hatena.ne.jp/teramako/">id:teramako</a></li>
+    <li>Twitter: <a href="http://twitter.com/teramako/">@teramako</a></li>
+    <li>最近だと Vimperator で有名？</li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>Panorama</h1>
+  <p>Pano の前にちょいとおさらい</p>
+</div>
+<div class="slide">
+  <h1>Panoramaとは</h1>
+  <ul>
+    <li>Firefox 4からの新しい概念</li>
+    <li>タブグループを管理するビュー
+      <ul>
+        <li>グループ毎にタブを仕分け</li>
+        <li>アクティブなグループの切り替え</li>
+      </ul>
+    </li>
+    <li>他グループに属するタブはタブバーに表示されない</li>
+    <li>名称
+      <ul>
+        <li>Panorama</li>
+        <li>TabView (ソースコード上はこの呼び方)</li>
+        <li>TabCandy (昔はこう呼ばれていた)</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>タブの種類</h1>
+  <ul>
+    <li>ピン留めされたタブ(AppTab)
+      <ul>
+        <li>タブがアイコンのみに</li>
+        <li>どのグループに移っても常にタブバーに表示</li>
+      </ul>
+    </li>
+    <li>グループの属するタブ
+      <ul>
+        <li>アクティブなグループ内のタブのみタブバーに表示</li>
+      </ul>
+    </li>
+    <li><s>グループの属さないタブ(OrhpanedTab)</s>
+      <ul>
+        <li>Firefox7 から廃止(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=654721">Bug 654721</a>)</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>Pano とは</h1>
+  <p>タブグループを可視化&amp;操作する拡張機能</p>
+</div>
+<div class="slide">
+  <h1>作った経緯</h1>
+  <ul class="incremental">
+    <li>Firefox4 から導入されたタブグループの概念は好き</li>
+    <li>結構遊んでいる<br/>
+        <img src="panoramaPlay_1.jpg" width="350"/><img src="pgadget_2.png" width="350"/><br/>
+        から中身はそれなりに知っている。
+    </li>
+  </ul>
+</div>
+<div class="slide big">
+  <h1>作った経緯 - 2</h1>
+  <p align="center" class="incremental">開くの面倒</p>
+</div>
+<div class="slide">
+  <h1>タブグループを可視化&amp;操作</h1>
+  <ul>
+    <li>Panorama を開く必要性をなくそう</li>
+    <li>グループ毎にタブをツリー表示
+      <ul>
+        <li>サイドバー</li>
+        <li>パネル</li>
+      </ul>
+    </li>
+    <li>タブ一覧ボタンから他グループへのメニュー</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>できること</h1>
+  <ul>
+    <li>グループの作成/削除</li>
+    <li>グループ名変更</li>
+    <li>Drag &amp; Drop
+      <ul>
+        <li>タブ</li>
+        <li>URL的なもの
+          <ul>
+            <li>ブックマークアイテム/フォルダ</li>
+            <li>履歴</li>
+            <li>ブラウザコンテンツのリンク</li>
+            <li>ローカルファイル</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>正体</h1>
+  <ul>
+    <li>単なるビュー</li>
+    <li>タブやPanorama上で起こったことを反映
+      <ul>
+        <li>基本的にはDOM Eventを拾う
+          <ul>
+            <li><code>TabOpen</code>, <code>TabClose</code>, <code>TabMove</code>, <code>TabPinned</code>, <code>TabUnpinned</code>, etc...</li>
+          </ul>
+        </li>
+        <li>拾えないものは、無理やり発行させる</li>
+      </ul>
+    </li>
+    <li>操作したことを、タブ,タブバーやPanoramaに反映</li>
+  </ul>
+  <p><br/><br/><em>タブバーの置き換えではない！</em> (のつもりだったｗ)</p>
+</div>
+<div class="slide">
+  <h1>(おまけ)タブバーになっちゃったｗ</h1>
+  <p>
+    <img src="pano_verticalTabBar.png" width="282" align="left"/>
+  </p>
+  <div style="margin-left:320px;">
+    <p>
+      <dfn>userChrome.css</dfn> で装飾<br/>
+      <a href="https://gist.github.com/1202886">https://gist.github.com/1202886</a>
+    </p>
+    <p>
+      がんばれば、ここまで装飾できる一例
+    </p>
+  </div>
+</div>
+<div class="slide titlepage h1">
+  <h1>Pano でがんばったところ</h1>
+</div>
+<div class="slide">
+  <h1>Index</h1>
+  <ol>
+    <li>アイコンをSVGに</li>
+    <li>必要なDOM Eventを強制発行</li>
+    <li>遅延読込</li>
+    <li><s>ポップアップパネル</s> (時間があれば)</li>
+  </ol>
+</div>
+<div class="slide titlepage h1">
+  <h1>アイコンをSVGに</h1>
+  <p>伸縮自在！</p>
+</div>
+<div class="slide">
+  <h1>アイコン</h1>
+  <ul>
+    <li>いろいろな場所で使用
+      <ul>
+        <li>ボタンのアイコン</li>
+        <li>メニューのアイコン</li>
+        <li>about:addons 内のアイコン</li>
+        <li>etc...</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>アイコン</h1>
+  <ul>
+    <li>いろいろな大きさ
+      <ul>
+        <li>18px ... ツールバーボタンのアイコン</li>
+        <li>48px ... about:addons の拡張アイコン</li>
+        <li>もしかすると他にも使うかも...</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>アイコン</h1>
+  <div style="font-size: 48pt; text-align: center;">
+  <p>使いまわしたい</p>
+  <p>↓↓</p>
+  <p>SVG で作ろう</p>
+  </div>
+</div>
+<div class="slide"> 
+  <h1>SVG</h1>
+  <ul style="font-size: 40pt">
+    <li>ベクターグラフィックで伸縮自在<br/> → いろいろな大きさに対応できる</li>
+    <li>ファイルサイズも小さい</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>ところが...</h1>
+  <p>about:addons にアイコンが表示されない</p>
+  <p class="incremental">なぜ？</p>
+  <ul class="incremental">
+    <li>画像のURLは正しく入っている</li>
+    <li>画像の大きさ....ない...</li>
+  </ul>
+  <p class="incremental">アイコンの画像(image要素)に対して大きさが指定されていない</p>
+</div>
+<div class="slide">
+  <h1>about:addons 対応</h1>
+  <ul>
+    <li>枠は 48px</li>
+    <li>SVG内で<code>width</code>と<code>height</code>を<code>48</code>に指定</li>
+    <li>他はCSSで指定</li>
+  </ul>
+  <pre class="brush: xml">
+  &lt;svg width="48" height="48"
+       viewBox="0 0 128 128" version="1.1" xmlns="..."&gt;
+    &lt;!-- width と height を指定した --&gt;
+  &lt;/svg&gt;
+  </pre>
+</div>
+<div class="slide titlepage h1">
+  <h1>DOM Event</h1>
+  <p>Panorama発のEvent</p>
+</div>
+<div class="slide">
+  <h1>タブから発生するDOM Event</h1>
+  <table border="1" width="90%" align="center">
+    <caption>タブ関連DOM Event</caption>
+    <tr>
+      <td>TabOpen</td>
+      <td>タブが作成された</td>
+    </tr><tr>
+      <td>TabClose</td>
+      <td>タブが閉じた</td>
+    </tr><tr>
+      <td>TabPinned</td>
+      <td>タブがピン留めされた</td>
+    </tr><tr>
+      <td>TabUnpinned</td>
+      <td>ピン留めが解除</td>
+    </tr><tr>
+      <td>TabAttrModified</td>
+      <td>タブの属性が変更された</td>
+    </tr>
+  </table>
+</div>
+<div class="slide">
+  <h1>Panoramaから発生するDOM Event</h1>
+  <table border="1" width="90%" align="center">
+    <caption>Panorama関連DOM Event</caption>
+    <tr>
+      <td>tabviewframeintialized</td>
+      <td>初期化完了時</td>
+    </tr><tr>
+      <td>tabviewshown</td>
+      <td>ビューが表示された時</td>
+    </tr><tr>
+      <td>tabviewhidden</td>
+      <td>ビューが閉じた時</td>
+    </tr><tr>
+      <td>tabviewsearchenabled</td>
+      <td>タブ検索が有効になった時</td>
+    </tr><tr>
+      <td>tabviewsearchdisabled</td>
+      <td>タブ検索が終了した時</td>
+    </tr>
+  </table>
+</div>
+<div class="slide">
+  <h1>Panoramaから発生しないEvent</h1>
+  <ul>
+    <li>グループが作成された</li>
+    <li>グループが削除された</li>
+    <li>タブが別グループへ移動した</li>
+  </ul>
+  <p>これらはEventを発行するように変更させる</p>
+</div>
+<div class="slide">
+  <h1>Panoで拾っているDOM Event</h1>
+  <table border="1" width="90%" align="center">
+    <tr>
+      <td>TabOpen</td>
+      <td>タブが作成された</td>
+    </tr><tr>
+      <td>TabClose</td>
+      <td>タブが閉じた</td>
+    </tr><tr>
+      <td>TabPinned</td>
+      <td>タブがピン留めされた</td>
+    </tr><tr>
+      <td>TabUnpinned</td>
+      <td>ピン留めが解除</td>
+    </tr><tr>
+      <td>TabAttrModified</td>
+      <td>タブの属性が変更された</td>
+    </tr><tr style="color: red">
+      <td>TabGroupAdded</td>
+      <td>グループが作成された</td>
+    </tr><tr style="color: red">
+      <td>TabGroupClose</td>
+      <td>グループが削除された</td>
+    </tr><tr style="color: red">
+      <td>TabGroupMove</td>
+      <td>タブがグループ間移動した</td>
+    </tr><tr>
+      <td>tabviewshown</td>
+      <td>ビューが表示された時</td>
+    </tr><tr>
+      <td>tabviewhidden</td>
+      <td>ビューが閉じた時</td>
+    </tr>
+  </table>
+</div>
+<div class="slide">
+  <h1>グループ作成</h1>
+  <div style="text-align: center; font-size: 32pt;">
+    <p>グループを作成すると、必ず<br/><code>GroupItems.register()</code>が実行される</p>
+    <p>↓↓↓</p>
+    <p>上書き</p>
+  </div>
+</div>
+<div class="slide">
+  <h1>GroupItems.registerの上書き</h1>
+  <ol>
+    <li>元関数を実行</li>
+    <li>DOM Event発行</li>
+  </ol>
+  <pre class="brush: mozjs">
+  var GI = TabView._window.GroupItems;
+  GI.origRegister = GI.register;
+  GI.register = function (groupItem) {
+    // 1 元関数実行
+    this.origRegister(groupItem);
+    // 2 DOM Event発行
+    var event = document.createEvent("Events");
+    event.initEvent("TabGroupAdded", true, false);
+    gBrowser.dispatchEvent(event);
+  };
+  </pre>
+  <p align="right"><small>※:簡略化したコードなので実際とは異なります</small></p>
+</div>
+<div class="slide">
+  <h1>グループ削除</h1>
+  <ul>
+    <li>Panorama独自callbackシステムに関数を登録し、DOM Eventを発行させる
+      <ul>
+        <li>ただし、グループ毎に登録する必要あり</li>
+        <li><code>Event.detail</code>値にグループのID値を入れる</li>
+      </ul>
+    </li>
+  </ul>
+  <pre class="brush: mozjs">
+groupItem.addSubscriber(this, "close", Pano_dispatchCloseEvent);
+
+function Pano_dispatchCloseEvent (groupItem, eventInfo) {
+  var event = document.createEvent("UIEvents");
+  // set groupItem.id to UIEvent.detail
+  event.initUIEvent("TabGroupClose", true, false, win, groupItem.id);
+  win.gBrowser.dispatchEvent(event);
+} 
+  </pre>
+  <p align="right"><small>※:簡略化したコードなので実際とは異なります</small></p>
+</div>
+<div class="slide">
+  <h1>タブのグループ間移動</h1>
+  <div style="text-align: center; font-size: 32pt;">
+    <p>グループ間移動は、<br/><code>GroupItems.moveTabToGroupItem()</code><br/>で行われる<p>
+    <p>↓↓↓</p>
+    <p>上書き(またか</p>
+  </div>
+</div>
+<div class="slide">
+  <h1>moveTabToGroupItemの上書き</h1>
+  <ol>
+    <li>元関数を実行</li>
+    <li>DOM Event発行</li>
+  </ol>
+  <pre class="brush: mozjs">
+var GI = TabView._window.GroupItems;
+GI.origMoveTabToGroupItem = GI.moveTabToGroupItem;
+GI.moveTabToGroupItem = function (tab, groupItemId) {
+  // 1 元関数の実行
+  this.origMoveTabToGroupItem(tab, groupItemId);
+  // 2 DOM Event発行
+  var event = tab.ownerDocument.createEvent("Events");
+  event.initEvent("TabGroupMove", true, false);
+  tab.dispatchEvent(event);
+}
+  </pre>
+  <p align="right"><small>※:簡略化したコードなので実際とは異なります</small></p>
+</div>
+<div class="slide titlepage h1">
+  <h1>遅延読込</h1>
+  <p>必要なときに必要なものを</p>
+</div>
+<div class="slide">
+  <h1>なぜ遅延読込か</h1>
+  <ul>
+    <li>Firefox起動時は多くの読込が発生</li>
+    <li>読込が多い ≒ 起動が遅くなる
+      <ul>
+        <li>起動を遅くされるアドオンはリストアップされる恐怖</li>
+      </ul>
+    </li>
+  </ul>
+  <p>　　↓↓↓</p>
+  <p>不必要なものは読み込まないのが吉</p>
+</div>
+<div class="slide">
+  <h1>方法</h1>
+  <ul>
+    <li>起動時のスクリプトは最小限に
+      <ul>
+        <li>必要なときにロードさせる<br/>→ <dfn>mozIJSSubScriptLoader</dfn>の使用</li>
+      </ul>
+    </li>
+    <li>必要なときに取得
+      <ul>
+        <li>getterの使用</li>
+      </ul>
+    </li>
+    <li>速い読込
+      <ul>
+        <li>コードの再利用 → JavaScript Moduleの使用<br/>
+        （一度ロードしたモジュールは同一オブジェクトを返す）
+        </li>
+        <li>Firefox 8以降からは<dfn>mozIJSSubScriptLoader</dfn>で読込んだスクリプトもキャッシュされる</li>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>最初は必要最低限のコードに</h1>
+  <p>必要なコードは後からロード</p>
+  <ul>
+    <li>Pano では最初に読み込まれるコードは<em>約40行</em> &amp; <code>onload</code>なし</li>
+    <li><code>Services.scriptLoader</code>(<dfn>mozIJSSubScriptLoader</dfn>) の使用</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>最初は必要最低限のコードに - 2</h1>
+  <ul>
+    <li>最初にロードするスクリプト
+      <pre class="brush: mozjs">
+        var pane = {
+          toggleOpen: function init () {
+            Services.scriptLoader.loadSubScript("foo.js", this);
+            this.toggleOpen();
+          }
+        };
+      </pre>
+    </li>
+    <li>後からロード(foo.js)
+      <pre class="brush: mozjs">
+        var panel = document.getElementById("panel");
+        function toggleOpen () {
+          panel.openPopupAtScreen(....);
+        }
+      </pre>
+    </li>
+  </ul>
+  <p align="right"><small>※:簡略化したコードなので実際とは異なります</small></p>
+</div>
+<div class="slide">
+  <h1>getterの使用</h1>
+  <ul>
+    <li><dfn>XPCOMUtils.jsm</dfn>の使用
+      <ul>
+        <li><code>XPCOMUtils.defineLazyGetter</code></li>
+        <li><code>XPCOMUtils.defineLazyServiceGetter</code></li>
+        <li><code>XPCOMUtils.defineLazyModuleGetter</code></li>
+      </ul>
+    </li>
+    <li>普通のgetterの使用</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>XPCOMUtils.defineLazyGetter</h1>
+  <ul>
+    <li>事前に<code>Components.utils.import</code>でモジュールのロードが必要</li>
+  </ul>
+  <pre class="brush: mozjs">
+  Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
+  var obj = {};
+  XPCOMUtils.defineLazyGetter(obj, "fooElement", function () {
+    return document.getElementById("foo");
+  });
+
+  function hoge () {
+    // ...
+    obj.fooElement.setAttribute(...);
+    // ...
+  }
+  </pre>
+</div>
+<div class="slide">
+  <h1>普通のgetterで書いてみる</h1>
+  <p>以下の様にもできる</p>
+  <pre class="brush: mozjs">
+  var obj = {
+    get fooElment () {
+      var e = document.getElementById("foo");
+      delete this.fooElement;
+      return this.fooElement = e;
+    }
+  };
+
+  function hoge () {
+    // ...
+    obj.fooElement.setAttribute(...);
+    // ...
+  }
+  </pre>
+</div>
+<div class="slide titlepage h1">
+  <h1>コンテンツの遅延読込</h1>
+  <p>めざせ、BarTab !!</p>
+</div>
+<div class="slide">
+  <h1>Firefox起動時の挙動</h1>
+  <ul>
+    <li>about:config の<code>browser.sessionstore.max_concurrent_tabs</code>が<code>0</code>の場合、
+      タブのコンテンツは実際にはロードされない
+    </li>
+    <li>タブが選択されアクティブになった時、初めてロードされる</li>
+  </ul>
+  <p>これをバックグラウンドでタブに開く時にやりたい！</p>
+</div>
+<div class="slide big">
+  <p>Firefox内のコード研究開始....</p>
+</div>
+<div class="slide">
+  <h1>nsISessionStore が鍵</h1>
+  <ul>
+    <li><a href="http://mxr.mozilla.org/mozilla-central/source/browser/components/sessionstore/src/nsSessionStore.js">http://mxr.mozilla.org/mozilla-central/source/browser/components/sessionstore/src/nsSessionStore.js</a></li>
+    <li>因みに、Firefox起動時に読まれるセッション情報は、<br/>
+  <code>プロファイル/sessionstore.js</code>(JSONコード)にあり</li>
+    <li>もしかして、Firefox Syncってこのファイルをアップロード/ダウンロードしてたりする？(未確認)</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>意外と簡単でした</h1>
+  <pre class="brush: mozjs">
+  const SessionStore =
+    Cc["@mozilla.org/browser/sessionstore;1"]
+    .getService(Ci.nsISessionStore);
+
+  function lazyLoadTab (aURL, aTitle) {
+    // バックグラウンドに about:blank を開く
+    var tab = gBrowser.addTab(null);
+    var session = {
+      entries: [{ url: aURL, title: aTitle || aURL }], // 履歴情報
+      hidden: false, // タブの非表示情報
+      index: 1, // 履歴位置
+    };
+    SessionStore.setTabState(tab, JSON.stringify(state));
+  }
+
+  function sleepTab (tab) {
+    var session = SessionStore.getTabState(tab); // 現在セッションを取る
+    tab.linkedBrowser.loadURI(null); // about:blank を開く
+    SessionStore.setTabState(session); // セッション設定
+  }
+  </pre>
+</div>
+<div class="slide">
+  <h1>おまけ</h1>
+  <p>もっと近くに情報があった....orz</p>
+  <ul>
+    <li>BarTab Lite !!!</li>
+    <li><a href="https://github.com/philikon/BarTabLite">https://github.com/philikon/BarTabLite</a></li>
+    <li>Bootstrap なアドオンでそんなに長くないので分かり易い</li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>非アクティブなグループ内にタブを</h1>
+</div>
+<div class="slide">
+  <h1>普通にタブを開く方法</h1>
+  <ul>
+    <li>おなじみのメソッド
+      <ul>
+        <li>gBrowser.loadOneTab</li>
+        <li>gBrowser.addTab</li>
+        <li>gBrowser.loadTabs</li>
+      </ul>
+    </li>
+  </ul>
+  <p>Panoramaのグループ管理では新たなタブはアクティブなグループに追加される</p>
+</div>
+<div class="slide">
+  <h1>非アクティブなグループ内に開くには？</h1>
+  <p>一時的にアクティブなグループを移してやればOK</p>
+  <pre class="brush: mozjs">
+    var activeGroup = GroupItems.getActiveGroupItem();
+    GroupItems.setActiveGroupItem(nonActiveGroup);
+    var tab = gBrowser.addTab(URL, { skipAnimation: true });
+    // 非アクティブなグループへの追加なので隠す
+    gBrowser.hideTab(tab);
+    // アクティブなグループを戻す
+    GroupItems.setActiveGroupItem(activeGroup);
+  </pre>
+  <div class="incremental">
+  <p>の様にみえたが...<em style="font-size: 64pt;">失敗</em>(することがある※)</p>
+  <p align="right"><small>※特に複数一気に追加すると</small></p>
+  </div>
+</div>
+<div class="slide big">
+  <h1 style="display:none;">Why ?</h1>
+  <p style="text-align: center;">Why ?</p>
+</div>
+<div class="slide">
+  <h1>タブが追加された時</h1>
+  <p>Panoramaもタブの管理はDOM Eventを拾って行っている</p>
+  <ol>
+    <li><code>TabOpen</code>イベントが発行される</li>
+    <li>Panorama がキャッチしてアクティブなグループに追加する</li>
+  </ol>
+</div>
+<div class="slide">
+  <h1>起った実際の事象</h1>
+  <ol class="incremental">
+    <li>別グループへアクティブなグループを設定</li>
+    <li>タブを追加</li>
+    <li>タブを隠す</li>
+    <li>アクティブなグループを元に戻す</li>
+    <li><code>TabOpen</code>イベントからPanoramaがアクティブなグループに追加する</li>
+  </ol>
+  <p class="incremental">　　↓↓↓</p>
+  <ul class="incremental">
+    <li>元のアクティブなグループへタブが追加される</li>
+    <li>タブは隠されたまま</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Panoramaの動きを追う</h1>
+  <ol>
+    <li><code>TabOpen</code>が発行される</li>
+    <li>Panoramaがキャッチ</li>
+    <li><code>TabItems.link(tab)</code>を実行</li>
+    <li><code>new TabItem(tab)</code> でインスタンス作成
+      <ol>
+        <li><code>tab._tabViewTabItem = this</code></li>
+        <li>いろいろ関数が呼ばれて...
+          <ul>
+          <li><code>activeGroupItem.add(tabItem)</code>
+            <ul>
+              <li><code>tabItem.setParent(this)</code>
+                <ul>
+                  <li><code>this.parent = parent</code></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          </ul>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</div>
+<div class="slide big">
+  <h1>スマートな解決方法</h1>
+  <p align="center" class="incremental">分かりません&gt;&lt;</p>
+</div>
+<div class="slide">
+  <h1>泥臭い解決方法</h1>
+  <ol class="incremental">
+    <li>別グループ(A)へアクティブなグループを設定</li>
+    <li>タブを追加</li>
+    <li>タブを隠す</li>
+    <li><code><var>tab._tabViewTabItem</var></code>が設定されるまで待つ
+      <ul>
+        <li>グループAでない場合は、グループ移動</li>
+      </ul>
+    </li>
+    <li>元アクティブなグループに戻す</li>
+  </ol>
+</div>
+<div class="slide">
+  <h1>泥臭いコード</h1>
+  <pre class="brush: mozjs">
+  function openTabs (aURLs, aGroup) {
+    var activeGroup = GroupItems.getActiveGroupItem();
+    GroupItems.setActiveGroupItem(aGroup);
+    try {
+      for (let i = 0, len = aURLs.length; i &lt; len; ++i) {
+        let tab = gBrowser.addTab(aURLs[i], { skipAnimation: true });
+        gBrowser.hideTab(tab);
+        delaySetupTab(tab, aGroup);
+      }
+    } finally {
+      GroupItems.setActiveGroupItem(activeGroup);
+    }
+  }
+  function delaySetupTab (aTab, aGroup) {
+    var tabViewTabItem = aTab._tabViewTabItem;
+    if (tabViewTabItem &amp;&amp; tabViewTabItem.parent) {
+      if (tabViewTabItem.parent !== aGroup) {
+        GroupItems.moveTabToGroupItem(aTab, aGroup.id);
+      }
+    } else {
+      window.setTimeout(delaySetupTab, 1000/60, aTab, aGroup);
+    }
+  }
+  </pre>
+</div>
+<div class="slide titlepage h1">
+  <h1>ポップアップパネル</h1>
+  <p>Drag &amp; Drop ができるようにするために</p>
+</div>
+<div class="slide">
+  <h1>panel要素</h1>
+  <ul>
+    <li>ウィンドウの最前面に来るポップアップ要素</li>
+    <li><dfn>noautoHide</dfn>属性
+      <ul>
+        <li>(default)<code>false</code>：フォーカス移動やmousedown時くらいに自動的に閉じてしまう</li>
+        <li><code>true</code>：明示的に閉じないといけない</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Pano のパネル</h1>
+  <ul>
+    <li>Drag &amp; Drop でURLを持つアイテムを受け付けている</li>
+    <li><dfn>noautoHide</dfn>が<code>false</code>(default)だとドロップできない(mousedown時に閉じてしまうため)</li>
+  </ul>
+  <p>　　↓↓↓</p>
+  <ul>
+    <li>開きっぱなしは嫌</li>
+    <li>→ <code>noautoHide="true"</code>を指定</li>
+    <li>ブックマークのドロップに対応するにはメニューが開かれるかどうかの判定をすれば良い</li>
+    <li>→ <code>window.addEventListener("click", ..)</code>でメニューが開かれる部分か独自判定</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Pano パネルの閉じない条件</h1>
+  <ul>
+    <li>パネル自身とその子要素がクリックされた時</li>
+    <li>メニューが開かれるボタン等がクリックされた時
+      <ul>
+        <li><dfn>menu</dfn>要素</li>
+        <li><dfn>splitmenu</dfn>要素の<dfn>menu</dfn>側がクリックされた時</li>
+        <li><dfn>button</dfn>,<dfn>toolbarbutton</dfn>の<dfn>type</dfn>属性が<code>menu</code></li>
+      </ul>
+    </li>
+  </ul>
+  <p>上記条件に当てはまらなければ閉じるコードを書く</p>
+</div>
+<div class="slide">
+  <h1>判定コード</h1>
+  <pre class="brush: mozjs">
+  window.addEventListener("click", onClick, true);
+  function onClick (aEvent) {
+    var position = panel.compareDocumentPosition(aEvent.target);
+    if (position === 0 ||
+        position === (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY) ||
+        aEvent.target === panel.anchorNode) {
+      return;
+    } else if (aEvent.target instanceof XULElement) {
+      switch (aEvent.target.localName) {
+      case "splitmenu":
+        if (aEvent.originalTarget.localName === "menu")
+          return;
+
+        break;
+      case "button":
+      case "toolbarbutton":
+        if (aEvent.target.type !== "menu")
+          break;
+      case "menu":
+        return;
+      }
+    }
+    panel.hidePopup();
+  }
+  </pre>
+</div>
+<div class="slide">
+  <table width="95%" height="80%" align="center" style="text-align:center;">
+    <tr>
+      <td>
+        <p>ご清聴ありがとうございました</p>
+      </td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = true;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->

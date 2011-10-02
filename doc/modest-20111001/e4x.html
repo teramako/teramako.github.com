@@ -1,0 +1,180 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2011 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="1"/>
+  <title>Firefox4以降のE4X - Mozilla勉強会@東京 6th</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <table height="75%" width="100%" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">Firefox4以降のE4X</h1>
+        <p style="font-size:30pt;">Mozilla 勉強会@東京 6th<br/>2011-10-01</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>E4X 概要</h1>
+  <p><img src="../modest-20100904/Standard-ECMA-357.png" class="cap" height="300px" align="right"/></p>
+  <ul>
+    <li>ECMAScript for XML の略</li>
+    <li>ECMAScript を拡張してネイティブで XML をサポートする仕様</li>
+    <li>DOM ではない</li>
+    <li>仕様: <a href="http://www.ecma-international.org/publications/standards/Ecma-357.htm">Standard ECMA-357</a></li>
+    <li>和訳版: <a href="http://www.ne.jp/asahi/nanto/moon/specs/ecma-357.html">ECMAScript for XML (E4X) 仕様</a></li>
+  </ul>
+  <br clear="right"/>
+  <pre class="brush: mozjs;">
+    var x = <root>
+      <item>hoge</item>
+      <item>piyo</item>
+    </root>;
+    alert(x.item[0]); // hoge
+  </pre>
+  <p>みたいなことができる</p>
+</div>
+<div class="slide">
+  <h1>E4X 概要 - 2</h1>
+  <ul>
+    <li>Mozilla は JavaScript 1.6 からサポート</li>
+    <li>Mozilla独自拡張あり</li>
+    <li>ブラウザで実装されているのはFirefoxのみ</li>
+  </ul>
+  <p>詳しいことは、前項の仕様か、<a title="E4X in Firefox 発表資料" href="http://nanto.asablo.jp/blog/2007/04/22/1459018">E4X in Firefox 発表資料</a>を読もう<br/><img src="../modest-20100904/e4x_nanto.png" height="350"/></p>
+</div>
+<div class="slide">
+  <h1>E4X 概要 - 3</h1>
+  <p>v8 JavaScript Engine にも <a href="http://code.google.com/p/v8/issues/detail?id=235">Issue 235 - v8 - Support the Javascript E4X extension - V8 JavaScript Engine</a>が立っているが...<br/>
+    <img src="v8_e4x_issue.png"/><br/>
+    スターの数、2位！
+  </p>
+  <p>実装の気配なし</p>
+</div>
+<div class="slide">
+  <h1>ワイルドカード</h1>
+  <ul>
+    <li>E4Xではプロパティ<code>*</code>を使用して子要素を全てを取ることができる</li>
+  </ul>
+  <pre class="brush: mozjs">
+  var x = <root>
+    <list>foo</list>
+    <list>bar</list>
+  </root>;
+
+  x.*
+  /*
+   =>
+   <list>foo</list>
+   <list>bar</list>
+  */
+  </pre>
+  <p>
+    純粋なECMAScriptでは<dfn>IdentfierName</dfn>に<code>*</code>は使えないが、E4Xではこれを拡張している
+  </p>
+</div>
+<div class="slide">
+  <h1>属性アクセス</h1>
+  <ul>
+    <li>E4Xでは<code>@<var>属性名</var></code>で属性値にアクセスできる</li>
+  </ul>
+  <pre class="brush: mozjs">
+  var x = <root attr="foo"></root>;
+
+  alert(x.@attr); // "foo"
+  </pre>
+  <p>
+    これも純粋なECMAScriptでは<dfn>IdentfierName</dfn>に<code>@<var>〜</var></code>は使えないが、E4Xではこれを拡張している
+  </p>
+</div>
+<div class="slide">
+  <h1>ワイルドカード(Firefox 3.6)</h1>
+  <ul>
+    <li>通常オブジェクトでも使える
+      <ul>
+        <li>ただし、普通のプロパティ名として</li>
+      </ul>
+    </li>
+  </ul>
+  <pre class="brush: mozjs">
+  var o = {};
+  o.* = "hoge";
+
+  alert(o.*); // "hoge"
+  </pre>
+</div>
+<div class="slide">
+  <h1>属性アクセス(Firefox3.6)</h1>
+  <ul>
+    <li><code>@～</code>も通常のオブジェクトに使える</li>
+  </ul>
+  <pre class="brush: mozjs">
+  var o = {};
+  o.@attr = "foo";
+
+  alert(x.@attr); // "foo"
+  </pre>
+</div>
+<div class="slide big">
+  <h1>Firefox4以降のE4X</h1>
+  <p>より厳密になった</p>
+</div>
+<div class="slide">
+  <h1>ワイルドカード(Firefox4以降)</h1>
+  <ul>
+    <li>Firefox4からエラーになる</li>
+  </ul>
+  <pre class="brush: mozjs">
+  var o = {};
+  o.* = "hoge"; // Error: 
+  </pre>
+  <p><em>TypeError can't convert AryName to string</em></p>
+  <p>もちろん、以下でOK</p>
+  <pre class="brush: mozjs">
+  var o = {};
+  o["*"] = "foo";
+  </pre>
+</div>
+<div class="slide">
+  <h1>属性アクセス(Firefox4以降)</h1>
+  <ul>
+    <li>Firefox4からエラーになる</li>
+  </ul>
+  <pre class="brush: mozjs">
+  var o = {};
+  o.@attr = "foo"; // Error
+  </pre>
+  <p><em>TypeError can't convert AttributeName to string</em></p>
+  <p>もちろん、以下でOK</p>
+  <pre class="brush: mozjs">
+  var o = {};
+  o["@attr"] = "foo";
+  </pre>
+</div>
+<div class="slide big">
+  <p>喜ばしいことだけど<br/>何か残念 orz</p>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = false;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
