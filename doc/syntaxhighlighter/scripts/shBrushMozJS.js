@@ -56,7 +56,7 @@
 						'default delete do else false  ' +
 						'for function if in instanceof ' +
 						'new null return super switch ' +
-						'this throw true try typeof let var while with' +
+						'this throw true try finally typeof let var while with' +
 						'yield'
 						;
 
