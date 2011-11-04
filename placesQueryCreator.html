@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>PlacesQuery Creator</title>
+  <style>
+    #placesForm {
+      width: 25em;
+      float: left;
+    }
+    #placesForm table {
+      border: 0;
+      margin-right: 1em;
+    }
+    #placesForm dl {
+      margin: 0;
+    }
+    #placesForm dl > dt { float: left; width: 8em; }
+    #placesForm dl > dd:after {
+      clear: left;
+    }
+    dl > dt:after { content: ":" }
+    #beginTime:not([type=number]) + span,
+    #endTime:not([type=number]) + span{
+      display: none;
+    }
+    #explainConteiner {
+      margin: 2em 1em 1em 26em;
+    }
+    #explainConteiner:after {
+      display: block;
+      content: "";
+      clear: left;
+    }
+    #out {
+      margin: 1em 0;
+      padding: 0.5em;
+      border: thin solid gray;
+    }
+    #out > p { margin: 0 1em; }
+  </style>
+</head>
+<body>
+<h1>PlacesQuery Creator</h1>
+<p>Firefox の動的なブックマークフォルダとなるURLを作成するツール (参考: <a href="https://developer.mozilla.org/ja/Places_query_URIs">https://developer.mozilla.org/ja/Places_query_URIs</a>)</p>
+<form id="placesForm">
+  <fieldset>
+    <legend>検索クエリ</legend>
+    <dl>
+      <dt><label for="term">クエリ</label></dt>
+      <dd><input id="term" name="term" size="30"/></dd>
+      <dt><label for="uri">URL</label></dt>
+      <dd><input id="uri" name="uri" size="30"/></dd>
+      <dt><label for="onlyBookmarked">Bookmarkのみ</label></dt>
+      <dd><input id="onlyBookmarked" name="onlyBookmarked" type="checkbox" value="1"/></dd>
+    </dl>
+
+    <fieldset>
+      <legend>日付</legend>
+      <dl>
+        <dt><label for="beginTime">開始</label></dt>
+        <dd><input id="beginTime" name="beginTime" type="date"/><span>(days)</span></dd>
+        <dt><label for="endTime">終了</label></dt>
+        <dd><input id="endTime" name="endTime" type="date"/><span>(days)</span></dd>
+        <dt><label for="relativeNow">相対的な日数</label></dt>
+        <dd><input id="relativeNow" name="relativeNow" type="checkbox" value="1"></dd>
+      </dl>
+    </fieldset>
+  </fieldset>
+  <fieldset>
+    <legend>オプション</legend>
+    <dl>
+      <dt><label for="queryType">検索対象</label></dt>
+      <dd>
+        <select id="queryType" name="queryType">
+          <option id="QUERY_TYPE_HISTORY" value="0">履歴</option>
+          <option id="QUERY_TYPE_BOOKMARKS" value="1">ブックマーク</option>
+          <option id="QUERY_TYPE_UNIFIED" value="2">履歴とブックマーク両方</option>
+        </select>
+      </dd>
+      <dt><label for="resultType">検索結果種類</label></dt>
+      <dd>
+        <select id="resultType" name="resultType">
+          <option id="RESULTS_AS_URI" value="0">URL</option>
+          <option id="RESULTS_AS_VISIT" value="1">履歴</option>
+          <option id="RESULTS_AS_DATE_QUERY" value="3">1週間前までの各日付</option>
+          <option id="RESULTS_AS_SITE_QUERY" value="4">ホスト名</option>
+          <option id="RESULTS_AS_DATE_SITE_QUERY" value="5">1週間前までの各日付、各ホスト名</option>
+          <option id="RESULTS_AS_TAG_QUERY" value="6">タグ一覧</option>
+          <option id="RESULTS_AS_TAG_CONTENTS" value="7">タグ付けされた場所一覧</option>
+        </select>
+      </dd>
+      <dt><label for="maxResults">最大数 (0: ALL)</label></dt>
+      <dd><input id="maxResults" type="number" name="maxResults" value="0"/></dd>
+      <dt><label for="sortingMode">ソート</label></dt>
+      <dd>
+        <select id="sortingMode" name="sortingMode">
+          <option id="SORT_BY_NONE" value="0">NONE</option>
+          <option id="SORT_BY_TITLE_ASCENDING" value="1">タイトルで昇順</option>
+          <option id="SORT_BY_TITLE_DESCENDING" value="2">タイトルで降順</option>
+          <option id="SORT_BY_DATE_ASCENDING" value="3">最終訪問日付で昇順</option>
+          <option id="SORT_BY_DATE_DESCENDING" value="4">最終訪問日付で降順</option>
+          <option id="SORT_BY_URI_ASCENDING" value="5">URIで昇順</option>
+          <option id="SORT_BY_URI_DESCENDING" value="6">URIで降順</option>
+          <option id="SORT_BY_VISITCOUNT_ASCENDING" value="7">訪問回数で昇順</option>
+          <option id="SORT_BY_VISITCOUNT_DESCENDING" value="8">訪問回数で降順</option>
+          <option id="SORT_BY_KEYWORD_ASCENDING" value="9">ブックマークキーワードで昇順</option>
+          <option id="SORT_BY_KEYWORD_DESCENDING" value="10">ブックマークキーワードで降順</option>
+          <option id="SORT_BY_DATEADDED_ASCENDING" value="11">ブックマーク追加日で昇順</option>
+          <option id="SORT_BY_DATEADDED_DESCENDING" value="12">ブックマーク追加日で降順</option>
+          <option id="SORT_BY_LASTMODIFIED_ASCENDING" value="13">ブックマーク更新日で昇順</option>
+          <option id="SORT_BY_LASTMODIFIED_DESCENDING" value="14">ブックマーク更新日で降順</option>
+          <option id="SORT_BY_TAGS_ASCENDING" value="17">タグ名で昇順</option>
+          <option id="SORT_BY_TAGS_DESCENGING" value="18">タグ名で降順</option>
+          <option id="SORT_BY_ANNOTATION_ASCENDING" value="19">アノテーションで昇順</option>
+          <option id="SORT_BY_ANNOTATION_DESCENDING" value="20">アノテーションで降順</option>
+        </select>
+      </dd>
+    </dl>
+  </fieldset>
+  <button type="submit">作成</button>
+</form>
+<div id="explainConteiner">
+  <dl>
+    <dt>クエリ</td>
+      <dd>タイトル、URL、タグ等を検索</dd>
+    <dt>URL</td>
+      <dd>URLを検索</dd>
+    <dt>Bookmarkのみ</dt>
+      <dd>検索対象をブックマークされているもののみに絞ります</dd>
+    <dt>日付</dt>
+      <dd><code>YYYY-MM-DD</code>形式で入力。「相対的な日数」にチェックを入れると検索時からの時間となり、検索範囲の日数を入力して下さい。</dd>
+    <dt>検索結果種類</dt>
+      <dd>基本的にはURLでOK</dd>
+    <dt>最大数</dt>
+      <dd>出力する数の最大数。<code>0</code>の場合は全てとなります。</dd>
+  </dl>
+</div>
+<div id="out">
+  結果：
+  <p id="result"></p>
+</div>
+<script>
+(function init() {
+  function $(id) {
+    return document.getElementById(id);
+  }
+  function enc (str) {
+    return encodeURIComponent(str);
+  }
+  function dec (str) {
+    return decodeURIComponent(str);
+  }
+  function toTimeStamp (dateString) {
+    console.log(dateString);
+    return (new Date(dateString)).getTime() * 1000;
+  }
+
+  var form = document.forms[0];
+  var query = location.search ? location.search.substr(1) : "";
+  var q = {};
+
+  function onChangeRelativeNow (aEvent) {
+    var beginTime = form.beginTime.value,
+        endTime = form.endTime.value,
+        now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    if (aEvent.target.checked) {
+      form.beginTime.type = form.endTime.type = "number";
+      if (beginTime)
+        form.beginTime.value = parseInt(((new Date(beginTime)) - now) / (24 * 60 * 60 * 1000), 10);
+      if (endTime)
+        form.endTime.value = parseInt(((new Date(endTime)) - now) / (24 * 60 * 60 * 1000), 10);
+      else
+        form.endTime.value = 0;
+    } else {
+      form.beginTime.type = form.endTime.type = "date";
+      if (beginTime) {
+        var d = new Date(now);
+        d.setDate(now.getDate() + parseInt(beginTime, 10));
+        form.beginTime.value = d.toISOString().substr(0, 10);
+      }
+      if (endTime) {
+        var d = new Date(now);
+        d.setDate(now.getDate() + parseInt(endTime, 10));
+        form.endTime.value = d.toISOString().substr(0, 10);
+      }
+    }
+  }
+  function onChangeOnlyBookmared (aEvent) {
+    if (aEvent.target.checked) {
+      $("queryType").value = "1";
+      $("QUERY_TYPE_UNIFIED").disabled = true;
+    }
+  }
+  form.relativeNow.addEventListener("change", onChangeRelativeNow, false);
+  form.onlyBookmarked.addEventListener("change", onChangeOnlyBookmared, false);
+
+
+
+  if (!query)
+    return;
+
+  query.split("&").forEach(function(param) {
+    var p = param.split("=");
+    q[p[0]] = dec(p[1].replace(/\+/g, " "));
+    //console.log(p[0], p[1], typeof p[1]);
+    if (p[1]) { 
+      var elm = form[p[0]];
+      if (elm) {
+        if (elm.type === "checkbox")
+          elm.checked = true;
+        else
+          elm.value = q[p[0]];
+      }
+    }
+  });
+
+  var pqs = []; 
+  if (q.term) {
+    pqs.push(["terms", q.term]);
+  }
+  if (q.uri) {
+    pqs.push(["uri", q.uri]);
+    pqs.push(["uriIsPrefix", "true"]);
+  }
+  if (q.onlyBookmarked) {
+    pqs.push(["onlyBookmarked", "true"]);
+  }
+  if (q.beginTime && q.endTime) {
+    if (q.relativeNow) {
+      pqs.push(["beginTime", parseInt(q.beginTime,10) * 24 * 60 * 60 * 1000 * 1000]);
+      pqs.push(["endTime", parseInt(q.endTime, 10) * 24 * 60 * 60 * 1000 * 1000]);
+      pqs.push(["beginTimeRef", "2"]);
+      pqs.push(["endTimeRef", "2"]);
+    } else {
+      pqs.push(["beginTime", toTimeStamp(q.beginTime)]);
+      pqs.push(["endTime", toTimeStamp(q.endTime)]);
+    }
+  }
+  if (q.queryType !== "0" && q.onlyBookmarked !== "1") {
+    pqs.push(["queryType", q.queryType]);
+  }
+  if (q.resultType !== "0") {
+    pqs.push(["resultType", q.resultType]);
+  }
+  if (parseInt(q.maxResults, 10) > 0) {
+    pqs.push(["maxResults", parseInt(q.maxResults, 10)]);
+  }
+  if (q.sortingMode !== "0") {
+    pqs.push(["sortingMode", q.sortingMode]);
+  }
+
+  var href = "place:" + pqs.map(function(param){ return param.join("="); }).join("&");
+  var a = document.createElement("a");
+  a.setAttribute("href", href);
+  a.appendChild(document.createTextNode("Bookmark this"));
+  var res = $("result");
+  res.appendChild(a);
+  res.appendChild(document.createElement("br"));
+  res.appendChild(document.createTextNode(href));
+})();
+</script>
+</body>
+</html>
