@@ -294,7 +294,7 @@ Punctuator: <b>one of</b>
   <em class="p oneof">&lt;&lt; &gt;&gt; &gt;&gt;&gt; &amp; | ^</em>
   <em class="p oneof">! ~ &amp;&amp; || ? :</em>
   <em class="p oneof">= += -= *= %= &lt;&lt;=</em>
-  <em class="p oneof">&gt;&gt;> &gt;&gt;&gt;= &amp;= |= ^=</em>
+  <em class="p oneof">&gt;&gt;> &gt;&gt;&gt;= &amp;= |= ^= &lt;|</em>
 
 DivPunctuator: <b>one of</b>
   <em class="p oneof">/ /=</em>
@@ -307,6 +307,9 @@ DivPunctuator: <b>one of</b>
       <pre>
 Literal:
   NullLiteral
+  ValueLiteral
+
+ValueLiteral:
   BooleanLiteral
   NumericLiteral
   StringLiteral
@@ -560,14 +563,19 @@ PrimaryExpression:
   <em class="k">this</em>
   Identifier
   Literal
-  ArrayLiteral
-  ObjectLiteral
+  SealedArrayLiteral
+  SealedObjectLiteral
+  FunctionExpression
   <em class="p">(</em> Expression <em class="p">)</em>
     </pre>
 
     <section>
       <h4 id="11.1.4">Array Initalizer</h4>
       <pre>
+SealedArrayLiteral:
+  ArrayLiteral
+  <em class="p">#</em> ArrayLiteral
+
 ArrayLiteral:
   <em class="p">[</em> Elision<sub>opt</sub> <em class="p">]</em>
   <em class="p">[</em> ElementList <em class="p">]</em>
@@ -588,6 +596,10 @@ Elision:
     <section>
       <h4 id="11.1.5">Object Initializer</h4>
       <pre>
+SealedObjectLiteral:
+  ObjectLiteral
+  <em class="p">#</em> ObjectLiteral
+
 ObjectLiteral:
   <em class="p">{ }</em>
   <em class="p">{</em> PropertyNameAndValueList <em class="p">}</em>
@@ -600,6 +612,7 @@ PropertyNameAndValueList:
 PropertyAssignment:
   IdentifierName
   PropertyName <em class="p">:</em> AssignmentExpression
+  PropertyName <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
   <em class="k">get</em> PropertyName <em class="p">( ) {</em> FunctionBody <em class="p">}</em>
   <em class="k">set</em> PropertyName <em class="p">(</em> PropertySetParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
 
@@ -609,7 +622,8 @@ PropertyName:
   NumberLiteral
 
 PropertySetParameterList:
-  Identifier
+  BindingIdentifier
+  BindingPattern
       </pre>
     </section>
   </section>
@@ -619,9 +633,14 @@ PropertySetParameterList:
     <pre>
 MemberExpression:
   PrimaryExpression
-  FunctionExpression
   MemberExpression <em class="p">[</em> Expression <em class="p">]</em>
   MemberExpression <em class="p">.</em> IdentifierName
+  <em class="k">super</em> <em class="p">[</em> Expression <em class="p">]</em>
+  <em class="k">super</em> <em class="p">.</em> IdentifierName
+  MemberExpression <em class="p">&lt;|</em> SealedArrayLiteral
+  MemberExpression <em class="p">&lt;|</em> SealedObjectLiteral
+  MemberExpression <em class="p">&lt;|</em> FunctionExpression 
+  MemberExpression <em class="p">&lt;|</em> ValueLiteral 
   <em class="k">new</em> MemberExpression Arguments
 
 NewExpression:
@@ -1027,7 +1046,7 @@ BindingElementList:
 BindingProperty:
   SingleNameBinding
   PropertyName <em class="p">:</em> SingleNameBinding
-  PropertyName <em class="p">:</em> BindingPattern Initializer<sub>opt</sub>
+  PropertyName <em class="p">:</em> BindingElement
 
 BindingElement:
   SingleNameBinding
@@ -1201,20 +1220,23 @@ FunctionExpression:
   <em class="k">function</em> BindingIdentifier<sub>opt</sub> <em class="p">(</em> FormalParameterList<sub>opt</sub> <em class="p">)</em> <em class="p">{</em> FunctionBody <em class="p">}</em>
 
 FormalParameterList:
-  <em class="p">...</em> Identifier
+  <small>[empty]</small>
+  FunctionRestParameter
   FormalsList
-  FormalsList <em class="p">,</em> <em class="p">...</em> Identifier
+  FormalsList <em class="p">,</em> FunctionRestParameter
 
 FormalsList:
   FormalParameter
   FormalsList <em class="p">,</em> FormalParameter
 
+FunctionRestParameter:
+  <em class="p">...</em> Identifier
+
 FormalParameter:
-  BindingIdentifier Initializer<sub>opt</sub>
-  BindingPattern Initializer<sub>opt</sub>
+  BindingElement
 
 FunctionBody:
-  SourceElement<sub>opt</sub>
+  StatementList<sub>opt</sub>
   </pre>
 </section>
 
