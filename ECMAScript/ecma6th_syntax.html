@@ -8,8 +8,8 @@
 <body>
 <header>
   <h1>ECMAScript 6th Syntax Grammer</h1>
-  <h2>6th Edition / Draft November 7 2011</h2>
-  <p>この文章は <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=harmony%3Aspecification_drafts&cache=cache&media=harmony:working_draft_ecma-262_edition_6_11-7-11.pdf">>working_draft_ecma-262_edition_6_11-7-11.pdf</a> の構文部分の一部を抜き取り、編集したものです。<br/>
+  <h2>6th Edition / Draft January 16 2012</h2>
+  <p>この文章は <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=harmony%3Aspecification_drafts&cache=cache&media=harmony:working_draft_ecma-262_edition_6_1-16-12_.pdf">working_draft_ecma-262_edition_6_1-16-12_.pdf</a> の構文部分の一部を抜き取り、編集したものです。<br/>
   次期ECMAScriptのドラフトの最新版は<a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">harmony:specification_drafts [ES Wiki]</a>にあげられるはずです。</p>
 </header>
 
@@ -585,11 +585,14 @@ ElementList:
   Elision<sub>opt</sub> AssignmentExpression
   Elision<sub>opt</sub> <em class="p">...</em> AssignmentExpression
   ElementList <em class="p">,</em> Elision<sub>opt</sub> AssignmentExpression
-  ElementList <em class="p">,</em> Elision<sub>opt</sub> <em class="p">...</em> AssignmentExpression
+  ElementList <em class="p">,</em> Elision<sub>opt</sub> SpreadElement
 
 Elision:
   <em class="p">,</em>
   Elision <em class="p">,</em>
+
+SpreadElement:
+  <em class="p">...</em> AssignmentExpression
       </pre>
     </section>
 
@@ -635,12 +638,9 @@ MemberExpression:
   PrimaryExpression
   MemberExpression <em class="p">[</em> Expression <em class="p">]</em>
   MemberExpression <em class="p">.</em> IdentifierName
+  MemberExpression <em class="p">&lt;|</em> TriangleLiteral
   <em class="k">super</em> <em class="p">[</em> Expression <em class="p">]</em>
   <em class="k">super</em> <em class="p">.</em> IdentifierName
-  MemberExpression <em class="p">&lt;|</em> SealedArrayLiteral
-  MemberExpression <em class="p">&lt;|</em> SealedObjectLiteral
-  MemberExpression <em class="p">&lt;|</em> FunctionExpression 
-  MemberExpression <em class="p">&lt;|</em> ValueLiteral 
   <em class="k">new</em> MemberExpression Arguments
 
 NewExpression:
@@ -649,9 +649,11 @@ NewExpression:
 
 CallExpression:
   MemberExpression Arguments
+  <em class="k">super</em> Arguments
   CallExpression Arguments
   CallExpression <em class="p">[</em> Expression <em class="p">]</em>
   CallExpression <em class="p">.</em> IdentifierName
+  CallExpression <em class="p">&lt;|</em> TriangleLiteral
 
 Arguments:
   <em class="p">( )</em>
@@ -662,6 +664,12 @@ ArgumentList:
   <em class="p">...</em> AssignmentExpression
   ArgumentList <em class="p">,</em> AssignmentExpression
   ArgumentList <em class="p">,</em> <em class="p">...</em> AssignmentExpression
+
+TriangleLiteral:
+  SealedArrayLiteral
+  SealedObjectLiteral
+  FunctionExpression
+  ValueLiteral
 
 LeftHandSideExpression:
   NewExpression
@@ -763,6 +771,9 @@ EqualityExpression:
   EqualityExpression <em class="p">!=</em> RelationalExpression
   EqualityExpression <em class="p">===</em> RelationalExpression
   EqualityExpression <em class="p">!==</em> RelationalExpression
+  EqualityExpression <small>[no LineTerminator here]</small> <em class="p">is</em> RelationalExpression
+  EqualityExpression <small>[no LineTerminator here]</small> <em class="p">isnt</em> RelationalExpression
+
 
 EqualityExpressionNoIn:
   RelationalExpressionNoIn
@@ -770,6 +781,8 @@ EqualityExpressionNoIn:
   EqualityExpressionNoIn <em class="p">!=</em> RelationalExpressionNoIn
   EqualityExpressionNoIn <em class="p">===</em> RelationalExpressionNoIn
   EqualityExpressionNoIn <em class="p">!==</em> RelationalExpressionNoIn
+  EqualityExpression <small>[no LineTerminator here]</small> <em class="p">is</em> RelationalExpression
+  EqualityExpression <small>[no LineTerminator here]</small> <em class="p">isnt</em> RelationalExpression
     </pre>
   </section>
 
@@ -867,6 +880,7 @@ ObjectAssignmentPattern:
 
 ArrayAssignmentPattern:
   <em class="p">[</em> Elision<sub>opt</sub> AssignmentRestElement<sub>opt</sub> <em class="p">]</em>
+  <em class="p">[</em> AssignmentElementList <em class="p">]</em>
   <em class="p">[</em> AssignmentElementList <em class="p">,</em> Elision<sub>opt</sub> AssignmentRestElement<sub>opt</sub> <em class="p">]</em>
 
 AssignmentPropertyList:
@@ -1038,6 +1052,7 @@ ObjectBindingPattern:
 
 ArrayBindingPattern:
   <em class="p">[</em> Elision<sub>opt</sub> BindingRestElement<sub>opt</sub> <em class="p">]</em>
+  <em class="p">[</em> BindingElementList <em class="p">]</em>
   <em class="p">[</em> BindingElementList <em class="p">,</em> Elision<sub>opt</sub> BindingRestElement<sub>opt</sub> <em class="p">]</em>
 
 BindingPropertyList:
@@ -1235,7 +1250,7 @@ FormalsList:
   FormalsList <em class="p">,</em> FormalParameter
 
 FunctionRestParameter:
-  <em class="p">...</em> Identifier
+  <em class="p">...</em> BindingIdentifier
 
 FormalParameter:
   BindingElement
@@ -1321,7 +1336,11 @@ SourceElement:
         <li><a href="#11.10">Binaly Bitwise Operators</a></li>
         <li><a href="#11.11">Binaly Logical Operators</a></li>
         <li><a href="#11.12">Conditional Operator</a></li>
-        <li><a href="#11.13">Assignment Operators</a></li>
+        <li><a href="#11.13">Assignment Operators</a>
+          <ul>
+            <li><a href="#11.13.1">Destructuring Assingment</a></li>
+          </ul>
+        </li>
         <li><a href="#11.14">Comma Operator</a></li>
       </ul>
     </li>
