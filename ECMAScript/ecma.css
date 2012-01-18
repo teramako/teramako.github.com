@@ -81,3 +81,5 @@ thead { background-color: #EEE; }
 td, th {
   border: thin solid gray;
 }
+small { font-size: 75%; }
+
