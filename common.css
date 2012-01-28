@@ -21,6 +21,7 @@ h2 { font-size: 24pt; }
 h3 { font-size: 20pt; }
 h4 { font-size: 18pt; }
 h5 { font-size: 14pt; border-bottom: thin solid #a5bce7; }
+h1, h2, h3, h4, h5, section, article, hgroup, p, ul, ol, dl { overflow: auto; }
 article {
   counter-reset: table_counter code_counter img_caption;
 }
@@ -163,7 +164,7 @@ p.img {
   font-size: 10pt;
   text-decoration:none;
   counter-increment: img_caption;
-  margin: 0.5em auto;
+  margin: 0.5em;
   padding: 0.5em;
   background-image: url("./img/img-bg.svg");
 }
