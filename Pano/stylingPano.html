@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Pano Style Example - hogezilla@github</title>
+  <link rel="shortcut icon" href="pano.ico"/>
+  <link rel="prev" href="index.html"/>
+  <link rel="contents" href="index.html"/>
+  <link rel="start" href="../index.html"/>
+  <link rel="stylesheet" type="text/css" href="../common.css"/>
+  <style type="text/css">
+pre { font-family: monospace; color: white; background-color: #222; padding: 5px; margin: 2px;}
+pre :link { color: cyan; }
+.Error { color: #ffffff; background-color: #ff6060; font-weight: bold; }
+.PreProc { color: #ff40ff; }
+.Special { color: #ff40ff; }
+.Type { color: #00ff00; }
+.Identifier { color: #00ffff; }
+.Constant { color: #ff6060; }
+.Comment { color: #ffff00; }
+</style>
+</head>
+<body>
+<h1><a href="../index.html"><img src="../logo.svg" width="300" height="150" alt="hogehoge" /></a></h1>
+
+<article>
+  <hgroup style="width: auto; float: none;">
+    <h2>Styling Pano</h2>
+    <p>for advance settings</p>
+  </hgroup>
+  <p class="img" title="Pano option" style="float: right;">
+    <img src="pano-option.png" width="510" height="380"/>
+  </p>
+  <p>
+    Can edit CSS and change looks with <dfn>CSS editor</dfn>.
+  </p>
+  <p>
+    You need to learn the how to <a href="https://developer.mozilla.org/en/XUL_Tutorial/Styling_a_Tree" title="Styling a Tree - MDN">styling a tree</a> maybe.
+  </p>
+  <p>
+    And following contents maybe help you:
+  </p>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en/CSS/CSS_Reference">CSS Reference - MDN</a></li>
+    <li><a href="https://developer.mozilla.org/en/CSS/CSS_Reference/Mozilla_Extensions">Mozilla CSS Extensions</a></li>
+  </ul>
+  <br clear="all"/>
+  <section>
+    <h3>like vertical tab bar and put background image</h3>
+    <p class="img" title="Pano Sidebar Style 1" style="float:right;">
+      <img src="panoStyle_1.png" width="230" height="711"/>
+    </p>
+<pre>
+<span class="Comment">/*</span>
+<span class="Comment"> * Pano Tree Style</span>
+<span class="Comment"> *</span>
+<span class="Comment"> * Common Style Guide</span>
+<span class="Comment"> *  see <a href="https://developer.mozilla.org/en/XUL_Tutorial/Styling_a_Tree">https://developer.mozilla.org/en/XUL_Tutorial/Styling_a_Tree</a></span>
+<span class="Comment"> *</span>
+<span class="Comment"> * Additional properties:</span>
+<span class="Comment"> *</span>
+<span class="Comment"> *  currentTab  : the cell and row of the current active tab</span>
+<span class="Comment"> *  currentGroup: the cell and row of the current active group</span>
+<span class="Comment"> *  item        : the cell and row of tabs</span>
+<span class="Comment"> *  group       : the cell and row of groups</span>
+<span class="Comment"> *  AppTabs     : the cell and row of the pinned tab's group</span>
+<span class="Comment"> *  apptab      : the cell and row of pinned tabs</span>
+<span class="Comment"> *  pending     : the cell and row of tab which is not loaded the contents</span>
+<span class="Comment"> *  unread      : the cell and row of tab which is not selected yet</span>
+<span class="Comment"> *  loading     : the cell and row of tab which is loading(busy)</span>
+<span class="Comment"> *  titlechanged: the cell and row of tab which is changed title</span>
+<span class="Comment"> *</span>
+<span class="Comment"> * Use following &quot;@-moz-document&quot; (see <a href="https://developer.mozilla.org/en/CSS/@-moz-document">https://developer.mozilla.org/en/CSS/@-moz-document</a> )</span>
+<span class="Comment"> * if you want to apply styles to only either the sidebar or the panel,</span>
+<span class="Comment"> *</span>
+<span class="Comment"> *  Sidebar:</span>
+<span class="Comment"> *    @-moz-document url(chrome://pano/content/sidebar.xul) { ... }</span>
+<span class="Comment"> *  Panel:</span>
+<span class="Comment"> *    @-moz-document url(chrome://browser/content/browser.xul) { ... }</span>
+<span class="Comment"> * </span>
+<span class="Comment"> */</span>
+
+@charset <span class="Constant">&quot;utf-8&quot;</span>;
+@namespace url(<span class="Constant">&quot;<a href="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul</a>&quot;</span>);
+
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(currentTab),
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(currentGroup) <span class="Identifier">{</span>
+  <span class="Type">font-weight</span>: <span class="Type">bold</span>;
+<span class="Identifier">}</span>
+
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(unread) <span class="Identifier">{</span>
+  <span class="Type">color</span>: magenta <span class="Special">!important</span>;
+<span class="Identifier">}</span>
+
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(pending) <span class="Identifier">{</span>
+  <span class="Type">color</span>: <span class="Constant">GrayText</span> <span class="Special">!important</span>;
+<span class="Identifier">}</span>
+
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(<span class="PreProc">hover</span>) <span class="Identifier">{</span>
+  <span class="Type">text-decoration</span>: <span class="Type">underline</span>;
+<span class="Identifier">}</span>
+
+<span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(titlechanged) <span class="Identifier">{</span>
+  <span class="Type">font-style</span>: <span class="Type">italic</span>;
+<span class="Identifier">}</span>
+
+@-moz-document url(chrome://pano/content/sidebar.xul) <span class="Identifier">{</span>
+  #panoToolBox &gt; toolbar { <span class="Type">background-color</span>: <span class="Identifier">rgb(</span><span class="Constant">32,10,48</span><span class="Identifier">)</span> <span class="Special">!important</span>; <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> <span class="Identifier">{</span>
+    <span class="Type">border</span>: <span class="Constant">0</span> <span class="Special">!important</span>;
+    <span class="Type">border-top</span>: <span class="Type">thin</span> <span class="Type">solid</span> <span class="Constant">ThreeDShadow</span> <span class="Special">!important</span>;
+    <span class="Type">margin</span>: <span class="Constant">0</span> <span class="Special">!important</span>;
+    -moz-appearance: <span class="Type">none</span> <span class="Special">!important</span>;
+    <span class="Comment">/* set background color and image */</span>
+    <span class="Type">background-color</span>: <span class="Identifier">rgb(</span><span class="Constant">48,10,64</span><span class="Identifier">)</span> <span class="Special">!important</span>;
+    <span class="Type">background-image</span>:
+      <span class="Identifier">url(</span><span class="Constant">&quot;file:///G:/image/Mozilla_Nightly_icon_2011_sliced.png&quot;</span><span class="Identifier">)</span>,
+      -moz-linear-gradient(<span class="Type">top</span>, <span class="Constant">transparent</span>, <span class="Identifier">rgba(</span><span class="Constant">0,0,0,.6</span><span class="Identifier">)</span> <span class="Constant">50%</span>);
+    <span class="Type">background-position</span>: <span class="Type">left</span> <span class="Type">bottom</span>;
+    <span class="Type">background-repeat</span>: <span class="Type">no-repeat</span>;
+    <span class="Type">background-size</span>: <span class="Type">contain</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(currentTab) <span class="Identifier">{</span>
+    <span class="Type">color</span>: <span class="Constant">black</span> <span class="Special">!important</span>;
+  <span class="Identifier">}</span>
+  <span class="Comment">/* like tab item */</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row <span class="Identifier">{</span>
+    <span class="Type">background-image</span>:
+      -moz-linear-gradient(<span class="Type">center</span> <span class="Type">bottom</span> , <span class="Identifier">rgba(</span><span class="Constant">26, 26, 26, 0.4</span><span class="Identifier">)</span> <span class="Constant">1px</span>, <span class="Constant">transparent</span> <span class="Constant">1px</span>),
+      -moz-linear-gradient(<span class="Constant">transparent</span>, <span class="Identifier">rgba(</span><span class="Constant">114, 114, 114, 0.1</span><span class="Identifier">)</span> <span class="Constant">1px</span>, <span class="Identifier">rgba(</span><span class="Constant">81, 81, 81, 0.2</span><span class="Identifier">)</span> <span class="Constant">80%</span>, <span class="Identifier">rgba(</span><span class="Constant">0, 0, 0, 0.2</span><span class="Identifier">)</span>),
+      -moz-linear-gradient(-moz-dialog, -moz-dialog);
+    <span class="Type">background-clip</span>: <span class="Type">border-box</span>, <span class="Type">border-box</span>, <span class="Type">border-box</span>;
+    <span class="Type">background-repeat</span>: <span class="Type">no-repeat</span>;
+    <span class="Type">background-color</span>: <span class="Constant">transparent</span>;
+    <span class="Type">height</span>: <span class="Constant">26px</span> <span class="Special">!important</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row(leaf, currentTab),
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row(currentGroup) <span class="Identifier">{</span>
+    <span class="Type">background-image</span>: -moz-linear-gradient(<span class="Identifier">rgba(</span><span class="Constant">255,255,255,.7</span><span class="Identifier">)</span>, <span class="Identifier">rgba(</span><span class="Constant">255,255,255,.5</span><span class="Identifier">)</span> <span class="Constant">50%</span>),
+                      -moz-linear-gradient(-moz-dialog, -moz-dialog);
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row(leaf) <span class="Identifier">{</span>
+    <span class="Type">background-position</span>: <span class="Constant">23px</span> <span class="Type">center</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row(group) <span class="Identifier">{</span>
+    <span class="Type">background-position</span>: <span class="Type">left</span> <span class="Type">center</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text <span class="Identifier">{</span>
+    <span class="Type">font-size</span>: <span class="Constant">10pt</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-indentation <span class="Identifier">{</span>
+    <span class="Type">width</span>: <span class="Constant">10px</span> <span class="Special">!important</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-cell-text(pending) <span class="Identifier">{</span>
+    <span class="Type">color</span>: <span class="Constant">#666</span> <span class="Special">!important</span>;
+  <span class="Identifier">}</span>
+  <span class="Identifier">.pano-tree</span> treechildren::-moz-tree-row(selected) <span class="Identifier">{</span>
+    <span class="Type">background-color</span>: <span class="Identifier">rgba(</span><span class="Constant">255,255,255,.1</span><span class="Identifier">)</span> <span class="Special">!important</span>;
+  <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+</pre>
+  </section>
+</article>
+<footer>
+  <hr/>
+  <p><a href="index.html">Index</a></p>
+</footer>
+</body>
+</html>
+
