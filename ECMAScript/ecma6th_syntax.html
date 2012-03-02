@@ -597,7 +597,7 @@ SpreadElement:
     </section>
 
     <section>
-      <h4 id="11.1.5">Object Initializer</h4>
+      <h4 id="11.1.5">Object Initialiser</h4>
       <pre>
 SealedObjectLiteral:
   ObjectLiteral
@@ -980,20 +980,20 @@ LetBindingListNoIn:
   LetBindingListNoIn <em class="p">,</em> LetBindingNoIn
 
 LetBinding:
-  BindingIdentifier Initializer<sub>opt</sub>
-  BindingPattern Initializer
+  BindingIdentifier Initialiser<sub>opt</sub>
+  BindingPattern Initialiser
 
 LetBindingNoIn:
-  BindingIdentifier InitializerNoIn<sub>opt</sub>
-  BindingPattern InitializerNoIn
+  BindingIdentifier InitialiserNoIn<sub>opt</sub>
+  BindingPattern InitialiserNoIn
 
 BindingIdentifier:
   Identifier
 
-Initializer:
+Initialiser:
   = AssignmentExpression
 
-InitializerNoIn:
+InitialiserNoIn:
   = AssignmentExpressionNoIn
       </pre>
     </section>
@@ -1009,8 +1009,8 @@ ConstBindingList:
   ConstBindingList <em class="p">,</em> ConstBinding
 
 ConstBinding:
-  BindingIdentifier Initializer
-  BindingPattern Initializer
+  BindingIdentifier Initialiser
+  BindingPattern Initialiser
       </pre>
     </section>
 
@@ -1029,12 +1029,12 @@ VariableDeclarationListNoIn:
   VariableDeclarationListNoIn <em class="p">,</em> VariableDeclarationNoIn
 
 VariableDeclaration:
-  BindingIdentifier Initializer<sub>opt</sub>
-  BindingPattern Initializer
+  BindingIdentifier Initialiser<sub>opt</sub>
+  BindingPattern Initialiser
 
 VariableDeclarationNoIn:
-  BindingIdentifier InitializerNoIn<sub>opt</sub>
-  BindingPattern InitializerNoIn
+  BindingIdentifier InitialiserNoIn<sub>opt</sub>
+  BindingPattern InitialiserNoIn
       </pre>
     </section>
 
@@ -1070,10 +1070,10 @@ BindingProperty:
 
 BindingElement:
   SingleNameBinding
-  BindingPattern Initializer<sub>opt</sub>
+  BindingPattern Initialiser<sub>opt</sub>
 
 SingleNameBinding:
-  BindingIdentifier Initializer<sub>opt</sub>
+  BindingIdentifier Initialiser<sub>opt</sub>
 
 BindingRestElement:
   <em class="p">...</em> BindingIdentifier
@@ -1321,8 +1321,8 @@ SourceElement:
       <ul>
         <li><a href="#11.1">Primary Expressions</a>
           <ul>
-            <li><a href="#11.1.4">Array Initializer</a></li>
-            <li><a href="#11.1.5">Object Initializer</a></li>
+            <li><a href="#11.1.4">Array Initialiser</a></li>
+            <li><a href="#11.1.5">Object Initialiser</a></li>
           </ul>
         </li>
         <li><a href="#11.2">Left-Hand-Side Expressions</a></li>
