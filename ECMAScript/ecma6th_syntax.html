@@ -974,7 +974,7 @@ ExpressionNoIn:
   </section>
 </section>
 <!-- ==============================================================
-  Statements and Declaration
+  Statements and Declarations
   ============================================================= -->
 <section>
   <h2 id="12">Statements and Declarations</h2>
@@ -1024,7 +1024,7 @@ StatementListItem:
   <section>
     <h3 id="12.2">Declarations and the Variable Statement</h3>
     <section>
-      <h4 id="12.2.1">Let and Const Declaration</h4>
+      <h4 id="12.2.1">Let and Const Declarations</h4>
       <pre>
 LexicalDeclaration:
   LetOrConst BindingList <em class="p">;</em>
@@ -1362,6 +1362,7 @@ ProgramBody:
     <datalist id="syntaxName"></datalist>
   </form>
   <ul>
+    <li><a href="#6">Source Text</li>
     <li><a href="#7">Lexical Conventions</a>
       <ul>
         <li><a href="#7.1">Unicode Format-Control Characters</a></li>
@@ -1395,8 +1396,14 @@ ProgramBody:
       <ul>
         <li><a href="#11.1">Primary Expressions</a>
           <ul>
-            <li><a href="#11.1.4">Array Initialiser</a></li>
+            <li><a href="#11.1.4">Array Initialiser</a>
+              <ul>
+                <li><a href="#11.1.4.1">Array Literal</a></li>
+                <li><a href="#11.1.4.2">Array Comprehension</a></li>
+              </ul>
+            </li>
             <li><a href="#11.1.5">Object Initialiser</a></li>
+            <li><a href="#11.1.7">Generator Comprehensions</a></li>
           </ul>
         </li>
         <li><a href="#11.2">Left-Hand-Side Expressions</a></li>
@@ -1423,9 +1430,8 @@ ProgramBody:
         <li><a href="#12.1">Block</a></li>
         <li><a href="#12.2">Declarations and the variable Statement</a>
           <ul>
-            <li><a href="#12.2.1">Let Declaration</a></li>
-            <li><a href="#12.2.2">Const Declaration</a></li>
-            <li><a href="#12.2.3">Variable Statement</a></li>
+            <li><a href="#12.2.1">Let and Const Declarations</a></li>
+            <li><a href="#12.2.2">Variable Statement</a></li>
             <li><a href="#12.2.4">Destructuring Binding Pattern</a></li>
           </ul>
         </li>
@@ -1444,7 +1450,12 @@ ProgramBody:
         <li><a href="#12.15">The debugger Statement</a></li>
       </ul>
     </li>
-    <li><a href="#13">Function Declaration</a></li>
+    <li><a href="#13">Function and Generators</a>
+      <ul>
+        <li><a href="#13.1">Function Definitions</a></li>
+        <li><a href="#13.2">Generator Definitions</a></li>
+      </ul>
+    </li>
     <li><a href="#14">Program</a></li>
   </ul>
 </nav>
