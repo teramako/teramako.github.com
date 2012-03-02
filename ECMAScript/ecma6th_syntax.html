@@ -566,16 +566,26 @@ PrimaryExpression:
   SealedArrayLiteral
   SealedObjectLiteral
   FunctionExpression
+  GeneratorExpression
+  GeneratorComprehension
   <em class="p">(</em> Expression <em class="p">)</em>
     </pre>
 
     <section>
       <h4 id="11.1.4">Array Initalizer</h4>
       <pre>
-SealedArrayLiteral:
-  ArrayLiteral
-  <em class="p">#</em> ArrayLiteral
+SealedArrayInitialiser:
+  ArrayInitialiser
+  <em class="p">#</em> ArrayInitialiser
 
+ArrayInitialiser:
+  ArrayLiteral
+  ArrayComprehension
+      </pre>
+
+      <section>
+        <h5 id="11.1.4.1">Array Literal</h5>
+        <pre>
 ArrayLiteral:
   <em class="p">[</em> Elision<sub>opt</sub> <em class="p">]</em>
   <em class="p">[</em> ElementList <em class="p">]</em>
@@ -593,7 +603,35 @@ Elision:
 
 SpreadElement:
   <em class="p">...</em> AssignmentExpression
-      </pre>
+
+ArrayComprehension:
+  Expression ComprehensionForList
+  Expression ComprehensionForList <em class="k">if</em> <em class="p">(</em> Expression <em class="p">)</em>
+
+ComprehensionForList:
+  ComprehensionFor
+  ComprehensionForList ComprehensionFor
+
+ComprehensionFor:
+  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em>
+        </pre>
+      </section>
+
+      <section>
+        <h5 id="11.1.4.2">Array Comprehension</h5>
+        <pre>
+ArrayComprehension:
+  <em class="p">[</em> Expression ComprehensionForList <em class="p">]</em>
+  <em class="p">[</em> Expression ComprehensionForList <em class="k">if</em> <em class="p">(</em> Expression <em class="p">) ]</em>
+
+ComprehensionForList:
+  ComprehensionFor
+  ComprehensionForList ComprehensionFor
+
+ComprehensionFor:
+  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em>
+        </pre>
+      </section>
     </section>
 
     <section>
@@ -616,6 +654,7 @@ PropertyAssignment:
   IdentifierName
   PropertyName <em class="p">:</em> AssignmentExpression
   PropertyName <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
+  <em class="p">*</em> PropertyName <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
   <em class="k">get</em> PropertyName <em class="p">( ) {</em> FunctionBody <em class="p">}</em>
   <em class="k">set</em> PropertyName <em class="p">(</em> PropertySetParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
 
@@ -629,6 +668,22 @@ PropertySetParameterList:
   BindingPattern
       </pre>
     </section>
+  </section>
+
+  <section>
+    <h4 id="11.1.7">Generator Comprehensions</h4>
+    <pre>
+GeneratorComprehension:
+  <em class="p">(</em> Expression ComprehensionForList <em class="p">)</em>
+  <em class="p">(</em> Expression ComprehensionForList <em class="k">if</em> <em class="p">(</em> Expression <em class="p">) )</em>
+
+ComprehensionForList:
+  ComprehensionFor
+  ComprehensionForList ComprehensionFor
+
+ComprehensionFor:
+  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em>
+    </pre>
   </section>
 
   <section>
@@ -854,6 +909,7 @@ ConditionalExpressionNoIn:
     <pre>
 AssignmentExpression:
   ConditionalExpression
+  YieldExpression
   LeftHandSideExpression <em class="p">=</em> AssignmentExpression
   LeftHandSideExpression AssignmentOperator AssignmentExpression
 
@@ -929,21 +985,23 @@ Statement:
   EmptyStatement
   ExpressionStatement
   IfStatement
-  IterationStatement
+  BreakableStatement
   ContinueStatement
   BreakStatement
   ReturnStatement
   WithStatement
   LabelledStatement
-  SwitchStatement
   ThrowStatement
   TryStatement
   DebuggerStatement
 
 Declaration:
   FunctionDeclaration
-  LetDeclaration
-  ConstDeclaration
+  LexicalDeclaration
+
+BreakableStatement:
+  IterationStatement
+  SwitchStatement
   </pre>
   <section>
     <h3 id="12.1">Block</h3>
@@ -966,24 +1024,31 @@ StatementListItem:
   <section>
     <h3 id="12.2">Declarations and the Variable Statement</h3>
     <section>
-      <h4 id="12.2.1">Let Declaration</h4>
+      <h4 id="12.2.1">Let and Const Declaration</h4>
       <pre>
-LetDeclaration:
-  <em class="k">let</em> LetBindingList <em class="p">;</em>
+LexicalDeclaration:
+  LetOrConst BindingList <em class="p">;</em>
 
-LetBindingList:
-  LetBinding
-  LetBindingList <em class="p">,</em> LetBinding
+LexicalDeclarationNoIn:
+  LetOrConst BindingListNoIn
 
-LetBindingListNoIn:
-  LetBindingNoIn
-  LetBindingListNoIn <em class="p">,</em> LetBindingNoIn
+LetOrConst:
+  <em class="k">let</em>
+  <em class="k">const</em>
 
-LetBinding:
+BindingList:
+  LexicalBinding
+  BindingList <em class="p">,</em> LexicalBinding
+
+BindingListNoIn:
+  LexicalBindingNoIn
+  BindingListNoIn <em class="p">,</em> LexicalBindingNoIn
+
+LexicalBinding:
   BindingIdentifier Initialiser<sub>opt</sub>
   BindingPattern Initialiser
 
-LetBindingNoIn:
+LexicalBindingNoIn:
   BindingIdentifier InitialiserNoIn<sub>opt</sub>
   BindingPattern InitialiserNoIn
 
@@ -991,31 +1056,15 @@ BindingIdentifier:
   Identifier
 
 Initialiser:
-  = AssignmentExpression
+  <em class="p">=</em> AssignmentExpression
 
 InitialiserNoIn:
-  = AssignmentExpressionNoIn
+  <em class="p">=</em> AssignmentExpressionNoIn
       </pre>
     </section>
 
     <section>
-      <h4 id="12.2.2">Const Declaration</h4>
-      <pre>
-ConstDeclaration:
-  <em class="k">const</em> ConstBindingList ;
-
-ConstBindingList:
-  ConstBinding
-  ConstBindingList <em class="p">,</em> ConstBinding
-
-ConstBinding:
-  BindingIdentifier Initialiser
-  BindingPattern Initialiser
-      </pre>
-    </section>
-
-    <section>
-      <h4 id="12.2.3">Variable Statement</h4>
+      <h4 id="12.2.2">Variable Statement</h4>
       <pre>
 VariableStatement:
   <em class="k">var</em> VariableDeclarationList <em class="p">;</em>
@@ -1065,7 +1114,6 @@ BindingElementList:
 
 BindingProperty:
   SingleNameBinding
-  PropertyName <em class="p">:</em> SingleNameBinding
   PropertyName <em class="p">:</em> BindingElement
 
 BindingElement:
@@ -1117,8 +1165,24 @@ IterationStatement:
   <em class="k">while</em> <em class="p">(</em> Expression <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> ExpressionNoIn<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub> <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> VariableDeclarationNoIn <em class="p">;</em> Expression<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub> <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> LexicalDeclarationNoIn <em class="p">;</em> Expression<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub> <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">in</em> Expression <em class="p">)</em> Statement
-  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> VariableDeclarationNoIn <em class="k">in</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> BindingIdentifier <em class="k">in</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> ForDeclaration <em class="k">in</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> ForVarDeclaration <em class="k">of</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> ForDeclaration <em class="k">of</em> Expression <em class="p">)</em> Statement
+
+ForVarDeclaration:
+  BindingPattern
+  VariableDeclarationNoIn
+
+ForDeclaration:
+  LetOrConst ForBinding
+
+ForBinding:
+  BindingIdentifier
+  BindingPattern
     </pre>
   </section>
 
@@ -1232,8 +1296,10 @@ DebuggerStatement:
   Function Declaration
   ============================================================= -->
 <section>
-  <h2 id="13">Function Declaration</h2>
-  <pre>
+  <h2 id="13">Function and Generators</h2>
+  <section>
+    <h3 id="13.1">Function Definitions</h3>
+    <pre>
 FunctionDeclaration:
   <em class="k">function</em> BindingIdentifier <em class="p">(</em> FormalParameterList <em class="p">)</em> <em class="p">{</em> FunctionBody <em class="p">}</em>
 
@@ -1258,7 +1324,19 @@ FormalParameter:
 
 FunctionBody:
   StatementList<sub>opt</sub>
-  </pre>
+    </pre>
+  </section>
+
+  <section>
+    <h3 id="13.2">Generator Definitions</h3>
+    <pre>
+GeneratorDeclaration:
+  <em class="k">function</em> <em class="p">*</em> BindingIdentifier <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
+
+GeneratorExpression:
+  <em class="k">function</em> <em class="p">*</em> BindingIdentifier<sub>opt</sub> <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
+    </pre>
+  </section>
 </section>
 
 
@@ -1269,15 +1347,10 @@ FunctionBody:
   <h2 id="14">Program</h2>
   <pre>
 Program:
-  SourceElements<sub>opt</sub>
+  ProgramBody<sub>opt</sub>
 
-SourceElements:
-  SourceElement
-  SourceElements SourceElement
-
-SourceElement:
-  Statement
-  FunctionDeclaration
+ProgramBody:
+  StatementList
   </pre>
 </section>
 
