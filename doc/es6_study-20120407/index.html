@@ -1,0 +1,246 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2012 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="1"/>
+  <title>ES.next 追っかけ - ECMAScript 勉強会</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <p id="bg-p">ECMAScript<br/>next</p>
+  <img src="Mozilla-Firefox.jpg" id="bg" width="500"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="100%" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">ES.next 追っかけ</h1>
+        <p style="font-size:30pt;">ECMAScript 勉強会<br/>2012-04-07</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide titlepage h1">
+  <h1>自己紹介</h1>
+</div>
+<div class="slide">
+  <h1>teramako</h1>
+  <dl>
+    <dt>はてな</dt>
+    <dd><a href="http://d.hatena.ne.jp/teramako/">id:teramako</a></dd>
+    <dt>Twitter</dt>
+    <dd><a href="https://twitter.com/teramako/">@teramako</a></dd>
+    <dt>Github</dt>
+    <dd><a href="https://github.com/teramako/">teramako</a></dd>
+  </dl>
+  <ul>
+    <li>Firefox拡張機能を作りたくてJavaScriptを勉強し始めた</li>
+    <li>次第に Mozilla JavaScript にはまってゆく
+      <ul>
+        <li>こじらせて E4X とか</li>
+      </ul>
+    </li>
+    <li><img src="firefox_hacks_rebooted.jpg" height="200"/> 本を書くのに参加したり(E4X部分とか)</li>
+    <li>未来のJavaScriptはどうなるの？が気になり始める</li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>ES.next 追っかけ</h1>
+  <p>僕がやっていること</p>
+</div>
+<div class="slide">
+  <h1>やっていること</h1>
+  <ul>
+    <li>メーリングリストの購読</li>
+    <li>ドラフト版の構文抽出</li>
+    <li>Mozilla の実装追いかけ</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>メーリングリストの購読</h1>
+  <p><a href="https://mail.mozilla.org/listinfo/es-discuss">es-discuss@mozilla.org</a></p>
+  <ul>
+    <li>ES.next を追っかけるなら購読するべし</li>
+    <li>流量多し。100以上の返信が付く事も</li>
+    <li>僕は読めてないorz
+      <ul>
+        <li>何に対して言及しているか何となくは読んで終了</li>
+        <li>Webサイトへのリンクがあれば目を通してみる</li>
+      </ul>
+    </li>
+    <li><a href="http://wiki.ecmascript.org/">wiki.ecmascript.org</a>に提案を書いて、このMLで議論を進める形が多い</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>構文抽出</h1>
+  <p><a href="http://teramako.github.com/ECMAScript/ecma6th_syntax.html">ECMAScript 6th Syntax Grammer</a> にドラフト版の構文をまとめてます</p>
+  <ul>
+    <li>ES.next では構文に対して多くの変更点がある</li>
+    <li>ドラフト版は最後の方にあるGrammer Summaryが更新されない</li>
+    <li>構文をまとめたものが欲しい</li>
+  </ul>
+  <p><img src="es6_grammer.png" align="left"></p>
+  <ol style="overflow:auto;">
+    <li>ML にドラフト版をアップしたよーアナウンスが流れる</li>
+    <li>変更点が色分けされたPDF版をダウンロード</li>
+    <li>構文の変更点に注目しつつHTMLに</li>
+  </ol>
+  <p style="clear:left">利用者は、主にConstellationさんです(only疑惑)</p>
+</div>
+<div class="slide">
+  <h1>Mozilla の実装追いかけ</h1>
+  <p>SpiderMonkeyのHarmony実装をトラッキングするメタバグがある</p>
+  <ul>
+    <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=694100">Bug 694100 - (harmony) [meta] Tracking bug for ECMAScript Harmony in SpiderMonkey</a>
+      <ul>
+        <li>CC listに登録 → 更新があるとメールが来る<br/>
+          <img src="harmony_meta_bug.png"/><br/>
+        </li>
+        <li>FIX される → Firefox Nightlyにしばらすると反映される → 動かしてみる</li>
+        <li>Scratchpad 便利</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide titlepage h1">
+  <h1>構文解析</h1>
+  <p>【ちょっとわき道】JavaScriptがどう構文解析されるか確認する</p>
+</div>
+<div class="slide">
+  <h1>SpiderMonkey で構文解析</h1>
+  <ul>
+    <li><code>Reflect.parse()</code>メソッド</li>
+    <li>結果をオブジェクトのツリーで返してくれる</li>
+  </ul>
+  <pre class="brush: mozjs">print(JSON.stringify(Reflect.parse("{ a:'A' } + 10"), null, "  "))</pre>
+  <ul>
+    <li>BlockStatement
+      <ul>
+        <li>LabeledStatement
+          <ul>
+            <li>identifier: a</li>
+            <li>ExpressionStatement
+              <ul>
+                <li>literal: 'A'</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>ExpressionStatement
+      <ul>
+        <li>UnaryExpression
+          <ul>
+            <li>operator: +</li>
+            <li>literal: 10</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Firefox で構文解析</h1>
+  <ul>
+    <li>SpiderMonkeyの<code>Reflect.parse</code>と同様ことができる</li>
+    <li><code>Cu.import("resource://gre/modules/reflect.jsm")</code></li>
+    <li>Scratchpad(about:configで<code>devtools.chrome.enabled</code>を<code>true</code>)が便利</li>
+  </ul>
+  <p><img src="fx_reflect_parse.png" height="400"/></p>
+</div>
+<div class="slide">
+  <h1>iv / js で解析</h1>
+  <p><a href="http://constellation.github.com/iv/js/es.next.html">iv / js, ES.next test</a></p>
+  <p><img src="iv_js_parse.png" height="500"/></p>
+</div>
+<div class="slide">
+  <h1>JavaScript syntax tree visualization with Esprima</h1>
+  <p><img src="tree_with_esprima.png" height="450" align="left"></p>
+  <p><a href="http://ariya.ofilabs.com/2012/04/javascript-syntax-tree-visualization-with-esprima.html">http://ariya.ofilabs.com/2012/04/javascript-syntax-tree-visualization-with-esprima.html</a></p>
+  <p>似たようなサンプルが...orz</p>
+  <p style="clear:left; text-align: right;"><ins>2012-04-05 追記</ins></p>
+</div>
+<div class="slide titlepage h1">
+  <h1>ECMAScript 系各種ページ</h1>
+</div>
+<div class="slide">
+  <h1>現行ECMAScript 5.1</h1>
+  <ul>
+    <li>PDF: <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">http://www.ecma-international.org/publications/standards/Ecma-262.htm</a></li>
+    <li>Web: <a href="http://es5.github.com/">http://es5.github.com/</a></li>
+  </ul>
+  <p>あえて言及する必要はないかも？</p>
+</div>
+<div class="slide">
+  <h1>wiki.ecmascript.org</h1>
+  <p><a href="http://wiki.ecmascript.org/doku.php">http://wiki.ecmascript.org/doku.php</a></p>
+  <p>ECMAScript に対する提案など</p>
+  <ul>
+    <li>Drafts: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">harmony:specification_drafts [ES Wiki]</a>
+      <ul>
+        <li>次期ECMAScript のドラフト仕様がここにアップされる</li>
+        <li>前回からの変更部分が色分けされる pdf with change markup の PDF ファイルがお勧め<br/>
+          <img src="es_drafts.png"/>
+        </li>
+      </ul>
+    </li>
+    <li><a href="http://people.mozilla.org/~jorendorff/es6-draft.html">ECMAScript Language Specification ECMA-262 6th Edition - DRAFT</a>
+      <ul>
+        <li>ドラフトのHTML版</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Quasis Demo</h1>
+  <p><a href="http://js-quasis-libraries-and-repl.googlecode.com/svn/trunk/index.html">http://js-quasis-libraries-and-repl.googlecode.com/svn/trunk/index.html</a></p>
+  <ul>
+    <li>テンプレート構文みたいな何か</li>
+    <li>ヒアドキュメントっぽい複数行にわたる文字列も書ける</li>
+    <li>ぶっちゃけ、きもい</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>キーワード化!?</h1>
+  <ul>
+    <li>let キーワード
+      <ul>
+        <li><a href="https://hg.mozilla.org/mozilla-central/rev/6d139ebc0f43">Mozilla JSでは let がキーワード化した</a></li>
+        <li>一方、<a href="http://trac.webkit.org/changeset/113352">WebKit では、Revertされた</a><br/>
+          <q>This does break the web</q>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <br/><br/>
+  <p>ES.next では新たなキーワード候補が多くあるが...どうなってしまうん？</p>
+</div>
+<div class="slide">
+  <table width="100%" height="90%"><tr><td style="text-align:center; font-size: 24pt;">
+  おしまい<br/>
+  ご清聴ありがとうございました。
+  </td></tr></table>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = false;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
