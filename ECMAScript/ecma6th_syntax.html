@@ -8,8 +8,8 @@
 <body>
 <header>
   <h1>ECMAScript 6th Syntax Grammer</h1>
-  <h2>6th Edition / Draft February 27, 2012</h2>
-  <p>この文章は <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=harmony%3Aspecification_drafts&cache=cache&media=harmony:working_draft_ecma-262_edition_6_2-27-12.pdf">working_draft_ecma-262_edition_6_2-27-12.pdf</a> の構文部分の一部を抜き取り、編集したものです。<br/>
+  <h2>6th Edition / Draft May 4, 2012</h2>
+  <p>この文章は <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=harmony%3Aspecification_drafts&cache=cache&media=harmony:working_draft_ecma-262_edition_6_5-4-12.pdf">working_draft_ecma-262_edition_6_5-4-12.pdf</a> の構文部分の一部を抜き取り、編集したものです。<br/>
   次期ECMAScriptのドラフトの最新版は<a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">harmony:specification_drafts [ES Wiki]</a>にあげられるはずです。</p>
 </header>
 
@@ -338,6 +338,8 @@ BooleanLiteral:
         <pre>
 NumericLiteral:
   DecimalLiteral
+  BinaryIntegerLiteral
+  OctalIntegerLiteral
   HexIntegerLiteral
 
 DecimalLiteral:
@@ -369,6 +371,22 @@ SignedInteger:
   DecimalDigits
   <em class="p">+</em> DecimalDigits
   <em class="p">-</em> DecimalDigits
+
+BinaryIntegerLiteral:
+  <em class="p">0b</em> BinaryDegit
+  <em class="p">0B</em> BinaryDegit
+  BinaryIntegerLiteral BinaryDegit
+
+BinaryDegit: <b>one of</b>
+  <em class="oneof">0 1</em>
+
+OctalIntegerLiteral:
+  <em class="p">0o</em> OctalDigit
+  <em class="p">0O</em> OctalDigit
+  OctalIntegerLiteral OctalDigit
+
+OctalDigit: <b>one of</b>
+  <em class="oneof">0 1 2 3 4 5 6 7</em>
 
 HexIntegerLiteral:
   0x HexDigit
@@ -629,7 +647,11 @@ ComprehensionForList:
   ComprehensionForList ComprehensionFor
 
 ComprehensionFor:
-  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em>
+  <em class="k">for</em> ForBinding <em class="k">of</em> Expression
+
+ForBinding:
+  BindingIdentifier
+  BindingPattern
         </pre>
       </section>
     </section>
@@ -643,29 +665,22 @@ SealedObjectLiteral:
 
 ObjectLiteral:
   <em class="p">{ }</em>
-  <em class="p">{</em> PropertyNameAndValueList <em class="p">}</em>
-  <em class="p">{</em> PropertyNameAndValueList <em class="p">,</em> <em class="p">}</em>
+  <em class="p">{</em> PropertyDefinitionList <em class="p">}</em>
+  <em class="p">{</em> PropertyDefinitionList <em class="p">,</em> <em class="p">}</em>
 
-PropertyNameAndValueList:
-  PropertyAssignment
-  PropertyNameAndValueList <em class="p">,</em> PropertyAssignment
+PropertyDefinitionList:
+  PropertyDefinition
+  PropertyDefinitionList <em class="p">,</em> PropertyDefinition
 
-PropertyAssignment:
+PropertyDefinition:
   IdentifierName
   PropertyName <em class="p">:</em> AssignmentExpression
-  PropertyName <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
-  <em class="p">*</em> PropertyName <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
-  <em class="k">get</em> PropertyName <em class="p">( ) {</em> FunctionBody <em class="p">}</em>
-  <em class="k">set</em> PropertyName <em class="p">(</em> PropertySetParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
+  MethodDefinition
 
 PropertyName:
   IdentifierName
   StringLiteral
   NumericLiteral
-
-PropertySetParameterList:
-  BindingIdentifier
-  BindingPattern
       </pre>
     </section>
   </section>
@@ -682,7 +697,7 @@ ComprehensionForList:
   ComprehensionForList ComprehensionFor
 
 ComprehensionFor:
-  <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em>
+  <em class="k">for</em> LeftHandSideExpression <em class="k">of</em> Expression
     </pre>
   </section>
 
@@ -724,6 +739,7 @@ TriangleLiteral:
   SealedArrayLiteral
   SealedObjectLiteral
   FunctionExpression
+  ArrowFunctioin
   ValueLiteral
 
 LeftHandSideExpression:
@@ -910,11 +926,14 @@ ConditionalExpressionNoIn:
 AssignmentExpression:
   ConditionalExpression
   YieldExpression
+  ArrowFunctioin
   LeftHandSideExpression <em class="p">=</em> AssignmentExpression
   LeftHandSideExpression AssignmentOperator AssignmentExpression
 
 AssignmentExpressionNoIn:
   ConditionalExpressionNoIn
+  YieldExpression
+  ArrowFunctioin
   LeftHandSideExpression <em class="p">=</em> AssignmentExpressionNoIn
   LeftHandSideExpression AssignmentOperator AssignmentExpressionNoIn
 
@@ -1167,22 +1186,14 @@ IterationStatement:
   <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> VariableDeclarationListNoIn <em class="p">;</em> Expression<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub> <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> LexicalDeclarationNoIn <em class="p">;</em> Expression<sub>opt</sub><em class="p">;</em> Expression<sub>opt</sub> <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">in</em> Expression <em class="p">)</em> Statement
-  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> BindingIdentifier <em class="k">in</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> ForBinding <em class="k">in</em> Expression <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> ForDeclaration <em class="k">in</em> Expression <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> LeftHandSideExpression <em class="k">of</em> Expression <em class="p">)</em> Statement
-  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> ForVarDeclaration <em class="k">of</em> Expression <em class="p">)</em> Statement
+  <em class="k">for</em> <em class="p">(</em> <em class="k">var</em> ForBinding <em class="k">of</em> Expression <em class="p">)</em> Statement
   <em class="k">for</em> <em class="p">(</em> ForDeclaration <em class="k">of</em> Expression <em class="p">)</em> Statement
-
-ForVarDeclaration:
-  BindingPattern
-  VariableDeclarationNoIn
 
 ForDeclaration:
   LetOrConst ForBinding
-
-ForBinding:
-  BindingIdentifier
-  BindingPattern
     </pre>
   </section>
 
@@ -1328,7 +1339,47 @@ FunctionBody:
   </section>
 
   <section>
-    <h3 id="13.2">Generator Definitions</h3>
+    <h2 id="13.2">Arrow Function Definitions</h2>
+    <pre>
+ArrowFunctioin:
+  ArrowParameters <em class="p">=></em> ConciseBody
+
+ArrowParameters:
+  BindingIdentifier
+  <em class="p">(</em> ArrowFormalParameterList <em class="p">)</em>
+
+ArrowFormalParameterList:
+  <small>[empty]</small>
+  FunctionRestParameter
+  CoverFormalList
+  CoverFormalList <em class="p">,</em> FunctionRestParameter
+
+ConciseBody:
+  <small>[lookahead &notin; { <em class="p">{</em> }]</small> AssignmentExpression
+  <em class="p">{</em> FunctionBody <em class="p">}</em>
+
+CoverFormalList:
+  Expression
+    </pre>
+  </section>
+
+  <section>
+    <h2 id="13.3">Method Definitions</h2>
+    <pre>
+MethodDefinition:
+  PropertyName <em class="p">(</em> FormalParameterList <em class="p">)</em> ConciseBody
+  <em class="p">*</em> PropertyName <em class="p">(</em> FormalParameterList <em class="p">)</em> ConciseBody
+  <em class="k">get</em> PropertyName <em class="p">( )</em> ConciseBody
+  <em class="k">set</em> PropertyName <em class="p">(</em> PropertySetParameterList <em class="p">)</em> ConciseBody
+
+PropertySetParameterList:
+  BindingIdentifier
+  BindingPattern
+    </pre>
+  </section>
+
+  <section>
+    <h3 id="13.4">Generator Definitions</h3>
     <pre>
 GeneratorDeclaration:
   <em class="k">function</em> <em class="p">*</em> BindingIdentifier <em class="p">(</em> FormalParameterList <em class="p">) {</em> FunctionBody <em class="p">}</em>
@@ -1453,7 +1504,9 @@ ProgramBody:
     <li><a href="#13">13 Function and Generators</a>
       <ul>
         <li><a href="#13.1">13.1 Function Definitions</a></li>
-        <li><a href="#13.2">13.2 Generator Definitions</a></li>
+        <li><a href="#13.2">13.2 Arrow Function Definitions</a></li>
+        <li><a href="#13.3">13.3 Method Definitions</a></li>
+        <li><a href="#13.4">13.4 Generator Definitions</a></li>
       </ul>
     </li>
     <li><a href="#14">14 Program</a></li>
