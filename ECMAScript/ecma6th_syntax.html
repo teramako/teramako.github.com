@@ -728,7 +728,7 @@ TriangleLiteral:
   SealedArrayLiteral
   SealedObjectLiteral
   FunctionExpression
-  ArrowFunctioin
+  ArrowFunction
   ValueLiteral
 
 LeftHandSideExpression:
@@ -915,14 +915,14 @@ ConditionalExpressionNoIn:
 AssignmentExpression:
   ConditionalExpression
   YieldExpression
-  ArrowFunctioin
+  ArrowFunction
   LeftHandSideExpression <em class="p">=</em> AssignmentExpression
   LeftHandSideExpression AssignmentOperator AssignmentExpression
 
 AssignmentExpressionNoIn:
   ConditionalExpressionNoIn
   YieldExpression
-  ArrowFunctioin
+  ArrowFunction
   LeftHandSideExpression <em class="p">=</em> AssignmentExpressionNoIn
   LeftHandSideExpression AssignmentOperator AssignmentExpressionNoIn
 
@@ -1330,7 +1330,7 @@ FunctionBody:
   <section>
     <h2 id="13.2">Arrow Function Definitions</h2>
     <pre>
-ArrowFunctioin:
+ArrowFunction:
   ArrowParameters <em class="p">=></em> ConciseBody
 
 ArrowParameters:
