@@ -1,0 +1,74 @@
+/**
+ * @projectdescription JavaScript Shell
+ * @version 0.1
+ */
+:root {
+  font-family: monospace;
+  line-height: 1.5;
+}
+body {
+  margin: 8px; padding: 0;
+}
+#input {
+  border: none;
+  white-space: pre;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  padding-left: 0.5em;
+  overflow: hidden;
+  min-height: 1.5em;
+}
+.code {
+  border: none;
+  white-space: pre;
+  overflow: hidden;
+  -moz-tab-size: 4;
+}
+#inputContainer {
+  margin-top: 5px;
+}
+#inputContainer:after, .codeline:after {
+  clear: both;
+  content:"";
+}
+.codeline {
+  overflow: hidden;
+  max-height: 100%;
+  height: auto;
+}
+.prompt {
+  height: 1.5em;
+  display: inline-block;
+  float: left;
+  margin-right: 0.5em;
+}
+.error { color: red; }
+.normal { color: black; }
+.echo { color: magenta; white-space: pre;}
+.propName { font-weight: bold; }
+.propAttr { color: gray; }
+.propValue { white-space: pre; }
+.getter::before {
+  content: "[getter]: ";
+}
+.setter::before {
+  content: "[setter]: ";
+}
+#toolbox {
+  position: fixed;
+  width: 50%;
+  top: 10px;
+  right: 10px;
+}
+#esprima {
+  border: thin solid ThreeDShadow;
+  border-radius: 5px;
+  background-color: silver;
+  max-height: 40em;
+  overflow: auto;
+  padding: 0 0.5em;
+}
+.hidden {
+  visibility: collapse;
+}
+

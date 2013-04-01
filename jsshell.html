@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript Shell</title>
+  <script src="esprima.js"></script>
+  <link rel="StyleSheet" href="style/orion.css">
+  <link rel="StyleSheet" href="style/jsshell.css">
+  <script src="js/orion.js"></script>
+</head>
+<body>
+<h1>JavaScript Shell</h1>
+<main id="content">
+  <div id="output" contextmenu="shellContextMenu"></div>
+  <div id="inputContainer">
+    <div class="prompt">js&gt;</div>
+    <!--div id="input" contenteditable="true" contextmenu="shellContextMenu"></div-->
+    <pre id="input" class="editor" contextmenu="shellContextMenu"></pre>
+  <div>
+</main>
+<section id="toolbox">
+  <div id="esprima" class="hidden">
+    <h2>Esprima.parse</h2>
+    <pre id="parseResult"></pre>
+  </div>
+  <div id="completion"></div>
+</section>
+<menu id="shellContextMenu" type="context" oncontext="console.log(event);">
+  <menuitem id="parseCmd" label="Esprima.parse"></menuitem>
+  <menuitem id="clearCmd" label="Clear"></menuitem>
+</menu>
+<script>
+(function(){
+  var script = document.createElement("script");
+  script.src = "js/jsshell.js";
+  if (/Firefox\/[0-9.]+$/.test(navigator.userAgent))
+    script.setAttribute("type", "application/javascript;version=1.8");
+
+  document.body.appendChild(script);
+}());
+</script>
+</body>
+</html>
