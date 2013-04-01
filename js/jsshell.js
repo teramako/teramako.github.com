@@ -2,9 +2,10 @@
 (function(win){
   "use strict";
   var evalCode = eval;
-  var config = {
+  var config = Object.preventExtensions({
+    /** console.log 系の制御 */
     debug: true,
-  };
+  });
 
   // ====================================================
   // Utilities
