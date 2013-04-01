@@ -186,6 +186,9 @@
   // 1}}}
 
 
+  // ====================================================
+  // Editor class
+  // ================================================{{{1
   function Editor (editor) {
     this.editor = editor;
     this.view = editor.getTextView();
@@ -215,6 +218,16 @@
         this.view.setAction(act.id, act.handler.bind(this), act.description);
       }, this);
     },
+    /**
+     * actions::[]  {{{2
+     * エディタ上でのカスタム・アクション
+     * @type {Object[]}
+     * {
+     *   id:          {String} keyBinding.id と対応
+     *   description: {String} 概要
+     *   handler:     {Function} アクション内容
+     * }
+     */
     actions: [
       {
         id: "execOrFeed",
@@ -245,17 +258,47 @@
           return true;
         },
       }
-    ],
+    ], // 2}}}
+    /**
+     * keyBindings::[] {{{2
+     * エディタへ設定するカスタム・キーバインド
+     * @type {Object[]}
+     * {
+     *   id:       {String}        アクションのidと対応
+     *   key:      {String|Number} 入力キー文字 or AsciiCode
+     *   override: {Boolean}       既存キーバインドを上書きするか
+     *   accel:    {Boolean}       Ctrl (Macの場合はCommand) の有無
+     *   shift:    {Boolean}       Shift の有無
+     *   meta:     {Boolean}       Alt (Macの場合はOption) の有無
+     * }
+     */
     keyBindings: [
       { id: "execOrFeed", key: 13, override: true },
       { id: "exec",       key: "r", accel: true  },
       { id: "clear",      key: "l", accel: true, override: true },
-    ],
+    ], // 2}}}
+    /**
+     * onModelChanged (Object::e) {{{2
+     * エディタ内で発生するイベントのハンドラ
+     * エディタの高さを行数に合わせる
+     * @param {Object} e
+     * @param {Number} e.addedLineCount
+     * @param {Number} e.removedLineCount
+     * @param {Number} e.addedCharCount
+     * @param {Number} e.removedCharCount
+     */
     onModelChanged: function onModelChanged (e) {
+      // TODO: 16(行の高さ)のマジックナンバー良くない
       if (e.addedLineCount > 0 || e.removedLineCount > 0) {
         this.editor._domNode.style.height = (2 + 16 * this.model.getLineCount()) + "px";
       }
-    },
+    }, // 2}}}
+    /**
+     * validateCode ([String::aCode]) {{{2
+     * esprima.parse() が成功するか否か
+     * @param {String} [aCode]
+     * @return {Boolean}
+     */
     validateCode: function (aCode) {
       if (!aCode)
         aCode = this.model.getText().trim();
@@ -269,7 +312,17 @@
         return false;
       }
       return true;
-    },
+    }, // 2}}}
+    /**
+     * exec ([String::aCode]) {{{2
+     * 入力されたコードの実行(eval)
+     * 1. 履歴へ追加 @see History.add
+     * 2. 入力コードの出力 @see Editor.setCodeLine
+     * 3. 実行
+     * 4. 実行結果出力 @see Editor.printResult
+     * 5. 入力欄へスクロール
+     * 6. 入力欄のクリア @see Editorclear
+     */
     exec: function (aCode) {
       if (!aCode)
         aCode = this.model.getText().trim();
@@ -289,7 +342,11 @@
       this.printResult(res, success);
       this.editor._domNode.scrollIntoView();
       this.clear();
-    },
+    }, // 2}}}
+    /**
+     * printResult (Any::aResult, Boolean::aSuccess) {{{2
+     * 実行結果を出力
+     */
     printResult: function (aResult, aSuccess) {
       if (!aSuccess && aResult instanceof Error) {
         output.insertAdjacentHTML("BeforeEnd",
@@ -297,11 +354,21 @@
       } else {
         output.insertAdjacentHTML("BeforeEnd", '<div class="normal">' + objectToString(aResult) + '</div>');
       }
-    },
+    }, // 2}}}
+    /**
+     * clear () {{{2
+     * 入力ボックスの内容を削除
+     */
     clear: function () {
       this.view.setSelection(0, Infinity, false);
       this.view._doDelete();
-    },
+    }, // 2}}}
+    /**
+     * setCodeLine (String::aPromptName) {{{2
+     * 入力コードの内容を出力
+     * @param {String} aPromptName
+     * @return {Element} appendした要素
+     */
     setCodeLine: function (aPromptName) {
       var content = this.editor._domNode.querySelector(".textviewContent");
       if (!content)
@@ -310,12 +377,21 @@
       content = content.cloneNode(true);
       content.contentEditable = false;
       content.removeAttribute("style");
+
+      // remove unnecessary class
       Array.prototype.forEach.call(content.querySelectorAll(".currentLine,.currentBracket,.matchingBracket"),
         function (node) {
           node.classList.remove("currentLine");
           node.classList.remove("currentBracket");
           node.classList.remove("matchingBracket");
         });
+
+      /*
+       * <div class="codeline">
+       *  <div class="prompt">${aPromptName}&gt;</div>
+       *  <div class="code">${content}</div>
+       * </div>
+       */
       var container = document.createElement("div"),
           prompt = document.createElement("div"),
           code = document.createElement("div");
