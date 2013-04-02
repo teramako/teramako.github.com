@@ -1,0 +1,32 @@
+body { counter-reset: section; }
+h3:before { counter-increment: section; content: counter(section) ". "; }
+hgroup > h2 { margin: 0; }
+hgroup > p { margin: 0; font-size: small; }
+section { display: block; }
+section + section { margin-top: 3em; }
+#result p, #result h3 { margin: 0; }
+.time { color: red; }
+.time:before { content: "TotalTime: "; }
+.time:after { content: " ms"; }
+#code {
+  padding: 5px;
+  position: fixed;
+  top: 10%;
+  right: 2%;
+  color: white;
+  background-color: rgba(32,32,32,0.9);
+  max-height: 85%;
+  width: 75%;
+  overflow: auto;
+  display: none;
+  border: thin solid black;
+  -moz-border-radius: 10px;
+  font-family: monospace;
+  -moz-box-shadow: 5px 5px 5px rgba(128,128,128,0.5), 5px -5px 5px rgba(128,128,128,0.5), -5px 5px 5px rgba(128,128,128,0.5), -5px -5px 5px rgba(128,128,128,0.5);
+}
+
+img.cap {
+  -moz-box-shadow: 10px 10px 15px rgba(128,128,128,0.9);
+  border: thin solid silver;
+}
+

@@ -1,0 +1,188 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="jp">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="copyright" content="Copyright &#169; 2012 Makoto Terada"/>
+  <meta name="font-size-adjustment" content="2"/>
+  <title>Preprocessor - Mozilla勉強会</title>
+  <link rel="StyleSheet" href="../slidy.css" type="text/css"/>
+  <link rel="StyleSheet" href="./slide.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shCore.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/default.css" type="text/css"/>
+  <link rel="StyleSheet" href="../syntaxhighlighter/styles/shThemeMidnight.css" type="text/css"/>
+  <script src="../slidy.js" charset="utf-8" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushMozJS.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+  <script src="../syntaxhighlighter/scripts/shBrushBash.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="background">
+  <p id="bg-p">Mozilla<br/>勉強会</p>
+  <img src="Mozilla-Firefox.jpg" id="bg" width="500"/>
+</div>
+<div class="slide titlepage">
+  <table height="75%" width="100%" style="text-align:center;">
+    <tr>
+      <td>
+        <h1 style="font-size:64pt">Preprocessor</h1>
+        <p style="font-size:30pt;">Mozilla 勉強会<br/>2012-08-18</p>
+      </td>
+    </tr>
+  </table>
+  <address>by teramako &lt;<a href="mailto:teramako@gmail.com">teramako@gmail.com</a>&gt;</address>
+</div>
+<div class="slide">
+  <h1>自己紹介</h1>
+  <dl>
+    <dt>はてな</dt>
+    <dd><a href="http://d.hatena.ne.jp/teramako/">id:teramako</a></dd>
+    <dt>Twitter</dt>
+    <dd><a href="https://twitter.com/teramako/">@teramako</a></dd>
+    <dt>Github</dt>
+    <dd><a href="https://github.com/teramako/">teramako</a></dd>
+  </dl>
+  <ul>
+    <li>Firefox拡張機能を作りたくてJavaScriptを勉強し始めた</li>
+    <li>次第に Mozilla JavaScript にはまってゆく(こじらせて E4X とか)</li>
+    <li><img src="firefox_hacks_rebooted.jpg" height="200"/> 本を書くのに参加したり(E4X部分とか)</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>プリプロセッサ</h1>
+  <div>
+    <blockquote>
+    コンパイル処理において、プリプロセッサ(preprocessor)とは、コンパイラがソースコードをコンパイルする前に、一旦ソースコードに処理を施すためのプログラムである。
+    </blockquote>
+    <p style="text-align:right; margin-right: 5em;"><cite><a href="http://ja.wikipedia.org/wiki/プリプロセッサ">プリプロセッサ - Wikipedia</a></cite> より</p>
+  </div>
+  <br/><br/>
+  <p class="big">つまり、C言語とかのアレ</p>
+</div>
+<div class="slide">
+  <p class="big">
+    #include &lt;stdio.h&gt;<br/><br/>
+    とか<br/><br/>
+    #ifdef, #endif<br/><br/>
+    とか
+  </p>
+</div>
+<div class="slide">
+  <h1>Firefox のソースコード</h1>
+  <p>例えば、<a href="http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.xul">http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.xul</a></p>
+  <ul>
+    <li>#include</li>
+    <li>#ifdef</li>
+    <li>...</li>
+  </ul>
+  <p>各種環境に対応できるよう、JS,XML,CSSにもプリプロセッサを適用している</p>
+</div>
+<div class="slide">
+  <p class="big">C,C++などなら分かるが、<br/>JS,XML,CSSにプリプロセッサ？</p>
+</div>
+<div class="slide">
+  <h1>Preprocessor.py</h1>
+  <ul>
+    <li>Pythonコード</li>
+    <li><a href="http://mxr.mozilla.org/mozilla-central/source/config/">http://mxr.mozilla.org/mozilla-central/source/config/</a> にある</li>
+    <li>動かすには同ディレクトリにあるExpression.pyも必要</li>
+    <li>テキストファイルなら汎用的に使える
+      <ul>
+        <li>一部、.js, .java に限り特殊な部分があり（ハードコーディングされている）</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>使い方</h1>
+  <pre>python Preprocessor.py [ options ...] 入力ファイル &gt; 出力ファイル</pre>
+  <ul>
+    <li>出力は<em>標準出力</em>
+      <ul>
+        <li>必要(普通)ならリダイレクトを使用</li>
+      </ul>
+    </li>
+    <li>他のオプション等は <a href="http://moz-addon.g.hatena.ne.jp/teramako/20120715/1342300336">XPI 作成用 Makefile - Mozilla 拡張機能勉強会</a> を参照</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1><code>-D</code> オプション</h1>
+  <p><code>#ifdef</code> や <code>#if</code>,<code>#elif</code> などで使用するキー(と値)の定義</p>
+  <ul style="float:left">
+    <li><code>-D<var>Key</var>=<var>Value</var></code></li>
+    <li><code>-D<var>Key</var></code>
+      <ul>
+        <li><code>-D<var>Key</var>=1</code> と同じ</li>
+      </ul>
+    </li>
+  </ul>
+  <div style="max-width: 20em;">
+  <pre class="brush: mozjs">
+  #if OS == Darwin
+  // MacOS用コード
+  // ....
+  #endif
+
+  #ifdef HAS_FOO
+  // FOO の機能を持っているなら...
+  // ...
+  #endif
+  </pre>
+  </div>
+  <pre class="brush: bash" style="float:right;">
+  python Preprocessor.py -D OS=`uname` -DHAS_FOO foo.js
+  </pre>
+</div>
+<div class="slide">
+  <h1><code>-F</code> オプション</h1>
+  <p>フィルターの使用オプション</p>
+  <table border="1" align="center" width="90%">
+    <thead>
+      <tr>
+        <th>オプション</th>
+        <th>効果</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>-Fsubstitution</td>
+        <td>置換処理。<code>@<var>KEY</var>@</code>を<code>-D</code>で定義した値に置換する</td>
+      </tr>
+      <tr>
+        <td>-FemptyLines</td>
+        <td>空行部分の削除</td>
+      </tr>
+      <tr>
+        <td>-Fslashslash</td>
+        <td><code>//</code>のコメント部分を削除。（エラーが出て使えない）</td>
+      </tr>
+      <tr>
+        <td>-Fspaces</td>
+        <td>連続する空白を一つの半角空白にまとめる</td>
+      </tr>
+    </tbody>
+  </table>
+  <pre class="brush: bash">
+  python Preprocessor.py -DOS=`uname` -Fsubstitution foo.js
+  </pre>
+  <pre class="brush: mozjs">
+  var OS = "@OS@";
+  </pre>
+</div>
+<div class="slide">
+  <table width="100%" height="90%"><tr><td style="text-align:center; font-size: 24pt;">
+  おしまい<br/>
+  ご清聴ありがとうございました。
+  </td></tr></table>
+</div>
+<script type="text/javascript">
+SyntaxHighlighter.defaults["gutter"] = false;
+SyntaxHighlighter.defaults["auto-links"] = false;
+SyntaxHighlighter.defaults["toolbar"] = false;
+SyntaxHighlighter.defaults["tab-size"] = 2;
+SyntaxHighlighter.all()
+</script>
+</body>
+</html>
+<!--
+vim: sw=2 ts=2 et:
+-->
