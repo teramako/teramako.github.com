@@ -84,7 +84,7 @@
       this.currentIndex = this.list.length;
     },
     getPrev: function History_getPrev () {
-      if (this.currentIndex === 0)
+      if (this.currentIndex < 0)
         return "";
 
       return this.list[--this.currentIndex];
@@ -95,7 +95,7 @@
 
       return this.list[++this.currentIndex];
     },
-    cleer: function History_clear () {
+    clear: function History_clear () {
       this.list = [];
       this.currentIndex = 0;
     },
@@ -219,6 +219,40 @@
           output.innerHTML = "";
           return true;
         },
+      }, {
+        id: "historyPrevious", // Ctrl + p
+        description: "Show previous history",
+        handler: function historyPrevCmd () {
+          log.group("historyPrevious");
+          var code = this.history.getPrev();
+          log("code:", code);
+          this.clear();
+          if (code) {
+            this.view.setText(code);
+            this.view.setCaretOffset(code.length);
+          } else {
+            this.view.setText("");
+          }
+          log.group();
+          return true;
+        },
+      }, {
+        id: "historyNext", // Ctrl + n
+        description: "Show next history",
+        handler: function historyNextCmd () {
+          log.group("historyNext");
+          var code = this.history.getNext();
+          log("code:", code);
+          this.clear();
+          if (code) {
+            this.view.setText(code);
+            this.view.setCaretOffset(code.length);
+          } else {
+            this.view.setText("");
+          }
+          log.group();
+          return true;
+        },
       }
     ], // 2}}}
     /**
@@ -238,6 +272,8 @@
       { id: "execOrFeed", key: 13, override: true },
       { id: "exec",       key: "r", accel: true  },
       { id: "clear",      key: "l", accel: true, override: true },
+      { id: "historyPrevious", key: "p", accel: true, override: true },
+      { id: "historyNext",     key: "n", accel: true, override: true },
     ], // 2}}}
     /**
      * onModelChanged (Object::e) {{{2
