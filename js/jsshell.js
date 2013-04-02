@@ -190,7 +190,7 @@
      */
     actions: [
       {
-        id: "execOrFeed",
+        id: "execOrFeed", // Return
         description: "eval the code or line feed",
         handler: function execOrFeedCmd () {
           log.group("execOfFeed");
@@ -204,14 +204,16 @@
           return true;
         },
       }, {
-        id: "exec",
+        id: "exec", // Ctrl + r
         description: "eval the code",
         handler: function execCmd () {
+          log.group("exec code");
           this.exec();
+          log.group();
           return true;
         },
       }, {
-        id: "clear",
+        id: "clear", // Ctrl + l
         description: "clear output",
         handler: function clearCmd () {
           output.innerHTML = "";
@@ -287,6 +289,7 @@
       if (!aCode)
         aCode = this.model.getText().trim();
 
+      log.group("exec: " + aCode);
       this.history.add(aCode);
       this.setCodeLine("js");
       var res,
@@ -302,6 +305,7 @@
       this.printResult(res, success);
       this.editor._domNode.scrollIntoView();
       this.clear();
+      log.group();
     }, // 2}}}
     /**
      * printResult (Any::aResult, Boolean::aSuccess) {{{2
@@ -333,10 +337,8 @@
      * @return {Element} appendした要素
      */
     setCodeLine: function (aPromptName) {
-      var content = this.editor._domNode.querySelector(".textviewContent");
-      if (!content)
-        return;
 
+      var content = this.editor._domNode.querySelector(".textviewContent");
       content = content.cloneNode(true);
       content.contentEditable = false;
       content.removeAttribute("style");
@@ -494,7 +496,13 @@
   });
 
   require(["orion/editor/edit"], function (edit) {
-    var editor = edit({ parent: "input", lang: "js", showLinesRuler: false, });
+    var editor = edit({
+      parent: "input",
+      lang: "js",
+      showLinesRuler: true,
+      showAnnotationRuler: false,
+      showOverviewRuler: false,
+    });
     gEditor = new Editor(editor);
   });
 
