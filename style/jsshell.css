@@ -1,0 +1,153 @@
+/**
+ * @projectdescription JavaScript Shell
+ * @version 0.1
+ */
+:root {
+  font-family: monospace;
+  line-height: 1.5;
+}
+body {
+  margin: 8px; padding: 0;
+}
+
+/*
+ * header
+ */
+body > header {
+  line-height: 1;
+  margin: 0 0 1em 0;
+}
+header > h1 {
+  display: inline-block;
+  margin: 0 1em 0 0;
+}
+h1 +  p {
+  display: inline-block;
+  content: "";
+}
+
+#input {
+}
+/* editor */
+#inputContainer {
+  margin-top: 5px;
+}
+#inputContainer::after {
+  clear: both;
+  content:"";
+}
+
+/*
+ * code line
+ */
+.codeline {
+  overflow: hidden;
+  margin-top: 0.5em;
+  max-height: 100%;
+  height: auto;
+}
+.codeline::after {
+  clear: both;
+  content: "";
+}
+.codeline > .prompt {
+  background-color: #EAF2FE;
+}
+.prompt {
+  height: 1.5em;
+  display: inline-block;
+  float: left;
+  margin-right: 0.5em;
+  -moz-user-select: none;
+}
+.code {
+  border: none;
+  white-space: pre;
+  overflow: hidden;
+  -moz-tab-size: 4;
+}
+/*
+ * output result
+ */
+#output {
+  line-height: 1;
+}
+#output p { margin: 0; }
+.error { background-color: red: color: white; }
+.normal { color: black; white-space: pre; }
+.echo { color: magenta; white-space: pre;}
+
+.elapse {
+  color: gray;
+}
+.elapse::before {
+  content: "Elapse:";
+  margin-right: 0.5em;
+}
+.elapse::after {
+  content: "ms";
+  margin-left: 0.5em;
+}
+
+/* inspect command */
+.keyValueTable td {
+  vertical-align: top;
+}
+.propName { font-weight: bold; }
+.propAttr { color: gray; }
+.propValue { white-space: pre; }
+.type-getter::before {
+  content: "[getter]: ";
+}
+.type-setter::before {
+  content: "[setter]: ";
+}
+.type-string {
+  quotes: '"' '"';
+  color: red;
+}
+.type-string::before {
+  content: open-quote;
+}
+.type-string::after {
+  content: close-quote;
+}
+.type-boolean {
+  color: saddlebrown;
+}
+.type-number {
+  color: blue;
+}
+.type-null, .type-undefined {
+  color: darkgoldenrod;
+}
+.type-object {
+  color: deeppink;
+}
+
+/*
+ * toolbox
+ */
+#toolbox {
+  position: fixed;
+  width: 50%;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+#esprima {
+  border: thin solid ThreeDShadow;
+  border-radius: 5px;
+  background-color: silver;
+  max-height: 40em;
+  overflow: auto;
+  padding: 0 0.5em;
+}
+#esprima h2 {
+  display: inline-block;
+  margin: 0 1em;
+}
+.hidden {
+  visibility: collapse;
+}
+

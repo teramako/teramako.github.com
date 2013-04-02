@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript Shell</title>
+  <link rel="StyleSheet" href="style/orion.css">
+  <link rel="StyleSheet" href="style/jsshell.css">
+  <script src="js/esprima.js"></script>
+  <script src="js/orion.js"></script>
+</head>
+<body>
+<header>
+  <h1>JavaScript Shell</h1>
+  <p>powered by <a href="http://www.eclipse.org/orion/">Orion</a> and <a href="http://esprima.org/">Esprima</a>.</p>
+</header>
+<main id="content" contextmenu="shellContextMenu">
+  <div id="output"></div>
+  <div id="inputContainer">
+    <div class="prompt">js&gt;</div>
+    <!--div id="input" contenteditable="true" contextmenu="shellContextMenu"></div-->
+    <pre id="input" class="editor"></pre>
+  <div>
+</main>
+<section id="toolbox">
+  <div id="esprima" class="hidden">
+    <h2>Esprima.parse</h2><button id="esprimaCloseButton">X</button>
+    <pre id="parseResult"></pre>
+  </div>
+  <div id="completion"></div>
+</section>
+<menu id="shellContextMenu" type="context" oncontext="console.log(event);">
+  <menuitem id="parseCmd" label="Esprima.parse"></menuitem>
+  <menuitem id="clearCmd" label="Clear"></menuitem>
+</menu>
+<script>
+(function(){
+  var script = document.createElement("script");
+  script.src = "js/jsshell.js";
+  if (/Firefox\/[0-9.]+$/.test(navigator.userAgent))
+    script.setAttribute("type", "application/javascript;version=1.8");
+
+  document.body.appendChild(script);
+}());
+</script>
+</body>
+</html>
