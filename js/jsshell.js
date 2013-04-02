@@ -5,6 +5,7 @@
   var config = Object.preventExtensions({
     /** console.log 系の制御 */
     debug: true,
+    timer: false,
   });
 
   // ====================================================
@@ -65,6 +66,14 @@
         console.groupEnd();
     },
   });
+
+  var now = (function() {
+    if (win.performance && typeof win.performance.now === "function") {
+      return function(){ return performance.now(); };
+    } else {
+      return function(){ return Date.now(); };
+    }
+  }());
   // 1}}}
 
   // ====================================================
@@ -329,16 +338,20 @@
       this.history.add(aCode);
       this.setCodeLine("js");
       var res,
-          success = true;
+          success = true,
+          startTime, endTime;
       try {
+        startTime = now();
         res = evalCode(aCode);
+        endTime = now();
         log("result:", res);
+        log("elapse:", endTime - startTime);
       } catch(e) {
         res = e;
         log.error("result:", e);
         success = false;
       }
-      this.printResult(res, success);
+      this.printResult(res, success, endTime - startTime);
       this.editor._domNode.scrollIntoView();
       this.clear();
       log.group();
@@ -347,7 +360,7 @@
      * printResult (Any::aResult, Boolean::aSuccess) {{{2
      * 実行結果を出力
      */
-    printResult: function (aResult, aSuccess) {
+    printResult: function (aResult, aSuccess, aElapse) {
       if (!aSuccess && aResult instanceof Error) {
         output.insertAdjacentHTML("BeforeEnd",
           '<div class="error">' + aResult.toString() + '</div>');
@@ -356,6 +369,8 @@
         if (str)
           output.insertAdjacentHTML("BeforeEnd", '<div class="normal">' + str + '</div>');
       }
+      if (config.timer) {
+        output.insertAdjacentHTML("BeforeEnd", '<p><time class="elapse">' + aElapse + '</time></p>');
       }
     }, // 2}}}
     /**

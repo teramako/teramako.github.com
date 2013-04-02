@@ -77,6 +77,18 @@ h1 +  p {
 .normal { color: black; white-space: pre; }
 .echo { color: magenta; white-space: pre;}
 
+.elapse {
+  color: gray;
+}
+.elapse::before {
+  content: "Elapse:";
+  margin-right: 0.5em;
+}
+.elapse::after {
+  content: "ms";
+  margin-left: 0.5em;
+}
+
 /* inspect command */
 .keyValueTable td {
   vertical-align: top;
