@@ -139,47 +139,7 @@
     },
     inspect: {
       value: function (obj, onlyEnumerable) {
-        var keys = onlyEnumerable ? Object.keys(obj) : Object.getOwnPropertyNames(obj);
-        var i = 0, length = keys.length;
-        var attr, desc, value, type;
-        var msg = '<table border="0"><tr>';
-        for (; i < length; ++i) {
-          attr = "";
-          msg += '<td class="propName">' + keys[i] + '</td>';
-          desc = Object.getOwnPropertyDescriptor(obj, keys[i]);
-          if (desc.enumerable)
-            attr += "E";
-
-          try {
-            if ('value' in desc) {
-              if (desc.writable)
-                attr += "W";
-
-              type = typeof(desc.value);
-              switch (type) {
-                case "string":
-                  value = escapeHTML(desc.value.quote()); break;
-                case "function":
-                  value = escapeHTML(desc.value.toString()); break;
-                default:
-                  value = desc.value; break;
-              }
-              value = '<span class="' + type + '">' + value + '</span>';
-            } else {
-              type = "";
-              value = desc.get ? '<span class="getter">' + escapeHTML(desc.get.toString()) + '</span>' : "";
-              if (value) value += "\n";
-              value += desc.set ? '<span class="setter">' + escapeHTML(desc.set.toString()) + '</span>' : ""
-            }
-            msg += '<td class="propAttr">' + attr + '</td>';
-            msg += '<td class="propValue">' + value + '</td>';
-          } catch(e) {
-            msg += '<td></td><td class="error">' + e.toString() + '</td>';
-          }
-          msg += '</tr>';
-        }
-        msg += '</table>';
-        output.insertAdjacentHTML("BeforeEnd", msg);
+        output.insertAdjacentHTML("BeforeEnd", toStringResult.getKeyValueTable(obj, onlyEnumerable));
       }
     }
   });
@@ -352,7 +312,10 @@
         output.insertAdjacentHTML("BeforeEnd",
           '<div class="error">' + aResult.toString() + '</div>');
       } else {
-        output.insertAdjacentHTML("BeforeEnd", '<div class="normal">' + objectToString(aResult) + '</div>');
+        var str = toStringResult(aResult);
+        if (str)
+          output.insertAdjacentHTML("BeforeEnd", '<div class="normal">' + str + '</div>');
+      }
       }
     }, // 2}}}
     /**
@@ -405,18 +368,135 @@
 
       output.appendChild(container);
       return container;
-    },
+    }, // 2}}}
   };
-  function objectToString (obj) {
-    return String(obj);
+  // 1}}}
+
+  function toStringResult (obj, dontExpand, showUndefined) {
+    var type = typeof obj;
+    switch (type) {
+      case "undefined":
+        if (!showUndefined)
+          return;
+      case "string":
+      case "number":
+      case "boolean":
+      case "function":
+        return '<span class="type-' + type + '">' + escapeHTML(String(obj)) + '</span>';
+      case "object":
+      default: {
+        if (obj === null) {
+          return '<span class="type-null">null</span>';
+        } else if (dontExpand) {
+          return '<span class="type-object">' + Object.prototype.toString.call(obj) + '</span>';
+        }
+        return toStringResult.objectToString(obj);
+      }
+    }
   }
+  mixin(toStringResult, {
+    objectToString: function objectToString (obj) {
+      var str = Object.prototype.toString.call(obj),
+          html = '<p class="type-object">' + str + '</p>';
+      if (obj instanceof Element) {
+        return html + '<p class="type-element">' + this.getElement(obj) + '</p>';
+      }
+      var className = str.substring(8, str.length - 1);
+      switch (className) {
+        case "Error":
+        case "EvalError":
+        case "RangeError":
+        case "ReferenceError":
+        case "TypeError":
+        case "SyntaxError":
+        case "URIError":
+          return html + '<p class="error">' + escapeHTML(obj.toString()) + '</p>';
+        case "Window":
+        case "Document":
+        case "HTMLDocument":
+          return html;
+        case "Object":
+        default: {
+          return html + toStringResult.getKeyValueTable(obj, true);
+        }
+      }
+    },
+    getElement: function getElement (node) {
+      var ns = node.prefix,
+          tagName = (ns ? ns + ":" : "") + node.localName,
+          attrs = this.getAttributeList(node.attributes, ns);
+
+      var html = "&lt;" + tagName;
+      if (attrs.length > 0) {
+        html += " " + attrs.join(" ");
+      }
+      html += node.childNodes.length > 0 ? "&gt;..." : "&gt;";
+      html += "&lt;/" + tagName + "&gt;";
+      return html;
+    },
+    getAttributeList: function getAttributeList (attrs, prefix) {
+      var i = 0,
+          len = attrs.length,
+          result = [],
+          attr,
+          attrName;
+      for (; i < len; ++i) {
+        attr = attrs[i];
+        if (attr.prefix === prefix) {
+          attrName = attr.name;
+        } else {
+          attrName = attr.prefix + ":" + attr.name;
+        }
+        result.push(attrName + '="' + escapeHTML(attr.value) + '"');
+      }
+      return result;
+    },
+    getKeyValueTable: function getKeyValueTable (obj, onlyEnumerable) {
+      var keys = onlyEnumerable ? Object.keys(obj) : Object.getOwnPropertyNames(obj);
+      var i = 0, length = keys.length;
+      var attr, desc, value;
+      var msg = '<table class="keyValueTable"><tr>';
+      for (; i < length; ++i) {
+        attr = "";
+        msg += '<td class="propName">' + keys[i] + '</td>';
+        desc = Object.getOwnPropertyDescriptor(obj, keys[i]);
+        if (desc.enumerable)
+          attr += "E";
+
+        if (desc.configurable)
+          attr += "C";
+
+        try {
+          if ('value' in desc) {
+            if (desc.writable)
+              attr += "W";
+
+            value = toStringResult(desc.value, true);
+          } else {
+            value = desc.get ?
+                    '<span class="type-getter type-function">' + escapeHTML(desc.get.toString()) + '</span>' :
+                    "";
+            if (value) value += "\n";
+            value += desc.set ?
+                     '<span class="type-setter type-function">' + escapeHTML(desc.set.toString()) + '</span>' :
+                     "";
+          }
+          msg += '<td class="propAttr">' + escapeHTML(attr) + '</td>';
+          msg += '<td class="propValue">' + value + '</td>';
+        } catch(e) {
+          msg += '<td></td><td class="error">' + escapeHTML(e.toString()) + '</td>';
+        }
+        msg += '</tr>';
+      }
+      msg += '</table>';
+      return msg;
+    },
+  });
 
   require(["orion/editor/edit"], function (edit) {
     var editor = edit({ parent: "input", lang: "js", showLinesRuler: false, });
     gEditor = new Editor(editor);
   });
-  
-
 
   // ====================================================
   // Menu API
