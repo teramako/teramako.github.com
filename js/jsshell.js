@@ -126,11 +126,6 @@
     config: {
       value: config,
     },
-    echo: {
-      value: function (msg) {
-        output.insertAdjacentHTML("BeforeEnd", '<div class="echo">' + msg + '</div>');
-      }
-    },
     clear: {
       value: function() {
         output.innerHTML = "";
