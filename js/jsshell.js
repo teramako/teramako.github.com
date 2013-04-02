@@ -547,18 +547,20 @@
   // ================================================{{{1
   (function() {
     var clearCmd = $id("clearCmd"),
-        parseCmd = $id("parseCmd");
+        parseCmd = $id("parseCmd"),
+        esprimaCloseButton = $id("esprimaCloseButton");
     input.addEventListener("contextmenu", function onContext(aEvent) {
-      clearCmd.disabled = (!output.innerHTML && !input.innerHTML);
-      parseCmd.disabled = !input.innerHTML;
+      var charCount = gEditor.model.getCharCount();
+      clearCmd.disabled = (!output.innerHTML && charCount === 0);
+      parseCmd.disabled = charCount === 0;
     }, false);
     clearCmd.addEventListener("click", function onClick(aEvent) {
       output.innerHTML = ""
-      input.innerHTML = "";
-      input.focus();
+      gEditor.clear();
+      gEditor.view.focus();
     }, false);
     parseCmd.addEventListener("click", function onClick(aEvent) {
-      var text = input.innerHTML.replace(codeReplacer.reg, codeReplacer);
+      var text = gEditor.model.getText();
       var $res = $id("parseResult");
       $res.parentNode.classList.remove("hidden");
       try {
@@ -568,6 +570,9 @@
         $res.textContent = e.toString();
       }
     }, false);
+    esprimaCloseButton.addEventListener("click", function onClick (aEvent) {
+      $id("esprima").classList.add("hidden");
+    });
   })();
   // 1}}}
 

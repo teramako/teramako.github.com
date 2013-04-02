@@ -13,17 +13,17 @@
   <h1>JavaScript Shell</h1>
   <p>powered by <a href="http://www.eclipse.org/orion/">Orion</a> and <a href="http://esprima.org/">Esprima</a>.</p>
 </header>
-<main id="content">
-  <div id="output" contextmenu="shellContextMenu"></div>
+<main id="content" contextmenu="shellContextMenu">
+  <div id="output"></div>
   <div id="inputContainer">
     <div class="prompt">js&gt;</div>
     <!--div id="input" contenteditable="true" contextmenu="shellContextMenu"></div-->
-    <pre id="input" class="editor" contextmenu="shellContextMenu"></pre>
+    <pre id="input" class="editor"></pre>
   <div>
 </main>
 <section id="toolbox">
   <div id="esprima" class="hidden">
-    <h2>Esprima.parse</h2>
+    <h2>Esprima.parse</h2><button id="esprimaCloseButton">X</button>
     <pre id="parseResult"></pre>
   </div>
   <div id="completion"></div>

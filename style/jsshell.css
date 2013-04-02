@@ -54,11 +54,16 @@ body {
 .setter::before {
   content: "[setter]: ";
 }
+
+/*
+ * toolbox
+ */
 #toolbox {
   position: fixed;
   width: 50%;
   top: 10px;
   right: 10px;
+  z-index: 10;
 }
 #esprima {
   border: thin solid ThreeDShadow;
@@ -67,6 +72,10 @@ body {
   max-height: 40em;
   overflow: auto;
   padding: 0 0.5em;
+}
+#esprima h2 {
+  display: inline-block;
+  margin: 0 1em;
 }
 .hidden {
   visibility: collapse;
